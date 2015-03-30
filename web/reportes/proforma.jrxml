@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="proforma" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" >
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="clave_poliza" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Personal\\Documents\\NetBeansProjects\\administrax\\web\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select distinct
+(select case ifnull(razon_social,'-')  when '-' then nombre else razon_social end from pagarex_cliente where clave_cliente=fx_poliza_detalle.clave_beneficiario) as cliente,
+(select direccion_fiscal from pagarex_cliente where clave_cliente=fx_poliza_detalle.clave_beneficiario) as direccion_cliente,
+(select rfc from pagarex_cliente where clave_cliente=fx_poliza_detalle.clave_beneficiario) as rfc_cliente,
+(select bodega from pagarex_cliente where clave_cliente=fx_poliza_detalle.clave_beneficiario) as bodega,
+fx_poliza.fecha,
+fx_poliza.clave_poliza
+from fx_poliza, fx_poliza_detalle
+where fx_poliza.clave_poliza=fx_poliza_detalle.clave_poliza
+and fx_poliza.clave_poliza=$P{clave_poliza}]]>
+	</queryString>
+	<field name="cliente" class="java.lang.String"/>
+	<field name="direccion_cliente" class="java.lang.String"/>
+	<field name="rfc_cliente" class="java.lang.String"/>
+	<field name="bodega" class="java.lang.String"/>
+	<field name="fecha" class="java.sql.Date"/>
+	<field name="clave_poliza" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="1" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="233" splitType="Stretch">
+			<image>
+				<reportElement  x="0" y="0" width="134" height="172"/>
+				<imageExpression><![CDATA["C:\\Users\\Personal\\Documents\\NetBeansProjects\\administrax\\web\\reportes\\logo.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement  x="116" y="17" width="217" height="20"/>
+				<textElement>
+					<font fontName="Trebuchet MS" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[GRADESA, S.A. de C.V.]]></text>
+			</staticText>
+			<line>
+				<reportElement  x="117" y="37" width="410" height="1"/>
+			</line>
+			<staticText>
+				<reportElement  x="116" y="38" width="232" height="45"/>
+				<textElement/>
+				<text><![CDATA[Carolina 80 - 12
+Col. Cd de los Deportes, México DF 03710
+Benito Juárez
+
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="392" y="38" width="135" height="20"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[52(55) 5598-7270]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="392" y="58" width="135" height="20"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[52(55) 5598-7370]]></text>
+			</staticText>
+			<textField>
+				<reportElement  x="104" y="152" width="423" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cliente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  x="117" y="99" width="43" height="20"/>
+				<textElement/>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField>
+				<reportElement  x="160" y="99" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  x="117" y="119" width="43" height="20"/>
+				<textElement/>
+				<text><![CDATA[Póliza:]]></text>
+			</staticText>
+			<textField>
+				<reportElement  x="160" y="119" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{clave_poliza}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  x="17" y="152" width="81" height="20"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Cliente:]]></text>
+			</staticText>
+			<textField>
+				<reportElement  x="104" y="171" width="423" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{rfc_cliente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  x="17" y="171" width="81" height="20"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[RFC:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="17" y="190" width="81" height="20"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Dirección fiscal:]]></text>
+			</staticText>
+			<textField>
+				<reportElement  x="104" y="190" width="423" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{direccion_cliente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  x="17" y="209" width="81" height="20"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Bodega:]]></text>
+			</staticText>
+			<textField>
+				<reportElement  x="104" y="209" width="423" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{bodega}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="38" splitType="Stretch">
+			<subreport>
+				<reportElement  x="104" y="0" width="423" height="36"/>
+				<subreportParameter name="clave_poliza">
+					<subreportParameterExpression><![CDATA[$P{clave_poliza}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "proforma_detalle.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement  x="17" y="0" width="81" height="20"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Descripción:]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,783 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="gradesa_contrato" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" >
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" />
+	<parameter name="clave_contrato" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Personal\\Documents\\NetBeansProjects\\administrax\\web\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT clave_contrato, fecha, ref, clave_cliente,
+(select nombre from pagarex_cliente where clave_cliente=pagarex_contrato.clave_cliente) as nombre_cliente,
+(select rfc from pagarex_cliente where clave_cliente=pagarex_contrato.clave_cliente) as rfc_cliente,
+(select direccion_fiscal from pagarex_cliente where clave_cliente=pagarex_contrato.clave_cliente) as direccion_fiscal_cliente,
+(select cuenta from fx_cuenta where clave_cuenta=pagarex_contrato.clave_cuenta) as activo,
+clave_tipo_contrato, importe, clave_moneda, tipo_cambio, tasa_interes, numero_pagares, (select ciclo from pagarex_ciclo_agricola where clave_ciclo=pagarex_contrato.clave_ciclo) as ciclo, toneladas_promesa,
+hectareas,lugar_entrega,fecha_entrega, testigo
+FROM pagarex_contrato
+ where clave_contrato=$P{clave_contrato}]]>
+	</queryString>
+	<field name="clave_contrato" class="java.lang.Integer"/>
+	<field name="fecha" class="java.sql.Date"/>
+	<field name="ref" class="java.lang.String"/>
+	<field name="clave_cliente" class="java.lang.Integer"/>
+	<field name="nombre_cliente" class="java.lang.String"/>
+	<field name="rfc_cliente" class="java.lang.String"/>
+	<field name="direccion_fiscal_cliente" class="java.lang.String"/>
+	<field name="activo" class="java.lang.String"/>
+	<field name="clave_tipo_contrato" class="java.lang.Integer"/>
+	<field name="importe" class="java.math.BigDecimal"/>
+	<field name="clave_moneda" class="java.lang.Integer"/>
+	<field name="tipo_cambio" class="java.lang.Integer"/>
+	<field name="tasa_interes" class="java.lang.Float"/>
+	<field name="numero_pagares" class="java.lang.Integer"/>
+	<field name="ciclo" class="java.lang.String"/>
+	<field name="toneladas_promesa" class="java.lang.Float"/>
+	<field name="hectareas" class="java.lang.Float"/>
+	<field name="lugar_entrega" class="java.lang.String"/>
+	<field name="fecha_entrega" class="java.sql.Date"/>
+	<field name="testigo" class="java.lang.String"/>
+	<variable name="contrato1" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="91" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement  positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="5" y="11" width="560" height="55"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["CONTRATO DE COMPRAVENTA A TÉRMINO DE " +  $F{activo} + " DEL CICLO AGRÍCOLA , EN LO SUCESIVO DENOMINADO “PRODUCTO”, QUE CELEBRAN POR UNA PARTE, GRADESA, S.A. DE C.V. " +
+"REPRESENTADA EN EL ACTO POR GUILLERMO NAVARRO RIVERA, EN LO SUCESIVO DENOMINADO EL COMPRADOR, Y POR LA OTRA PARTE " + $F{nombre_cliente} +
+", EN LO SUCESIVO DENOMINADO EL VENDEDOR, EN LO SUCESIVO DENOMINADOS CONJUNTAMENTE LOS CONTRATANTES COMO “LAS PARTES”, DE CONFORMIDAD CON LAS SIGUIENTES " +
+"DECLARACIONES Y CLÁUSULAS: \n\n"+
+"DECLARACIONES" +
+"\n\n" +
+"I.    Declara EL COMPRADOR, por conducto de su representante legal:\n\n" +
+"a)	Que es una sociedad anónima constituida legalmente tal se acredita con el testimonio de la escritura pública No. 110,465, Libro Cinco, de fecha 13 de octubre de 2003, otorgada ante la fe del Lic. Felipe Guzmán Núñez, Notario Público No. 48, de la ciudad de México, Distrito Federal, cuyo primer testimonio quedo inscrito el 10 de Noviembre de 2003, " +
+"bajo Folio No. 312058, del Registro Público de la Propiedad y del Comercio del Distrito Federal. \n" +
+"b)	Que su representante legal cuenta con facultades suficientes para la celebración del presente contrato, acreditando su personalidad jurídica mediante el testimonio de la escritura pública No. 56,405 Volumen 787  Libro Siete Folio 39338, de fecha 10 de septiembre de 2007, otorgada ante la fe del Lic. Gilberto M. Miranda Pérez, Notario Público No. 79, de la ciudad de México, Distrito Federal, en el cual se contiene poder general para pleitos y cobranzas y para celebrar contratos de crédito y poder general cambiario; asimismo manifiesta bajo protesta de decir verdad que dichas facultades no le han sido revocadas, modificadas o limitadas en forma alguna.\n"+
+"c)	Que su Registro Federal De Contribuyentes es GRA031015KC0.\n" +
+"d)	Que señala como domicilio para los efectos de este contrato, el ubicado en Carolina #80 interior 12 Colonia Ciudad de los Deportes, México, D.F. " +
+"\n\n"+
+"II.   Declara  EL VENDEDOR:\n\n" +
+"a)	Que es una persona física, de nacionalidad mexicana, dedicado a la agricultura, con capacidad para obligarse en los términos del presente contrato, con Registro Federal de Contribuyentes es: " + $F{rfc_cliente} + "\n"+
+"b)	Que conoce los lineamientos emitidos por ASERCA para la Validación de Predios, por lo que se obliga a realizar todas las gestiones necesarias para la realización de la misma, así como entregar la documentación necesaria.\n" +
+"c)	Que señala como domicilio para los fines y efectos legales a que haya lugar derivados del presente contrato, el ubicado en:\n" +
+$F{direccion_fiscal_cliente} + "\n\n" +
+"d)	Que es su deseo vender a El COMPRADOR el producto que obtenga de una superficie de" +  $F{hectareas} + " de la cosecha de " + $F{activo} + " " + $F{ciclo} +
+", de los predios cuya ubicación se describe en el Anexo Único del presente contrato, las cuales no tiene comprometidas con terceros, que pudieran "+
+"manifestar  cosa en contrario,  ni embargada, ni dada en pago o en cualquier otra form-a comprometida o gravada, manifestando  su voluntad de venderla y  comprometerla  en los términos del presente. \n\n\n" +
+"III. DE “LAS PARTES”:\n\n"  +
+"a)	Que declaran, bajo protesta de decir verdad, que al amparo del presente contrato celebran una compraventa a término de " + $F{toneladas_promesa}+ " del “PRODUCTO”.\n"+
+"b)	Que en la celebración del presente contrato no ha existido mala fe, error, dolo o violencia de ningún tipo y que las contraprestaciones establecidas en el mismo son las justas, por lo que es su libre voluntad celebrar este contrato de compraventa a término y obligarse de acuerdo con las siguientes:\n\n" +
+"C L Á U S U L A S \n\n"+
+"PRIMERA.- OBJETO. EL VENDEDOR se obliga a entregar a EL COMPRADOR " + $F{nombre_cliente} + " toneladas aproximadas del PRODUCTO que obtendrá en la cosecha de " + $F{activo} + " ciclo " + $F{ciclo}  +
+"de la superficie relacionada en el ANEXO UNICO de este contrato, y EL COMPRADOR se obliga a adquirir dicho PRODUCTO y a pagar por el mismo a EL VENDEDOR " +
+"el precio establecido en la Cláusula Segunda del presente contrato.\n\n" +
+"SEGUNDA.- PRECIO. EL COMPRADOR se obliga a pagar a EL VENDEDOR el precio por tonelada, de conformidad con las condiciones de precio establecidos por " +
+"ASERCA (Apoyos y Servicios a la Comercialización Agropecuaria), de acuerdo con la calidad establecida en la cláusula cuarta del presente contrato.\n\n"+
+"TERCERA.- FORMA DE PAGO. EL COMPRADOR se obliga a pagar a EL VENDEDOR de contado contra cada una de las entregas del PRODUCTO que EL VENDEDOR efectúe " +
+"el centro de acopio y sean debidamente acreditadas y notificadas ante EL COMPRADOR, conforme a lo establecido en la Cláusula Quinta del presente." +
+"La liquidación del precio pactado en dólares se realizará en moneda nacional al tipo de cambio fix publicado por el Banco de México, vigente al día " +
+"de la operación. \n\n" +
+"EL VENDEDOR instruye a EL COMPRADOR, de manera irrevocable, para que con cargo al producto de la presente comercialización y/o servicios, se liquiden " +
+"los saldos deudores que tenga registrados con EL COMPRADOR, a opción de este último, de tal forma que al término de la operación, que concluye con el " +
+"embarque del producto al puerto o frontera,  así como, con la entrega de los documentos para el cobro de apoyos ante ASERCA, no existan obligaciónes " +
+"de pago entre las partes. \n\n" +
+"CUARTA.- CALIDAD. EL VENDEDOR se obliga a que el PRODUCTO que entregue a EL COMPRADOR al amparo de este contrato, deberá reunir las siguientes " +
+"especificaciones de calidad y humedad: "]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="318">
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="2" y="10" width="125" height="20" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[FACTOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="126" y="10" width="93" height="20" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MAXIMO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="218" y="10" width="93" height="20" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MINIMO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="310" y="10" width="257" height="20" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DESCUENTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="2" y="30" width="125" height="35"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ HUMEDAD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="126" y="30" width="93" height="35"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ 12 % ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="218" y="30" width="93" height="35"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="310" y="30" width="256" height="35"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ 1.150 KG/TON POR DECIMA DE GRADO ARRIBA DEL MAXIMO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="218" y="65" width="92" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="310" y="65" width="256" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ 2 KG/TON POR GRADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="2" y="65" width="125" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ PESO ESPECIFICO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="126" y="65" width="92" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ 80% KG/HL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="218" y="85" width="92" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ 1.5%]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="310" y="85" width="256" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ 1.03 KG / TON POR GRADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="2" y="85" width="125" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ IMPUREZAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="126" y="85" width="92" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ 2.0%]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="2" y="105" width="125" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ GRANO DAÑADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="218" y="105" width="92" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ 2.0 %]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="126" y="105" width="92" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ 3.0 %]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="310" y="105" width="256" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ 500 GRS /TON POR DECIMA ARRIBA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="126" y="125" width="92" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ 3.0 %]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="218" y="125" width="92" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ 2.0 %]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="310" y="125" width="256" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ 500 GRS /TON POR DECIMA ARRIBA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="2" y="125" width="124" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ GRANO QUEBRADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="218" y="145" width="92" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ 85%]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="2" y="145" width="124" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ GRANOS VITEOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="310" y="145" width="256" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ 500 GRS /TON POR DECIMA ARRIBA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="126" y="145" width="92" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ 88%]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="310" y="165" width="256" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ 1KG/TON POR CADA 1% ARRIBA DEL MAXIMO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="218" y="165" width="92" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ 10% ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="2" y="165" width="125" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ PANZA BLANCA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="126" y="165" width="92" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ 12% ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="310" y="185" width="256" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="2" y="185" width="124" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ CARBON PARCIAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="218" y="185" width="92" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="126" y="185" width="92" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ 0%]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="126" y="205" width="92" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ 12.5%]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="310" y="205" width="256" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="2" y="205" width="124" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ PROTEINA BASE SECA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="218" y="205" width="92" height="20"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="310" y="225" width="256" height="34"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="218" y="225" width="92" height="34"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="2" y="225" width="124" height="34"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ NEVIOSA INDICA U OTRO TIPO ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="126" y="225" width="92" height="34"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ NEGATIVO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="218" y="259" width="92" height="34"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="126" y="259" width="92" height="34"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ LIBRE DE PLAGA VIVA O MUERTA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="2" y="259" width="124" height="34"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[ PLAGA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" mode="Opaque" x="310" y="259" width="256" height="34"/>
+				<box>
+					<pen lineColor="#CCCCFF"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+				</box>
+				<textElement verticalAlignment="Top"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+		</band>
+		<band height="120">
+			<textField isStretchWithOverflow="true">
+				<reportElement  positionType="Float" stretchType="RelativeToBandHeight" x="0" y="18" width="560" height="90" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["En caso de que el PRODUCTO cuente con mayores o menores parámetros de calidad y/o de humedad a los antes señalados se aplicará los descuentos señalados en " +
+"la misma tabla.\n\n"+
+"QUINTA.- LUGAR, PLAZO DE ENTREGA Y DESTINO FINAL DEL PRODUCTO. EL VENDEDOR se obliga a entregar el PRODUCTO a EL COMPRADOR en el lugar y plazo que a "+
+"continuación se señalan:\n\n"+
+"Lugar:  En cualquiera de los centros de acopio que a continuacion se mencionan, o en los que Gradesa S.A. de C.V.  designe."+
+$F{lugar_entrega} + "\n\n" +
+"Plazo: A partir de que se inicie el período de cosecha del ciclo Otoño-Invierno 2013/2014 hasta el dia " + $F{fecha_entrega} + "\n\n"+
+"Por las entregas de PRODUCTO que realice, los centros de acopio expedirán a El VENDEDOR boletas de cobro que acrediten la cantidad de PRODUCTO entregada (Boletas de Bascula) y que deberán ser presentadas para el cálculo del precio y su correspondiente pago conforme se establece en la Cláusula SEGUNDA.\n\n"+
+"SEXTA.- PARTICIPACIÓN EN PROGRAMAS DE APOYOS FEDERALES. LAS PARTES convienen que, en caso de participar en programas de subsidios federales referentes al objeto del presente contrato, se sujetan voluntariamente a los plazos, condiciones y requisitos que se establezcan en el Acuerdo por el que se establecen las Reglas de Operación de los programas de la SAGARPA, relacionados con  el Programa de Atención a Problemas Estructurales (Apoyos Compensatorios) (En lo sucesivo, “Reglas de Operación”).\n\n"+
+"Con fundamento en el rubro de atribuciones y sanciones de las “reglas de operación” y en la normatividad de los Subprogramas referidos, que rija en el momento de que se trate, las partes aceptan sujetarse a las verificaciones físicas y/o documentales que SAGARPA-ASERCA considere pertinente realizar a través del Órgano Interno de Control en SAGARPA-ASERCA o de cualquier otra dependencia revisora. En caso de incumplimiento de sus obligaciones estipuladas en el presente contrato, por alguna de las partes o, en caso de que la SAGARPA y/o ASERCA detecten alguna irregularidad, las partes aceptan que éste aplique las medidas de apremio o sanción previstas en la propia normatividad, sin perjuicio de las sanciones que pudieren corresponder por la conducta realizada, conforme a la legislación aplicable.\n\n" +
+"SEPTIMA.- En  caso  de  incumplimiento  por  parte  de EL VENDEDOR sin causa justificada, pagara como pena convencional equivalente al precio por tonelada de grano de trigo pactado en la Cláusula Segunda del presente contrato, por cada tonelada no entregada, independientemente del  derecho que tenga EL COMPRADOR para demandar por la vía que considere pertinente dicho incumplimiento.\n\n"+
+"OCTAVA.- VIGENCIA. El presente contrato permanecerá vigente a partir de la fecha de su firma y hasta 90 (noventa) días naturales después de la fecha de la última entrega del PRODUCTO objeto de esta compraventa a término.\n\n" +
+"NOVENA.- IMPUESTOS. Las cargas impositivas que con motivo del presente contrato se generen correrán por cuenta de quien tenga la obligación de cubrirlas de conformidad con las leyes fiscales respectivas.\n\n"+
+"DÉCIMA.- CUMPLIMIENTO. Para el cumplimiento del presente contrato LAS PARTES se obligan a sujetarse estrictamente a todas y cada una de las cláusulas del mismo, así como al Acuerdo por el que se establecen las Reglas de Operación, por los términos de los Lineamientos, procedimientos y requisitos que en su caso, establezca el gobierno federal a través de la SAGARPA, por conducto de ASERCA, para la operación  del Programa de Atención a Problemas Estructurales (Apoyos Compensatorios), señalado en el Artículo 18 del Acuerdo citado en el presente párrafo, en las partes conducentes en relación con el PRODUCTO.\n\n" +
+"Asimismo, las Partes convienen en que, en caso de que sea la voluntad de ambas participar en otros programas de subsidios federales referentes al objeto del presente contrato, tales como el Subprograma de Cobertura de Precios, se sujetarán a los plazos, condiciones y requisitos que se establezcan en las Reglas de Operación y en caso de que el presente contrato sea sometido para su validación y, en su caso, posterior registro ante ASERCA, EL VENDEDOR se obliga a proporcionar toda la información y documentación que sea necesaria para esos efectos. \n\n"+
+"En caso de que EL VENDEDOR no proporcione documentación  o información, o bien, proporcione información o documentación insuficiente, de acuerdo a los lineamientos y mecanismos de ASERCA para la operación de los programas o subprogramas, se hará acreedor a una pena económica equivalente al importe correspondiente a los volúmenes no susceptibles de apoyos, que por sus omisiones ocasiones a EL COMPRADOR.\n\n" +
+"DÉCIMA PRIMERA.- INCUMPLIMIENTO. LAS PARTES convienen, que en caso de incumplimiento total o parcial de este contrato por causas imputables a alguna de LAS PARTES, el incumplido renuncia a todos los Apoyos establecidos en las Reglas de Operación de la SAGARPA, relacionados con el Programa de Atención a Problemas Estructurales (Apoyos Compensatorios),  sin perjuicio de la Cesión de Derechos que se describe en la cláusula décima segunda de éste documento.\n\n" +
+"DECIMA SEGUNDA.- CESION DE DERECHOS.- Convienen LAS PARTES en que, con sujeción a la condición suspensiva del incumplimiento del contrato de compra-venta a término materia del este contrato  por parte de EL VENDEDOR,  en caso de que existan apoyos a favor de El VENDEDOR por concepto de ganancias derivadas de la Cobertura de Precios en el marco del Programa de Atención a Problemas Estructurales (Apoyos Compensatorios) en el Componente Adquisición de Coberturas relacionadas con este contrato, EL VENDEDOR cede sus derechos sobre dichas ganancias a EL COMPRADOR.\n\n"+
+"Asimismo, LAS PARTES convienen en que, con sujeción a la condición suspensiva de que EL COMPRADOR haya incumplido el contrato de compra-venta a término descrito en las Declaraciones de este contrato, en los términos del mismo y de que existan apoyos a favor de El COMPRADOR por concepto de ganancias derivadas de la Cobertura de Precios en el marco del El Programa de Atención a Problemas Estructurales (Apoyos Compensatorios) en el Componente Adquisición de Coberturas, relacionadas con este contrato EL COMPRADOR cede sus derechos sobre dichas ganancias a EL VENDEDOR."+
+"DÉCIMA TERCERA.- COMPETENCIA Y LEGISLACIÓN APLICABLE. En caso de controversia sobre la interpretación y cumplimiento del presente contrato, así como para todo aquello que no esté expresamente estipulado en el mismo, LAS PARTES se someten a las leyes aplicables y a los tribunales competentes del Estado de ______________, renunciando expresamente a cualquier otra jurisdicción que en razón de sus domicilios presentes o futuros, o por cualesquiera otra, les corresponda o pudiera corresponderles." +
+"Ambas partes manifiestan bajo protesta de decir verdad, que han llegado a este acuerdo de voluntades, sin coacción, sin dolo, sin mala fe, ni cualquier otro vicio del consentimiento que pudiera invalidarlo, por lo que consientes de la importancia, trascendencia, alcance y fuerza legales de su contenido y de sus estipulaciones, firman de conformidad el presente contrato de compraventa a término, __________, Sonora, el ____________________."]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="198">
+			<staticText>
+				<reportElement  x="5" y="0" width="262" height="31"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[EL COMPRADOR
+GRADESA, S.A. DE C.V.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="334" y="0" width="214" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<text><![CDATA[POR EL VENDEDOR]]></text>
+			</staticText>
+			<textField>
+				<reportElement  x="314" y="71" width="255" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nombre_cliente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  x="6" y="71" width="261" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[ING. GUILLERMO NAVARRO RIVERA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="157" y="103" width="262" height="19"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[T E S T I G O S]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="2" y="166" width="261" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[MIGUEL VALDIVIA ROSALES]]></text>
+			</staticText>
+			<textField>
+				<reportElement  x="320" y="166" width="251" height="20"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{testigo}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="104">
+			<subreport>
+				<reportElement  positionType="Float" stretchType="RelativeToTallestObject" x="2" y="0" width="570" height="100"/>
+				<subreportParameter name="clave_contrato">
+					<subreportParameterExpression><![CDATA[$P{clave_contrato}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "gradesa_contrato_anexo.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

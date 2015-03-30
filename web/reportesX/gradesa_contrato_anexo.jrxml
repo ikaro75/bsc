@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="gradesa_contrato_anexo" language="groovy" pageWidth="612" pageHeight="792" columnWidth="612" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="d4418dc8-6482-472c-9ffe-06eabfab860a">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="clave_contrato" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT clave_lugar,(select producto from pagarex_contrato
+where pagarex_contrato.clave_contrato= pagarex_lugar_inversion.clave_contrato) as activo,
+(select nombre from pagarex_contrato, pagarex_cliente where pagarex_contrato.clave_cliente=pagarex_cliente. clave_cliente AND pagarex_contrato.clave_contrato=pagarex_lugar_inversion.clave_contrato) as nombre_cliente,
+(select testigo1 from pagarex_contrato where pagarex_contrato.clave_contrato=pagarex_lugar_inversion.clave_contrato) as testigo1,
+(select testigo2 from pagarex_contrato where pagarex_contrato.clave_contrato=pagarex_lugar_inversion.clave_contrato) as testigo2,
+(select ciclo from pagarex_contrato, pagarex_ciclo_agricola
+where pagarex_contrato.clave_ciclo=pagarex_ciclo_agricola.clave_ciclo
+and pagarex_contrato.clave_contrato= pagarex_lugar_inversion.clave_contrato) as ciclo,
+superficie, lote, ubicacion, propietario
+FROM pagarex_lugar_inversion WHERE clave_contrato=$P{clave_contrato}]]>
+	</queryString>
+	<field name="clave_lugar" class="java.lang.Integer"/>
+	<field name="activo" class="java.lang.String"/>
+	<field name="nombre_cliente" class="java.lang.String"/>
+	<field name="testigo1" class="java.lang.String"/>
+	<field name="testigo2" class="java.lang.String"/>
+	<field name="ciclo" class="java.lang.String"/>
+	<field name="superficie" class="java.lang.Integer"/>
+	<field name="lote" class="java.lang.String"/>
+	<field name="ubicacion" class="java.lang.String"/>
+	<field name="propietario" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="103" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="1700b858-a126-46fa-b109-269f754671a7" x="0" y="0" width="612" height="37"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[A N E X O    UNICO
+LUGAR DE INVERSIÓN
+]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="c3ee9b9e-eb65-4d54-b29f-b81b0a6dbf0e" positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="3" y="40" width="609" height="36"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["El Vendedor obtendrá la producción de " +  $F{activo} + "del ciclo agrícola " + $F{ciclo} + ", objeto de este contrato, en una superficie de " + $F{superficie} + "HA., establecidas en:"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="02bf8700-2057-486d-9c00-41d9152a2eb6" positionType="Float" mode="Opaque" x="2" y="-20" width="101" height="20" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[SUPERFICIE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="267e5f2c-6b1b-4f99-b41e-f564ad3652b6" positionType="Float" mode="Opaque" x="103" y="-20" width="93" height="20" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[LOTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="db993504-7031-4e25-855e-d74bc7c8ab56" positionType="Float" mode="Opaque" x="387" y="-20" width="225" height="20" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PROPIETARIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="af145bf8-2bd6-4a7e-9005-70f3154d9300" positionType="Float" mode="Opaque" x="196" y="-20" width="191" height="20" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[UBICACION]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="48342303-ac1f-46dd-a489-4f44ce0b44ee" x="3" y="1" width="101" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{superficie}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="96194288-33ee-4b6f-8750-62311c074f09" x="103" y="1" width="93" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{lote}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="094136d0-d219-41fa-8a91-a3a662c60d24" x="196" y="1" width="191" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{ubicacion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="3a309116-3f0e-4967-a829-a0b69ee822c4" x="387" y="1" width="225" height="20"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{propietario}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="214" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="7754762c-b491-4c51-baab-08008f9ac402" x="179" y="113" width="262" height="19"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[T E S T I G O S]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="543f2b33-35e2-4c38-bd31-1a4cbbb9d72e" x="342" y="176" width="251" height="20"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{testigo2}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f10aa4b7-cb0e-48bf-be4c-af816acdaae0" x="28" y="81" width="261" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[ING. GUILLERMO NAVARRO RIVERA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="eb02492e-5cfc-46ce-ba8f-2560ef2a33a4" x="27" y="10" width="262" height="31"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[EL COMPRADOR
+GRADESA, S.A. DE C.V.]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="418fb5a6-d7b3-4eb5-9184-62d6c849215b" x="336" y="81" width="255" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nombre_cliente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="69128bf3-5756-4c96-8601-009c112d04f4" x="356" y="10" width="214" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<text><![CDATA[POR EL VENDEDOR]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="543f2b33-35e2-4c38-bd31-1a4cbbb9d72e" x="27" y="176" width="251" height="20"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{testigo1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

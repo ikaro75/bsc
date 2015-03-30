@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="proforma_detalle" language="groovy" pageWidth="612" pageHeight="792" columnWidth="612" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="a3ff1ac2-c08e-4083-9f41-dbbfb9825590">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="clave_poliza" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="clave_beneficiario" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+folio_pagare,
+(SELECT SUM(CASE cargo when 0 then importe*-1 else importe end) FROM fx_poliza_detalle tmp WHERE folio_pagare=fx_poliza_detalle.folio_pagare and clave_cuenta=7) as saldo,
+(select fecha from fx_poliza where fx_poliza.clave_poliza = fx_poliza_detalle.clave_poliza) as fecha,
+(select tasa_interes from pagarex_pagare where folio_pagare=fx_poliza_detalle.folio_pagare) as tasa_interes,
+(select cuenta from fx_cuenta where clave_cuenta=fx_poliza_detalle.clave_cuenta) as cuenta,
+importe
+from
+fx_poliza_detalle
+where clave_poliza=$P{clave_poliza}
+and clave_beneficiario = $P{clave_beneficiario}
+and clave_cuenta=7]]>
+	</queryString>
+	<field name="folio_pagare" class="java.lang.Integer"/>
+	<field name="saldo" class="java.math.BigDecimal"/>
+	<field name="fecha" class="java.sql.Date"/>
+	<field name="tasa_interes" class="java.lang.Float"/>
+	<field name="cuenta" class="java.lang.String"/>
+	<field name="importe" class="java.math.BigDecimal"/>
+	<variable name="importe_1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{importe}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="23" splitType="Stretch">
+			<textField>
+				<reportElement uuid="eef06209-f429-42e8-9c06-771b2f4ce551" positionType="Float" x="0" y="2" width="342" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["Intereses al " + new SimpleDateFormat("dd/MM/yyyy").format($F{fecha}) + " del pagaré " + $F{folio_pagare} + " con un saldo de " + new java.text.DecimalFormat("\$ #,##0.00").format(Double.valueOf($F{saldo}))]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00">
+				<reportElement uuid="b54cf386-68b9-479c-8d38-b768314f9375" positionType="Float" isPrintRepeatedValues="false" x="300" y="2" width="100" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{importe}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="29" splitType="Stretch">
+			<textField pattern="$ #,##0.00">
+				<reportElement uuid="423877ec-dbc5-408a-a56d-459807989ebe" positionType="Float" isPrintRepeatedValues="false" x="300" y="8" width="100" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{importe_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="8d3d4d7f-50e3-482e-838d-1f52dcac83de" positionType="Float" isPrintRepeatedValues="false" x="196" y="8" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Total a facturar:]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="173"/>
+	<parameter name="p_folio_poliza" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{p_folio_poliza}.intValue()]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     cp_poliza.*,
+     ( SELECT nombre+' '+apellido_paterno+' '+isnull(apellido_materno,'') FROM "empleado" WHERE clave_empleado = cp_poliza.clave_empleado_solicitante ) as empleado_solicitante,
+     ( SELECT area FROM "area" WHERE clave_area = cp_poliza.clave_area_solicitante ) as area_solicitante,
+     ( SELECT clave_proyecto_control_presupuestal + ' ' +estructura_programatica FROM "proyecto" WHERE clave_proyecto = cp_poliza.clave_proyecto ) as proyecto
+FROM
+     "cp_poliza" cp_poliza
+WHERE cp_poliza.folio_poliza=$P{p_folio_poliza}]]>
+	</queryString>
+	<field name="folio_poliza" class="java.lang.Integer"/>
+	<field name="clave_tipo_solicitud" class="java.lang.Integer"/>
+	<field name="fecha_poliza" class="java.sql.Timestamp"/>
+	<field name="numero_suficiencia" class="java.lang.Integer"/>
+	<field name="asunto" class="java.lang.String"/>
+	<field name="justificacion" class="java.lang.String"/>
+	<field name="meta" class="java.lang.String"/>
+	<field name="observaciones" class="java.lang.String"/>
+	<field name="clave_estatus" class="java.lang.Integer"/>
+	<field name="fecha_autorizacion" class="java.sql.Timestamp"/>
+	<field name="numero_solicitud" class="java.lang.Integer"/>
+	<field name="clave_empleado_solicitante" class="java.lang.Integer"/>
+	<field name="clave_area_solicitante" class="java.lang.Integer"/>
+	<field name="numero_descripcion_proyecto" class="java.lang.String"/>
+	<field name="monto_solicitado" class="java.math.BigDecimal"/>
+	<field name="monto_iva" class="java.math.BigDecimal"/>
+	<field name="monto_total" class="java.math.BigDecimal"/>
+	<field name="numero_partida" class="java.lang.Integer"/>
+	<field name="clave_proyecto" class="java.lang.Integer"/>
+	<field name="motivo_cancelacion" class="java.lang.String"/>
+	<field name="empleado_solicitante" class="java.lang.String"/>
+	<field name="area_solicitante" class="java.lang.String"/>
+	<field name="proyecto" class="java.lang.String"/>
+	<group name="folio_poliza">
+		<groupExpression><![CDATA[$F{folio_poliza}]]></groupExpression>
+		<groupHeader>
+			<band height="118">
+				<staticText>
+					<reportElement x="5" y="10" width="120" height="15"/>
+					<textElement/>
+					<text><![CDATA[No. de suficiencia DCP:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="4" y="28" width="120" height="15"/>
+					<textElement/>
+					<text><![CDATA[Fecha de recepción:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="258" y="10" width="93" height="15"/>
+					<textElement/>
+					<text><![CDATA[Fecha de entrega:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="258" y="27" width="94" height="15"/>
+					<textElement/>
+					<text><![CDATA[Acuse de recibo:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="514" y="39" width="100" height="16"/>
+					<textElement textAlignment="Center"/>
+					<text><![CDATA[Nombre y firma]]></text>
+				</staticText>
+				<line>
+					<reportElement x="2" y="55" width="748" height="2"/>
+				</line>
+				<staticText>
+					<reportElement x="3" y="57" width="120" height="15"/>
+					<textElement/>
+					<text><![CDATA[Fecha de elaboración:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="3" y="73" width="120" height="17"/>
+					<textElement/>
+					<text><![CDATA[Número de solicitud:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="3" y="91" width="120" height="17"/>
+					<textElement/>
+					<text><![CDATA[Nombre del solicitante:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy">
+					<reportElement x="126" y="56" width="110" height="16"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{fecha_poliza}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement x="126" y="10" width="117" height="15"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{numero_suficiencia}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy">
+					<reportElement x="351" y="10" width="121" height="15"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{fecha_autorizacion}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement x="124" y="73" width="112" height="17"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{numero_solicitud}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement x="126" y="91" width="131" height="17"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{empleado_solicitante}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="258" y="58" width="120" height="15"/>
+					<textElement/>
+					<text><![CDATA[Área solicitante:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true">
+					<reportElement x="351" y="58" width="399" height="14"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{area_solicitante}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="257" y="72" width="94" height="44"/>
+					<textElement/>
+					<text><![CDATA[Número y descripción del proyecto:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true">
+					<reportElement x="351" y="73" width="399" height="14"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{proyecto}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="1" y="116" width="749" height="1"/>
+				</line>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="75">
+			<staticText>
+				<reportElement x="391" y="0" width="361" height="23"/>
+				<textElement textAlignment="Right">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SOLICITUD DE SUFICIENCIA PRESUPUESTAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="397" y="24" width="353" height="16"/>
+				<textElement textAlignment="Right">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[INSTITUTO LATINOAMERICANO DE LA COMUNICACIÓN EDUCATIVA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="397" y="41" width="353" height="16"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[UNIDAD DE CONTROL PRESUPUESTAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="397" y="59" width="353" height="16"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[DIRECCIÓN DE CONTROL PRESUESTAL]]></text>
+			</staticText>
+			<image>
+				<reportElement x="10" y="9" width="72" height="54"/>
+				<imageExpression><![CDATA["C:\\Users\\Daniel\\Documents\\NetBeansProjects\\plataforma\\web\\img\\logo ilce.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band height="4">
+			<line>
+				<reportElement x="0" y="3" width="750" height="1" forecolor="#666666"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="157">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="3" y="149" width="744" height="1"/>
+			</line>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="3" y="49" width="744" height="15"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{justificacion}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="2" y="83" width="470" height="16"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{meta}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="3" y="120" width="469" height="14"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{observaciones}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="$ #,##0.00">
+				<reportElement x="589" y="74" width="158" height="15"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{monto_solicitado}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="1" width="49" height="15"/>
+				<textElement/>
+				<text><![CDATA[Asunto:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="2" y="16" width="748" height="15"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{asunto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="35" width="168" height="15"/>
+				<textElement/>
+				<text><![CDATA[Justificación del gasto:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="69" width="168" height="15"/>
+				<textElement/>
+				<text><![CDATA[Meta a alcanzar:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="106" width="168" height="15"/>
+				<textElement/>
+				<text><![CDATA[Observaciones:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="3" y="141" width="749" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="483" y="74" width="104" height="15"/>
+				<textElement/>
+				<text><![CDATA[Cantidad solicitada:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="483" y="91" width="104" height="15"/>
+				<textElement/>
+				<text><![CDATA[IVA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="483" y="107" width="104" height="15"/>
+				<textElement/>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<textField pattern="$ #,##0.00">
+				<reportElement x="590" y="90" width="157" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{monto_iva}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00">
+				<reportElement x="589" y="107" width="157" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{monto_total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="4" width="747" height="13" backcolor="#E6E6E6"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="4" width="100" height="13"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

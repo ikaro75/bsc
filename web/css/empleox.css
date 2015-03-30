@@ -1,0 +1,192 @@
+/* 
+    Document   : empleox
+    Created on : 27/03/2013, 04:08:06 PM
+    Author     : Personal
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+html, body{
+    min-height: 101%;
+    width:100%;
+    margin:0;padding:0;overflow:auto;
+    font-size:80%;
+}
+
+.main {
+    margin: 0 auto;
+    width: 1200px;
+    background: white;
+    border-left: 1px solid #999;
+    border-right: 1px solid #999;    
+}
+
+.bannerdiv {
+    margin: 0 auto;
+    width: 960px;
+    background: white;
+}
+
+#banner {
+    width: 70%;
+    clear: both
+}
+
+#roldiv {
+    clear:left;
+    margin: 0 auto;
+    *padding-top: 10px;
+    width: 960px;
+    *height: 330px;
+}
+
+a.entitymenu:link {
+    font-family: Verdana, Arial, Helvetica, sans-serif !important; 
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #0000FF;
+} 
+
+a.entitymenu:visited {
+    font-family: Verdana, Arial, Helvetica, sans-serif !important;
+    font-size: 12px; 
+    font-weight: bold;
+    color: #0000FF;    
+}
+
+a.entitymenu:hover  {
+    font-family: Verdana, Arial, Helvetica, sans-serif !important;
+    font-size: 12px; text-decoration: none;
+    font-weight: bold;
+    color: #FF6600;
+}
+
+#empleos_destacados{
+    margin: 0 auto;
+    width: 960px;
+    padding-top: 10px; 
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+}
+
+#empleos_por_area{
+    margin: 0 auto;
+    width: 960px;
+    padding-top: 30px; 
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+}
+
+#legal{
+    margin: 0 auto;
+    width: 960px;
+    padding-top: 30px; 
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+}
+
+.control_set_2 {
+    float: right !important;
+    top: -10px;
+}
+
+td {
+    font-size: 13px;
+}
+
+#divCarouselEmpleox {
+    width: 100%;
+    height: 100%;
+}
+#divCarouselEmpleox .numbered_button  {
+    background-color: transparent;
+    *background-image: url("../img/sprite_ac_normal.png");
+    background-position: -95px 0;
+    color: #000000;
+    font-size: 12px;
+    *height: 10px;
+    margin-right: 2px;
+    overflow: hidden;
+    padding: 0 2px;
+    *text-indent: 1000px;
+    *width: 10px;
+}
+
+#divCarouselEmpleox .control_set_1 .ac_disabled {
+    background-image: url("../img/sprite_ac_disabled.png");
+}
+#divCarouselEmpleox .control_set_1 {
+    float: right;
+    margin: 4px 6px 0;
+    position: relative;
+}
+
+#divCarouselEmpleox .control_set_2 {
+    float: right;
+    margin: 8px 0 0;
+    position: relative;
+}
+
+#divCarouselEmpleox  .ac_selected {
+*background-image: url("../img/sprite_ac_hover.png");
+}
+
+#divCarouselEmpleox  .ac_selected > a.entitymenu{
+    color: #FF6600;
+}
+
+#divCarouselEmpleox .slide_button {
+    float: left;
+}
+
+#divCarouselEmpleox .previous_button {
+    background-position: 4px 3px;
+}
+
+#divCarouselEmpleox .next_button {
+    background-position: -44px 3px;
+}
+
+#divCarouselEmpleox .numbered_button_container .ac_selected, #divCarouselEmpleox .numbered_button:hover  {
+    *background-image: url("../img/sprite_ac_hover.png");
+    color: #FF6600;
+}
+
+#divCarouselEmpleox .previous_next_button {
+    background-color: #FFFFFF;
+    background-image: url("../img/sprite_ac_normal.png");
+    border: 1px solid #CFCECE;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 0 2px #DFDFDF;
+    height: 16px;
+    overflow: hidden;
+    text-indent: 1000px;
+    width: 16px;
+}
+
+
+.agile_carousel .control_set {
+    z-index: 0 !important;
+}
+
+form.forma {font-size: 1em; width: 100%;   }
+.ui-widget button {font-size: 12px !important; font-family:Verdana, Arial, Helvetica, sans-serif !important }
+table.forma { width: 100%; margin-left:10px; float: left;}
+
+h3.searchtitle {font-size: 1.2em; font-weight: bold; font-family:Verdana, Arial, Helvetica, sans-serif}
+td.etiqueta_forma1 {width: 24.5%; margin:5px; font-family:Verdana, Arial, Helvetica, sans-serif; vertical-align:top; text-align:right;  font-size: 12px !important }
+td.etiqueta_forma_control1 {width: 75.5%; margin:5px; font-family:Verdana, Arial, Helvetica, sans-serif; vertical-align:top; text-align:right;  font-size: 12px !important }
+
+td.etiqueta_forma2 {width: 15%; margin:5px; font-family:Verdana, Arial, Helvetica, sans-serif; vertical-align:top; text-align:right;  font-size: 12px !important }
+td.etiqueta_forma_control2 {width: 35%; margin:5px; font-family:Verdana, Arial, Helvetica, sans-serif; vertical-align:top; text-align:right;  font-size: 12px !important }
+
+div.etiqueta_forma { font-size: 12px; font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; text-align:right }
+input.singleInput { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 99%; float: left;}
+textarea.singleInput { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 99%; float: left;  }
+select.singleInput { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 99%; float: left; }
+input.inputWidgeted1 { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif;  font-size: 12px; float: left; width: 94%}
+select.inputWidgeted1 { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 95%; float: left; font-size: 12px; height:18px !important}
+input.inputWidgeted2 { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif;  font-size: 12px;float: left; width: 90%}
+select.inputWidgeted2 { font-weight: normal; font-family:Verdana, Arial, Helvetica, sans-serif; width: 88%; float: left; font-size: 12px; height:18px !important}
+.foreign_toolbar { float:right }

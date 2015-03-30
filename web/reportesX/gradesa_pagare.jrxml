@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="gradesa_pagare" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" >
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="folio_pagare" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT folio_pagare, clave_contrato, fecha,
+(select nombre from pagarex_cliente where clave_cliente=pagarex_pagare.clave_cliente) as nombre_cliente,
+(select razon_social from pagarex_cliente where clave_cliente=pagarex_pagare.clave_cliente) as empresa_cliente,
+(select direccion_fiscal from pagarex_cliente where clave_cliente=pagarex_pagare.clave_cliente) as direccion_fiscal_cliente,
+importe, (select simbolo from fx_moneda where clave_moneda=pagarex_pagare.clave_moneda)as simbolo,
+QUANTITY_LETTER(importe, clave_moneda) as importe_en_letra,
+tipo_cambio, tasa_interes,
+PERCENTAGE_LETTER(tasa_interes) as tasa_en_letra,
+numero_transferencia, fecha_a_pagar,fecha_transferencia
+FROM pagarex_pagare where folio_pagare=$P{folio_pagare}]]>
+	</queryString>
+	<field name="folio_pagare" class="java.lang.Integer"/>
+	<field name="clave_contrato" class="java.lang.Integer"/>
+	<field name="fecha" class="java.sql.Date"/>
+	<field name="nombre_cliente" class="java.lang.String"/>
+	<field name="empresa_cliente" class="java.lang.String"/>
+	<field name="direccion_fiscal_cliente" class="java.lang.String"/>
+	<field name="importe" class="java.math.BigDecimal"/>
+	<field name="simbolo" class="java.lang.String"/>
+	<field name="importe_en_letra" class="java.lang.String"/>
+	<field name="tipo_cambio" class="java.math.BigDecimal"/>
+	<field name="tasa_interes" class="java.lang.Float"/>
+	<field name="tasa_en_letra" class="java.lang.String"/>
+	<field name="numero_transferencia" class="java.lang.Integer"/>
+	<field name="fecha_a_pagar" class="java.sql.Date"/>
+	<field name="fecha_transferencia" class="java.sql.Date"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="7" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="365" splitType="Stretch">
+			<textField>
+				<reportElement  positionType="Float" x="197" y="23" width="183" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["Monto Principal:  "+ new java.text.DecimalFormat("#,##0.00").format($F{importe}) ]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  positionType="Float" x="237" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[PAGARÉ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement  positionType="Float" stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="0" y="59" width="572" height="108"/>
+				<textElement textAlignment="Justified"/>
+				<textFieldExpression><![CDATA["POR VALOR RECIBIDO, que la  empresa (" + $F{empresa_cliente} + ") es una  sociedad debidamente constituida y existente conforme las leyes de los Estados Unidos Mexicanos y,  la (el)  “Acreditada (o)” quien manifiesta  tener su domicilio en (" +
+$F{direccion_fiscal_cliente}.replace("\n"," ") + ")  mismo que  se  designa y proporciona  para  ser requerido de pago; por lo que  con base  en este  documento me  obligo a pagar y cumplir la suma que ampara  este Pagaré  y prometo pagar  incondicionalmente a la orden de GRADESA, S.A. DE C.V. (el “Acreedor”), la suma principal de " +
+"\$"+ new java.text.DecimalFormat("#,##0.00").format($F{importe}) + " " + $F{simbolo} + ". (SON: " + $F{importe_en_letra} + ") moneda de curso legal de los Estados Unidos Mexicanos, (el “Monto Principal”), pagadera al día " +
+new SimpleDateFormat("dd 'de ' MMMM 'de' yyyy").format($F{fecha_a_pagar}) +".\n\n" +
+"El deudor (a), asimismo, promete pagar intereses sobre el saldo insoluto de este Pagaré, por el período que comienza en la fecha del presente y que termina en la Fecha de Vencimiento, a una tasa anual equivalente al " + $F{tasa_interes} + "% (" + $F{tasa_en_letra} +
+"), pagadero en la Fecha de Vencimiento.\n\n" +
+$F{empresa_cliente} + " promete pagar intereses si incumple con el pago cuando sea exigible de cualquier suma de conformidad con el presente, ya sea de principal," +
+"intereses o cualquier otro concepto (haya o no vencido, por aceleración o de cualquier otra manera),  a   GRADESA, S.A. DE C.V., según el máximo alcance " +
+"permitido bajo la ley aplicable, pagará intereses moratorios sobre la cantidad no pagada  a una tasa anual igual al 24% (VEINITICUATRO POR CIENTO). Dichos intereses serán pagaderos a solicitud del Acreedor en cualquier momento.\n\n"+
+"Los intereses pagaderos bajo este Pagaré serán calculados sobre la base de un año de 360 (trescientos sesenta) días y el número de días actuales transcurridos, incluyendo el primer día pero excluyendo el último día del período que se trate.\n\n"+
+"Para efectos de este Pagaré, los siguientes términos tendrán los siguientes significados:\n\n"+
+"“Día Hábil” significa cualquier día distinto a un sábado, domingo o cualquier otro día en que los bancos comerciales en MEXICO se encuentren autorizados o requeridos por ley a permanecer cerrados.\n\n"+
+"Todos los pagos de principal e intereses conforme al presente deberán ser efectuados sin que exista compensación, deducción o reclamación alguna a más tardar "+
+"a las 16:00 HORAS, en la fecha de vencimiento, en fondos disponibles de forma inmediata a DEPOSITO EN CUENTA DE CHEQUES A NOMBRE DEL ACREEDOR por lo que, "+
+$F{empresa_cliente} + " conviene en rembolsar en cuanto le sea solicitado, de la misma forma y en el mismo tipo de fondos, todas las pérdidas, costos y gastos "+
+"relacionados con la ejecución del presente Pagaré (incluyendo  sin limitación todos los  gastos, costas y honorarios legales y cualesquier otra erogación que sea " +
+"con motivo de la recuperación de la deuda).\n\n"+
+"Todos los pagos hechos por o a cuenta de "+ $F{empresa_cliente} + " Bajo el presente se harán libres de y sin deducción de cualesquiera impuestos; " +
+"en el entendido de que cuando la  habilitada,  en este  caso la deudora,  es  decir " + $F{empresa_cliente} + " sea requerida a deducir los impuestos de " +
+"dichos pagos, entonces (I) se pagarán al Acreedor aquellas cantidades adicionales que sean necesarias para asegurar que después de realizar todas las " +
+"deducciones requeridas (incluyendo las deducciones aplicables a las sumas adicionales pagaderas bajo este párrafo)  con la finalidad de que  el Acreedor " +
+"reciba una cantidad neta equivalente a la cantidad total que hubiese  recibido si el pago no se hubiera hecho sujeto a dicho impuesto; " +
+"(II) por lo que (NOMBRE DEL PRODUCTOR) Realizará dichas deducciones  (III) y, " +  $F{empresa_cliente} + " Pagará dichos impuestos o cantidades retenidas " +
+"a las autoridades gubernamentales de conformidad con la ley aplicable.\n\n" +
+"Adicionalmente en igual forma pagará cualesquier otros impuestos a las autoridades gubernamentales de conformidad con la ley aplicable.\n\n"+
+"Tan pronto como sea posible una vez que sea hecho cualquier pago de impuestos por la  acreedora a una autoridad gubernamental, dicha acreedora entregará al deudor el original o copia certificada del recibo de pago  emitido por dicha autoridad gubernamental que documente dicho pago  y una copia de la declaración reportando dicho pago o cualquier prueba del referido  pago en la forma razonablemente aceptable por el Acreedor, dentro de los 30 (treinta) días siguientes al pago de los mismos.\n\n"+
+"En el caso concreto  y de acuerdo a la utilización  de los  términos   que se manejan en el presente  documento relacionados con “impuesto” e “impuestos”  se  entenderá que se incluyen todos  los impuestos, obligaciones fiscales y   de cualquier orden legal, derechos, deducciones y retenciones que se tengan que cubrir  en el tiempo que sean exigibles  o  a futuro,  es decir pagos que  sean obligados   en la actualidad  o a  futuro por cualquier autoridad fiscal de los Estados Unidos Mexicanos o cualquier otra jurisdicción así como cualquier cantidad pagadera  en el presente que fuese  cubierta como  cualesquier cantidad que resultare  de obligaciones o condiciones  que  tengan como consecuencia  sin  limitaciones o condiciones que tengan como consecuencia una contribución  conjuntamente con intereses sobre la cantidad adeudada y multas en relación con, dicha contribución que pudiera imponerse en virtud de la violación  de o incumplimiento de las leyes fiscales correspondientes; así mismo la deudora  deberá de cubrir  cualesquier   gasto, costa,  recargos, multas  y cualquier sanción de orden pecuniario  ya sea fiscal  o no  y  además  pago de  gastos de juicios que tuviesen que  tramitarse motivos  por   litigio, incluyendo  cualesquier honorario  a profesionista  llámese   abogados, peritos o cualesquier profesionista  o persona  que intervenga en el tramite procesal en la que se involucren las partes; es decir, todo  ello   corre por cuenta  de  la deudora.\n\n" +
+"La   deudora  renuncia a la diligencia de protesta  y cualquier diligencia que tenga  que realizarse con motivo de la  recuperación del  dinero recibido que sea necesario para promover  cualesquier  procedimiento judicial  pendiente  a la  recuperación del crédito otorgado.\n\n" +
+"El   aceptante y deudor  renuncia  al fuero de su domicilio y   GRADESA, S.A.  DE C.V.  podrá utilizar para la recuperación de las cantidades entregadas a la deudora y las que ampara  este   pagare,  cualesquier medio legal, bajo el entendido de que,   también podrá seleccionar  para  ejercitar las acciones  y obtener el pago  de las cantidades recibidas por  el acreedor, preferentemente   los Tribunales de la Ciudad de México, D.F. o el que  decida  seleccionar  acorde  a sus intereses.\n\n"+
+"Este Pagaré se regirá e interpretará de acuerdo con las leyes de MEXICO; en la inteligencia, sin embargo, de que si cualquier acción o procedimiento en relación con este Pagaré se iniciara en los tribunales de los Estados Unidos Mexicanos, este Pagaré se considerará regido de acuerdo con las leyes de los Estados Unidos Mexicanos.\n\n"+
+"Este Pagaré está compuesto por 2 páginas y, se  regula conforme  a lo  establecido en los artículos  170 al  174 de la  Ley General de  Títulos y Operaciones de Crédito.\n\n" +
+"AVAL.-  Firma este documento  " + $F{empresa_cliente} + "Quien se obliga a cubrir las obligaciones contenidas  en el mismo y a pagar  la  cantidad  y/o " +
+"cantidades con  cargo al deudor  en caso de incumplimiento de  este y señala como domicilio  para  ser  notificado  el ubicado en " +
+$F{direccion_fiscal_cliente}.replace("\n"," ") + ". Manifestando que renuncia al fuero de su domicilio.\n\n"+
+"Se firma en la ciudad de Cd. Obregón, Sonora los " + new SimpleDateFormat("dd 'días del mes de ' MMMM ' en el año ' yyyy").format($F{fecha}) + "."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  positionType="Float" isPrintRepeatedValues="false" x="163" y="180" width="262" height="19"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[La  Acreditada]]></text>
+			</staticText>
+			<textField>
+				<reportElement  positionType="Float" isPrintRepeatedValues="false" x="163" y="199" width="262" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{empresa_cliente}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement  positionType="Float" x="167" y="282" width="258" height="1"/>
+			</line>
+			<textField>
+				<reportElement  positionType="Float" isPrintRepeatedValues="false" x="163" y="283" width="262" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nombre_cliente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  positionType="Float" isPrintRepeatedValues="false" x="163" y="303" width="262" height="19"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[REPRESENTANTE LEGAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  positionType="Float" isPrintRepeatedValues="false" x="0" y="322" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Domicilio]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement  positionType="Float" isPrintRepeatedValues="false" x="0" y="342" width="221" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{direccion_fiscal_cliente}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

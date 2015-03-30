@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="proforma_detalle" language="groovy" pageWidth="612" pageHeight="792" columnWidth="612" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="55aeb323-d143-4918-9b97-8cead4a22784">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="clave_poliza" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select clave_cuenta,
+(select case isnull(razon_social) when true then nombre else razon_social end as razon_social
+from pagarex_cliente where clave_cliente=fx_poliza_detalle.clave_beneficiario) as subcuenta,
+(select cuenta from fx_cuenta where clave_cuenta=fx_poliza_detalle.clave_cuenta) as cuenta ,
+(select tipo_transaccion from fx_tipo_transaccion where clave_tipo_transaccion=fx_poliza_detalle.clave_tipo_transaccion) as tipo_transaccion,
+cargo,
+case cargo when 1 then importe else 0 end as importe_cargo,
+case cargo when 0 then importe else 0 end as importe_abono
+from fx_poliza_detalle where clave_poliza=$P{clave_poliza}
+order by cargo DESC]]>
+	</queryString>
+	<field name="clave_cuenta" class="java.lang.Integer"/>
+	<field name="subcuenta" class="java.lang.String"/>
+	<field name="cuenta" class="java.lang.String"/>
+	<field name="tipo_transaccion" class="java.lang.String"/>
+	<field name="cargo" class="java.lang.Integer"/>
+	<field name="importe_cargo" class="java.math.BigDecimal"/>
+	<field name="importe_abono" class="java.math.BigDecimal"/>
+	<variable name="importe_cargo_1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{importe_cargo}]]></variableExpression>
+	</variable>
+	<variable name="importe_abono_1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{importe_abono}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="58868bb1-9e41-4f7b-9701-61ec9c8f085d" positionType="Float" x="2" y="10" width="43" height="20"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Clave]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ceeaa715-0b73-4b72-a805-35e08371abee" positionType="Float" x="47" y="10" width="100" height="20"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cuenta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b5049d10-be6f-49c7-bfbf-855e5e3d49e4" positionType="Float" x="226" y="10" width="100" height="20"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Movimiento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="74a5b278-d913-4569-b32e-773749648b19" positionType="Float" x="328" y="10" width="100" height="20"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cargo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="87f029c7-08c9-4037-ac47-3f67d62a3a3b" positionType="Float" x="429" y="10" width="100" height="20"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Abono]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="40" splitType="Stretch">
+			<printWhenExpression><![CDATA[$F{cargo}==1]]></printWhenExpression>
+			<textField>
+				<reportElement uuid="bbd250ac-dd18-4dbc-89e0-d2c688268fc5" positionType="Float" x="2" y="0" width="33" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{clave_cuenta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="15183d73-cf3b-43a7-9d66-db7347e3fb1a" positionType="Float" stretchType="RelativeToBandHeight" x="50" y="20" width="155" height="20" isPrintWhenDetailOverflows="true"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{subcuenta}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00">
+				<reportElement uuid="b5b56de9-55d0-4508-aaea-e9e023a780a7" positionType="Float" x="328" y="0" width="100" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{importe_cargo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7568837b-c199-4ceb-a47e-2d43e052cf1e" positionType="Float" x="226" y="0" width="100" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tipo_transaccion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="724f5f7a-9ac8-447c-87f4-68ac21b382b0" positionType="Float" stretchType="RelativeToBandHeight" x="50" y="0" width="155" height="20" isPrintWhenDetailOverflows="true"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cuenta}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="42">
+			<printWhenExpression><![CDATA[$F{cargo}==0]]></printWhenExpression>
+			<textField>
+				<reportElement uuid="faeae8aa-bb70-49b9-987e-0e571e64bbaf" positionType="Float" x="69" y="20" width="155" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{subcuenta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="cd6d2bd3-8c1d-4d76-a7f1-c1728e5396aa" positionType="Float" x="226" y="0" width="100" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tipo_transaccion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0fbe87d2-0afa-47a3-af8f-a92e51d6bed1" positionType="Float" x="2" y="0" width="33" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{clave_cuenta}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00">
+				<reportElement uuid="53a5fe12-7d75-4b41-910f-0e3f717f3e8e" positionType="Float" x="429" y="0" width="100" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{importe_abono}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="6a2daf43-f203-4224-824b-248f91e4bbd0" positionType="Float" stretchType="RelativeToBandHeight" x="69" y="0" width="155" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cuenta}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="34" splitType="Stretch">
+			<textField pattern="$ #,##0.00">
+				<reportElement uuid="0d36e818-be5b-4b57-9caf-ddd374a91b75" x="328" y="10" width="100" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{importe_cargo_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00">
+				<reportElement uuid="53abbf91-2425-4280-a258-95dad4be48f9" x="429" y="10" width="100" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{importe_abono_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="28051e72-a487-4a47-b0e0-cc9da284c78d" x="223" y="10" width="100" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Sumas iguales]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

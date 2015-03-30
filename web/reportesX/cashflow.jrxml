@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cashflow" language="groovy" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2a104d5d-79bd-46df-a3e1-d5d7305e45f8">
+	<property name="template.type" value="columnar"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#000000" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="fecha_inicial" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fecha_final" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+$P{fecha_inicial} as fecha,
+case when saldo_inicial < 0 then
+  'Egresos'
+else
+  'Ingresos'
+end as tipo_transaccion,
+sum(fx_cuenta.saldo_inicial * fx_cuenta.tipo_cambio) as importe
+from
+fx_cuenta
+where fx_cuenta.clave_tipo_cuenta<6
+group by saldo_inicial
+union
+select
+fx_poliza.fecha,
+case
+when fx_poliza.clave_tipo_transaccion=1 or fx_poliza.clave_tipo_transaccion=7 then
+'Ingresos'
+else
+'Egresos'
+end as tipo_transaccion,
+sum(if(fx_poliza_detalle.cargo=1,1,-1)*fx_poliza_detalle.importe*fx_poliza_detalle.tipo_cambio )
+from
+fx_poliza, fx_poliza_detalle, fx_cuenta
+where fx_poliza.clave_poliza= fx_poliza_detalle.clave_poliza
+and fx_poliza_detalle.clave_cuenta=fx_cuenta.clave_cuenta
+and fx_cuenta.clave_tipo_cuenta<6
+and fx_poliza.fecha>=$P{fecha_inicial}
+and fx_poliza.fecha<=$P{fecha_final}
+group by fx_poliza.fecha, fx_poliza.clave_tipo_transaccion,fx_poliza_detalle.cargo]]>
+	</queryString>
+	<field name="fecha" class="java.sql.Date"/>
+	<field name="tipo_transaccion" class="java.lang.String"/>
+	<field name="importe" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="354" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="559e971d-d1b6-4b72-84e8-93d70ed08192" style="Title" x="308" y="10" width="264" height="64"/>
+				<textElement textAlignment="Right">
+					<font size="42" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Cashflow]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="faa9e49c-32a2-4a9f-8563-4e10b7c87232" style="SubTitle" x="280" y="74" width="293" height="29"/>
+				<textElement textAlignment="Right">
+					<font size="20" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Flujo de efectivo por fechas]]></text>
+			</staticText>
+			<image>
+				<reportElement uuid="d86d0a0d-0e97-4916-9612-1c01c2a8e4e7" x="4" y="10" width="154" height="48"/>
+				<imageExpression><![CDATA["C:\\Users\\Personal\\Documents\\NetBeansProjects\\administrax\\web\\img\\administrax_logo.png"]]></imageExpression>
+			</image>
+			<elementGroup>
+				<lineChart>
+					<chart evaluationTime="Report">
+						<reportElement uuid="399319de-73d0-4d1d-90c0-ba5c9fcdebbe" x="5" y="116" width="260" height="227"/>
+						<chartTitle/>
+						<chartSubtitle/>
+						<chartLegend/>
+					</chart>
+					<categoryDataset>
+						<categorySeries>
+							<seriesExpression><![CDATA[$F{tipo_transaccion}]]></seriesExpression>
+							<categoryExpression><![CDATA[$F{fecha}]]></categoryExpression>
+							<valueExpression><![CDATA[$F{importe}]]></valueExpression>
+							<labelExpression><![CDATA[$F{tipo_transaccion}]]></labelExpression>
+						</categorySeries>
+					</categoryDataset>
+					<linePlot>
+						<plot/>
+					</linePlot>
+				</lineChart>
+			</elementGroup>
+			<xyLineChart>
+				<chart evaluationTime="Report">
+					<reportElement uuid="e82bf0b1-4b60-4574-b95e-60450cc0ad05" x="280" y="116" width="263" height="215"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<xyDataset>
+					<xySeries>
+						<seriesExpression><![CDATA[$F{tipo_transaccion}]]></seriesExpression>
+						<xValueExpression><![CDATA[$F{importe}]]></xValueExpression>
+						<yValueExpression><![CDATA[$F{importe}]]></yValueExpression>
+						<labelExpression><![CDATA[$F{tipo_transaccion}]]></labelExpression>
+					</xySeries>
+				</xyDataset>
+				<linePlot>
+					<plot/>
+				</linePlot>
+			</xyLineChart>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="23" splitType="Stretch">
+			<frame>
+				<reportElement uuid="6c91d8af-8224-4de0-9aaa-98cab728d22f" mode="Opaque" x="3" y="9" width="555" height="13" forecolor="#D0B48E" backcolor="#9DB1B8"/>
+				<textField evaluationTime="Report">
+					<reportElement uuid="8e9e48f9-c2c8-4968-8c63-aee79a20da6a" style="Column header" x="513" y="-1" width="40" height="13" forecolor="#FFFFFF"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="113658f1-1717-46a5-a0cd-ce25e87e3f71" style="Column header" x="433" y="-1" width="80" height="13" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement uuid="93a36a66-8b99-495e-a946-0d57b3eb705a" style="Column header" x="2" y="0" width="197" height="13" forecolor="#FFFFFF"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
