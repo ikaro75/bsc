@@ -1022,7 +1022,7 @@
                                     //Genera reportes
                                     if ($("#_r").val() != "") {
                                         var caracteristicas = "height=800,width=800,scrollTo,resizable=1,scrollbars=1,location=0";
-                                        aReportes = $("#_r").val().split("||");
+                                        aReportes = $("#_r").val().split("|");
                                         for (var i = 0; i < aReportes.length; i++) {
                                             if (aReportes[i] != "")
                                                 window.open('control?$cmd=report&$cr=' + aReportes[i].split("|")[1] + "&$pk=" + sResultado, "_blank", caracteristicas);

@@ -1830,6 +1830,7 @@ public class Consulta {
             String[] aFields = this.sql.replaceAll("\n"," ").split(",");
             Boolean fromPendiente = false;
             Boolean wherePendiente = false;
+            Boolean subconsultaPendiente = false;
             String separador =",";
             for (int i = 0; i < aFields.length; i++) {
                 
@@ -1853,14 +1854,16 @@ public class Consulta {
                     } else {
                         select += aFields[i] + ","; 
                     } 
-                } else if (aFields[i].trim().startsWith("(")) { //Hay una subconsulta en el select?
+                } else if (aFields[i].trim().startsWith("(") || subconsultaPendiente) { //Hay una subconsulta en el select?
                     
                     if (aFields[i].toLowerCase().lastIndexOf("from")>aFields[i].toLowerCase().indexOf(")")) {
                         select += aFields[i].substring(0,aFields[i].toLowerCase().lastIndexOf("from")-1) + ",";
                         aFields[i] = aFields[i].substring(aFields[i].toLowerCase().lastIndexOf("from"),aFields[i].length());
+                        subconsultaPendiente = false;
                         i --; 
                     } else if (!aFields[i].equals("")){
                             select += aFields[i] + ",";
+                            subconsultaPendiente=true;
                      }
                     //Verificar si viene FROM
                 } else if (aFields[i].toLowerCase().contains("from") || fromPendiente) {
@@ -1873,17 +1876,21 @@ public class Consulta {
                             from += aFrom[j] + " ";
                         } else if (aFrom[j].toLowerCase().equals("where")) {
                             fromPendiente = false;
-                            /*String sFields = aFrom[j];
-                            for (int k=i;k<aFields.length;k++) {
-                                sFields = aFields[k].concat(separador);
+                            aFields[i]="";
+                            for (int k=j;k<aFields.length;k++) {
+                                aFields[i]+=aFrom[k] + " ";
                             }
-                            aFields = sFields.substring(0, sFields.length()-1).split(" ");
-                            separador = " ";*/
+                            separador = " ";
                             i--;
                             break;
                         } else if (aFrom[j].toLowerCase().equals("order")) {
                             fromPendiente = false;
-                            aFields[i]=aFields[i].substring(from.length(), aFields[i].length());
+                            //Se debe vaciar los valores del aFrom en aFields[i]
+                            aFields[i]="";
+                            for (int k=j; k < aFrom.length;  k++) {
+                                aFields[i]+=aFrom[k] + " ";
+                            }
+                            //aFields[i]=aFields[i].substring(from.length(), aFields[i].length());
                             i--;
                             break;
                         } else if (esDelFrom) { // caso de los alias

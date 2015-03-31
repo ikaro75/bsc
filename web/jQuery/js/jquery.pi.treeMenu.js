@@ -24,6 +24,60 @@
             obj.attr("pk", $.fn.treeMenu.options.pk);
             obj.attr("datestamp", $.fn.treeMenu.options.datestamp);
             $.fn.treeMenu.getTreeDefinition(this);
+            
+            //Aquí se le asignan eventos a los botones de herramientas del árbol
+            $("#refresh_tree_button").click(function() {
+               $.fn.treeMenu.getTreeDefinition ($("#tvIndicadores")); 
+            });
+            
+            $("#add_node_tree_button").click(function() {
+                     $("#divwait")
+                    .html("<br /><p style='text-align: center'><img src='img/throbber.gif' />&nbsp;Generando forma...</p>")
+                    .attr('title', 'Espere un momento por favor')
+                    .dialog({
+                        height: 140,
+                        modal: true,
+                        autoOpen: true,
+                        closeOnEscape: false
+                    });
+                   
+                    w = "";
+                    if ($('#tvIndicadores').jstree('get_selected').length>0) {
+                        nPK =$('#tvIndicadores').jstree('get_selected').attr('id').split("_")[1].split("-")[0];
+                        w = "clave_indicador_padre=" + nPK;
+                    }    
+                    
+                    $("body").form({
+                        app: "145",
+                        forma: 775,
+                        modo: "insert",
+                        columnas: 1,
+                        pk: 0,
+                        filtroForaneo: "2=clave_aplicacion=141&3="+w,
+                        height: "90%",
+                        width: "80%",
+                        originatingObject: "",
+                        showRelationships: "false",
+                        updateControl: obj[0].id,
+                        secondFieldText: "" //Puesto que se trata de un registro nuevo, 
+                    });                
+            });
+            
+            $("#edit_node_tree_button").click(function() {
+                
+            });
+            
+            $("#delete_node_tree_button").click(function() {
+                
+            });
+            
+            $("#expand_tree_button").click(function() {
+                
+            });
+            
+            $("#collapse_tree_button").click(function() {
+                
+            });
         });
     }
 
@@ -37,7 +91,8 @@
                     autoOpen: true,
                     closeOnEscape: false
                 });
-
+                
+                
         $("#_status_").val("Cargando indicadores");
         var nEntidad = $(o).attr("entidad");
         var nPk = $(o).attr("pk");
@@ -273,7 +328,7 @@
 
                                                 //Copia al cache la app que se est? usando al editar
                                                 $("#_cache_").val("145");
-                                                nForma = 0;
+                                                
                                                 nPK = 0;
                                                 w = "";
                                                 nForma = 775;

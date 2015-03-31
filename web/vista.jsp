@@ -156,26 +156,26 @@
                                                             <table cellspacing="0" cellpadding="0" border="0" class="ui-pg-table navtable" style="float:left;table-layout:auto;">
                                                                 <tbody>
                                                                     <tr>
-                                                                        <td class="ui-pg-button ui-corner-all" title="Recargar datos" id="refresh_grid_141_636_0_top">
+                                                                        <td class="ui-pg-button ui-corner-all" title="Recargar datos" id="refresh_tree_button">
                                                                             <div class="ui-pg-div"><span class="ui-icon ui-icon-refresh"></span></div>
                                                                         </td>
-                                                                        <td class="ui-pg-button ui-corner-all" title="Nuevo registro">
+                                                                        <td class="ui-pg-button ui-corner-all" title="Nuevo registro" id="add_node_tree_button">
                                                                             <div class="ui-pg-div"><span class="ui-icon ui-icon-plus"></span></div>
                                                                         </td>
-                                                                        <td class="ui-pg-button ui-corner-all" title="Editar registro">
+                                                                        <td class="ui-pg-button ui-corner-all" title="Editar registro" id="edit_node_tree_button">
                                                                             <div class="ui-pg-div"><span class="ui-icon ui-icon-pencil"></span></div>
                                                                         </td>
-                                                                        <td class="ui-pg-button ui-corner-all" title="Eliminar registro">
+                                                                        <td class="ui-pg-button ui-corner-all" title="Eliminar registro" id="delete_node_tree_button">
                                                                             <div class="ui-pg-div"><span class="ui-icon ui-icon-trash"></span>
                                                                             </div>
                                                                         </td>
                                                                         <td class="ui-pg-button ui-state-disabled" style="width:4px;">
                                                                             <span class="ui-separator"></span>
                                                                         </td>
-                                                                        <td class="ui-pg-button ui-corner-all" title="Expandir todo">
+                                                                        <td class="ui-pg-button ui-corner-all" title="Expandir todo" id="expand_tree_button">
                                                                             <div class="ui-pg-div"><span class="ui-icon ui-icon-circlesmall-plus"></span></div>
                                                                         </td>
-                                                                        <td class="ui-pg-button ui-corner-all" title="Colapsar todo">
+                                                                        <td class="ui-pg-button ui-corner-all" title="Colapsar todo" id="collapse_tree_button">
                                                                             <div class="ui-pg-div"><span class="ui-icon ui-icon-circlesmall-minus"></span>
                                                                             </div>
                                                                         </td>
