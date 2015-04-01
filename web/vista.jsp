@@ -144,7 +144,7 @@
                     <div id='jqxSplitter'>
                         <div class="portlet">
                             <div class="ui-jqgrid-titlebar ui-widget-header ui-corner-top ui-helper-clearfix" style="padding: .3em .2em .2em .3em;">Indicadores Clave de Desempeño</div>
-                            <div class="portlet-content" style="height:95%">
+                            <div class="portlet-content" style="height:93%">
                                 <div id="tvIndicadores_view" class="ui-jqgrid-view">
                                     <div class="ui-jqgrid ui-widget ui-widget-content ui-corner-all" id="gbox_tvIndicadores" dir="ltr" style="position: relative;left: 0px;top: 0px;padding: .0em;">
                                     <div id="tvIndicadores_toppager" class="ui-state-default ui-jqgrid-toppager" dir="ltr">
@@ -413,7 +413,7 @@
         </div>
 
         <div class="tlyPageGuideWelcome" style="text-align: center;">
-            <p>!Bienvenido al Directorio de Suscriptores y Contactos de la Revista Eficiencia Energ&eacute;tica! <br/> <br/>&iquest;Requiere de una gu&iacute;a para aprender a usarlo?</p>
+            <p>!Bienvenido al Cuadro de Mando Integral! <br/> <br/>&iquest;Requiere de una gu&iacute;a para aprender a usarlo?</p>
             <button class="tlypageguide_start">Si</button>
             <button class="tlypageguide_dismiss">No</button>
             <button class="tlypageguide_ignore">No volver a desplegar esta pantalla</button>

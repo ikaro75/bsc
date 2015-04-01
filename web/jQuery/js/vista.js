@@ -45,7 +45,7 @@ $(document).ready(function() {
     //Crea menú de aplicaciones de acuerdo al perfil
     $(".appmenu").appmenu();
     $('#jqxSplitter')
-            .jqxSplitter({ width: '100%', height: '95%', panels: [{ size: '50%' }, { size: '50%' }] })
+            .jqxSplitter({ width: '100%', height: '95%', panels: [{ size: '30%' }, { size: '70%' }] })
             .on('resize', function (event) { var panels = event.args.panels;
                                             $("#grid_141_636_0").setGridWidth($("#grid_141_636_0").parent().parent().parent().parent().parent().width()); 
             }); 

@@ -44,7 +44,7 @@
                     w = "";
                     if ($('#tvIndicadores').jstree('get_selected').length>0) {
                         nPK =$('#tvIndicadores').jstree('get_selected').attr('id').split("_")[1].split("-")[0];
-                        w = "clave_indicador_padre=" + nPK;
+                        w = "clave_indicador=" + nPK;
                     }    
                     
                     $("body").form({
@@ -58,25 +58,79 @@
                         width: "80%",
                         originatingObject: "",
                         showRelationships: "false",
-                        updateControl: obj[0].id,
+                        updateControl: "tvIndicadores",
                         secondFieldText: "" //Puesto que se trata de un registro nuevo, 
                     });                
             });
             
             $("#edit_node_tree_button").click(function() {
-                
+                $("#divwait")
+                    .html("<br /><p style='text-align: center'><img src='img/throbber.gif' />&nbsp;Generando forma...</p>")
+                    .attr('title', 'Espere un momento por favor')
+                    .dialog({
+                        height: 140,
+                        modal: true,
+                        autoOpen: true,
+                        closeOnEscape: false
+                });
+                    
+                if ($('#tvIndicadores').jstree('get_selected').length==0) {
+                    alert("Seleccione el nodo del \u00e1rbol que desea editar");
+                    return;
+                } else {
+                    nPK =$('#tvIndicadores').jstree('get_selected').attr('id').split("_")[1].split("-")[0];
+                    $("body").form({
+                        app: "145",
+                        forma: 775,
+                        modo: "update",
+                        columnas: 1,
+                        pk: nPK,
+                        filtroForaneo: "2=clave_aplicacion=141&3=",
+                        height: "90%",
+                        width: "80%",
+                        originatingObject: "",
+                        showRelationships: "false",
+                        updateControl: "tvIndicadores",
+                        secondFieldText: "" //Puesto que se trata de un registro nuevo, 
+                    });
+                }
             });
             
             $("#delete_node_tree_button").click(function() {
-                
+                if ($('#tvIndicadores').jstree('get_selected').length==0) {
+                    alert("Seleccione el nodo del \u00e1rbol que desea eliminar");
+                    return;
+                } else {
+                    
+                    if (!confirm("\xBFEst\u00e1 seguro que desea eliminar el registro? No es posible deshacer esta acci\u00f3n."))
+                        return false;
+                    else {
+                        $.ajax(
+                                {
+                                    url: "control?$cmd=register&$ta=delete&$cf=775&$pk=" + $('#tvIndicadores').jstree('get_selected').attr('id').split("_")[1].split("-")[0],
+                                    dataType: "text",
+                                    success: function (data) {
+                                        //Borra el nodo del ?rbol
+                                       $("#tvIndicadores").jstree("delete_node", "#" + $('#tvIndicadores').jstree('get_selected').attr('id'));
+                                    },
+                                    error: function (xhr, err) {
+                                        if (xhr.responseText.indexOf("Iniciar sesi&oacute;n") > -1) {
+                                            alert("Su sesión ha expirado, por seguridad es necesario volverse a registrar");
+                                            window.location = 'login.jsp';
+                                        }
+                                        alert("Error al eliminar registro");
+                                    }
+                                });
+                    }                                     
+                }                
             });
             
             $("#expand_tree_button").click(function() {
-                
+                 $("#tvIndicadores").jstree('open_all');
             });
             
             $("#collapse_tree_button").click(function() {
-                
+                $("#tvIndicadores").jstree("close_all");
             });
         });
     }
@@ -96,8 +150,7 @@
         $("#_status_").val("Cargando indicadores");
         var nEntidad = $(o).attr("entidad");
         var nPk = $(o).attr("pk");
-        $.ajax(
-                {
+        $.ajax({
                     url: $.fn.treeMenu.options.xmlUrl + "&$cf=" + nEntidad + "&$pk=" + nPk + "&$ta=children", //,"categorias.xml", //
                     dataType: ($.browser.msie) ? "text" : "xml",
                     contentType: "application/x-www-form-urlencoded",
@@ -178,43 +231,6 @@
                                 sTitulo = $.trim(nodoPadre.children("a").text()) + "\\" + sTitulo;
                                 nodoPadre = data.inst._get_parent(nodoPadre);
                             }                
-                                
-                            //Recorre los nodos hijos
-                            /*var sectoresHijos = "";
-                            nodosHijos = $(oTheNode).find("li");
-
-                            for (i = 0; i < nodosHijos.length; i++) {
-
-                                if (nodosHijos[i].id.indexOf("entidad") == 0) {
-                                    entidadesHijos += nodosHijos[i].id.split("_")[1].split("-")[0] + ",";
-                                } else if (nodosHijos[i].id.indexOf("sector") == 0) {
-                                    sectoresHijos += nodosHijos[i].id.split("_")[1].split("-")[0] + ",";
-                                }
-                            }
-
-                            //Elimina las últimas comas para evitar errores de sintaxis
-                            if (sectoresHijos != "")
-                                sectoresHijos = sectoresHijos.substring(0, sectoresHijos.length - 1);
-
-                            if (entidadesHijos != "")
-                                entidadesHijos = entidadesHijos.substring(0, entidadesHijos.length - 1);
-
-                            if (sNodeId.indexOf("sector") == 0) {
-                                sFiltro = sFiltro.replace(/%clave_taxonomia/g, sectoresHijos != "" ? sectoresHijos + "," + sNodeId.split("_")[1].split("-")[0] : sNodeId.split("_")[1].split("-")[0]);
-                            } 
-
-                            if (sFiltro == '')
-                                return false;*/
-
-                            $("#divwait")
-                                    .html("<br /><p style='text-align: center'><img src='img/throbber.gif' />&nbsp;Recuperando indicadores...</p>")
-                                    .attr('title', 'Espere un momento por favor')
-                                    .dialog({
-                                        height: 140,
-                                        modal: true,
-                                        autoOpen: true,
-                                        closeOnEscape: false
-                                    });
 
                             //Llama grids
                             oGridHeader = $("#grid_141_636_0").parent().parent().parent().find("span.ui-jqgrid-title");
@@ -238,10 +254,9 @@
                                     {url: "control?$cmd=grid&$cf=636&$ta=select&$dp=body&$w=" + sFiltro})
                                     .trigger("reloadGrid");//Reload grid trigger*/
 
-                            //$("#divwait").dialog("close");
+                            $("#divwait").dialog("close");
                             $("#_status_").val("");
                          }).bind("move_node.jstree", function (e, data) {
-                            if (data.rslt.o[0].id.indexOf("sector") > -1) {
                                 nodoPorMover = data.rslt.o[0].id.split("_")[1].split("-")[0];
                                 nuevoPadre = data.rslt.np[0].id.split("_")[1].split("-")[0];
                                 
@@ -254,8 +269,6 @@
                                 postConfig = "&$cf=775&$ta=update&$pk=" + nodoPorMover + "&$ca=0" +
                                         "&clave_indicador_padre=" + nuevoPadre + "&orden="+data.rslt.cp;
                                 $.post("control?$cmd=register" + postConfig, "");
-                                
-                            } 
                         }).jstree({
                             "core": {
                                 "check_callback": function (e, data) {
@@ -356,6 +369,7 @@
                                 }
                             }
                         });
+                        $("#divwait").dialog("close");    
                     },
                     error: function (xhr, err) {
                         $("#divwait").dialog("close");

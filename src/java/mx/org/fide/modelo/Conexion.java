@@ -485,5 +485,52 @@ public class Conexion {
     
     }
 
-        
+    /**
+     * Valida sentencias SQL
+     * @param q        Sentencia SQL compatible con la base de datos 
+     * @return         Código XML consentencia SQL resuelta, en caso de que la snetencia tenga errores tambien se incluirán
+     * @throws Fallo   si ocurre algún error relacionado a la base de datos 
+     */
+    public String validateSQL(String q, Integer origenDatos) throws Fallo {
+        Conexion c = null;        
+        String sResultado = openConnection();
+        ResultSet rs = null;
+        if (!sResultado.equals("")) {
+            throw new Fallo("Error al conectarse a la base de datos");
+        }
+        try {
+            //Recupera el origen de datos seleccionado
+            rs = this.getRs("SELECT * FROM fw_scorecard_origen_dato WHERE clave_origen_dato=".concat(origenDatos.toString()));
+            
+            if (rs.next()) {
+                c = new Conexion(rs.getString("servidor").concat(":").concat(rs.getString("puerto")),rs.getString("db"),rs.getString("login"),rs.getString("pw"),DbType.values()[rs.getInt("clave_tipo_db")]);
+                sResultado = c.openConnection();
+                if (q.toLowerCase().startsWith("select")) {
+                    rs = c.getRs(q);
+                    
+                    if (rs.next()) {
+                      sResultado = rs.getString(1);
+                    } else {
+                      sResultado=null;   
+                    }
+                } else {
+                    throw new Fallo("Se requiere que la consulta empiece con la palabra SELECT");
+                }
+                rs.close();
+                
+            } else {
+                throw new Fallo("No se encontró el origen de datos seleccionado, verifique");
+            }
+        } catch (SQLException sqlex) {
+            throw new Fallo(sqlex.toString());
+        } catch (Exception e) {
+            throw new Fallo(e.toString());
+        } finally {
+            this.cierraConexion();
+            c.cierraConexion();
+        }
+
+        return sResultado;
+    
+    }    
 }

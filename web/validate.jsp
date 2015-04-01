@@ -23,9 +23,12 @@
         q = request.getParameter("q").replace("$pk", "0")
                 .replace("%clave_empleado",user.getClave().toString())
                 .replace("%clave_perfil",user.getClavePerfil().toString());
-        
-        user.getCx().validateSQL(q);
-        
+
+        if (request.getParameter("origen_datos") == null || request.getParameter("origen_datos").equals("undefined")) 
+            user.getCx().validateSQL(q);
+        else     
+            s = new StringBuilder(user.getCx().validateSQL(q, Integer.parseInt(request.getParameter("origen_datos"))));
+            
     } catch (Fallo f) {
         error = f.getMessage();
     } catch (Exception e) {
@@ -34,10 +37,10 @@
         if (!error.equals("")) {
             s.append("<error><![CDATA[").append(error).append("]]></error>");
         } else {
-            s.append("<resultado><![CDATA[".concat(q).concat("]]></resultado>"));
+            s = new StringBuilder("<resultado><![CDATA[").append(s.toString()).append("]]></resultado>");
         }
     }
 %><qry>
-    <sql><![CDATA[<%=request.getParameter("$consulta")%>]]></sql>
+    <sql><![CDATA[<%=q%>]]></sql>
     <%=s%>
 </qry>

@@ -1,4 +1,4 @@
-﻿/* 
+/* 
  * Plugin de jQuery para cargar forma a trav?s de un plugin
  * 
  */
@@ -1039,6 +1039,23 @@
 
                                         if (sControl == "avatar") {
                                             setTimeout('$("#sessionMenu").sessionmenu()', 2000);
+                                        } else if (sControl == "tvIndicadores") { 
+                                            //Se verifica si está seleccionado algún nodo
+                                            if ($.fn.form.options.modo == "insert") {
+                                                rel = ($("#clave_tipo_indicador").val()=="1"?"clasificador":"pki_gris");
+                                                if ($('#tvIndicadores').jstree('get_selected').length==0) {
+                                                //Se debe de incorporar como nodo del árbol
+                                                newNode = {id: "pki_" + sResultado, data: $("#indicador").val(), icon: "/directorio/img/folder1.png", attr: {id: "pki_" + sResultado, rel: rel}};
+                                                $("#tvIndicadores").jstree('create_node', -1, false, newNode, false, true);
+                                                } else {
+                                                nodoSeleccionado = $('#tvIndicadores').jstree('get_selected').attr('id')
+                                                newNode = {id: "pki_" + sResultado + "-0", data: $("#indicador").val(), icon: "/directorio/img/folder1.png", attr: {id: "pki_" + sResultado, rel: rel}};
+                                                $("#tvIndicadores").jstree("create_node", "#" + nodoSeleccionado, 'inside', newNode, false, false);
+                                                }
+                                            } else {
+                                                $("#tvIndicadores").jstree('rename_node', '#' + $('#tvIndicadores').jstree('get_selected').attr('id'), $("#indicador").val());
+                                            }
+                                            
                                         } else {
 
                                             oControl = $("#" + sControl);

@@ -104,7 +104,7 @@ function check_number(field,nRangoMenor,nRangoMayor) {
     var numberField = field.value;// parseInt(field.value);
 
     if (isNaN(numberField)&&field.value!=='') {
-        alert('Valor inválido, se debe indicar un número, verifique.');
+        alert('Valor invï¿½lido, se debe indicar un nï¿½mero, verifique.');
         field.value='';	
         field.select();
         field.focus();
@@ -117,14 +117,14 @@ function check_number(field,nRangoMenor,nRangoMayor) {
         else 
         {
             if (numberField>nRangoMayor) {
-                alert('El número indicado es mayor a ' + nRangoMayor +', verifique');
+                alert('El nï¿½mero indicado es mayor a ' + nRangoMayor +', verifique');
                 field.select();
                 field.focus();	
                 return false;
             }
             else {
                 if (numberField<nRangoMenor) {
-                    alert('El número indicado es menor a ' + nRangoMenor +', verifique');
+                    alert('El nï¿½mero indicado es menor a ' + nRangoMenor +', verifique');
                     field.select();
                     field.focus();
                     return false
@@ -171,7 +171,7 @@ function right(e) {
     if (navigator.appName == 'Netscape' && (e.which == 3 || e.which == 2))
         return false;
     else if (navigator.appName == 'Microsoft Internet Explorer' && (event.button == 2 || event.button == 3)) {
-        alert("FIDE. Coordinación de Informática (c)");
+        alert("FIDE. Coordinaciï¿½n de Informï¿½tica (c)");
         return false;
     }
     return true;
@@ -292,7 +292,7 @@ function setXMLInSelect3(sSelect,cf,ta,pk,w) {
             /*if (pk!=null)
             addOption = new Option(x[i].childNodes[1].childNodes[0].nodeValue,x[i].childNodes[1].childNodes[0].nodeValue);
         else*/
-            var display=x[i].childNodes[3].childNodes[0].nodeValue.replace(/&aacute;/g,"á").replace(/&eacute;/g,"é").replace(/&iacute;/g,"í").replace(/&oacute;/g,"ó").replace(/&uacute;/g,"ú").replace(/&ntilde;/g,"ñ");
+            var display=x[i].childNodes[3].childNodes[0].nodeValue.replace(/&aacute;/g,"ï¿½").replace(/&eacute;/g,"ï¿½").replace(/&iacute;/g,"ï¿½").replace(/&oacute;/g,"ï¿½").replace(/&uacute;/g,"ï¿½").replace(/&ntilde;/g,"ï¿½");
             addOption = new Option(display,x[i].childNodes[1].childNodes[0].nodeValue);
             oSelect.options[oSelect.length] = addOption;
         }
@@ -344,11 +344,11 @@ function setXMLInSelect4(sSelect,cf,ta,pk,w) {
             /*if (pk!=null)
             addOption = new Option(x[i].childNodes[1].childNodes[0].nodeValue,x[i].childNodes[1].childNodes[0].nodeValue);
         else*/
-            var display=x[i].childNodes[3].childNodes[0].nodeValue.replace(/&aacute;/g,"á").replace(/&eacute;/g,"é").replace(/&iacute;/g,"í").replace(/&oacute;/g,"ó").replace(/&uacute;/g,"ú").replace(/&ntilde;/g,"ñ");
+            var display=x[i].childNodes[3].childNodes[0].nodeValue.replace(/&aacute;/g,"ï¿½").replace(/&eacute;/g,"ï¿½").replace(/&iacute;/g,"ï¿½").replace(/&oacute;/g,"ï¿½").replace(/&uacute;/g,"ï¿½").replace(/&ntilde;/g,"ï¿½");
             oSelect.append('<option value="' + x[i].childNodes[1].childNodes[0].nodeValue + '" >' + display + '</option>');
         }
     } else{
-        alert("No se encontró el control indicado");
+        alert("No se encontrï¿½ el control indicado");
     }      
 }
 
@@ -387,7 +387,7 @@ function emailCheck (emailStr) {
     // Si el user "user" es valido 
     if (user.match(userPat)==null) {
         // Si no
-        alert("El nombre de usuario no es válido.")
+        alert("El nombre de usuario no es vï¿½lido.")
         return false
     }
 
@@ -396,7 +396,7 @@ function emailCheck (emailStr) {
     if (IPArray!=null) {
         for (var i=1;i<=4;i++) {
             if (IPArray[i]>255) {
-                alert("IP de destino inválida")
+                alert("IP de destino invï¿½lida")
                 return false
             }
         }
@@ -405,7 +405,7 @@ function emailCheck (emailStr) {
 
     var domainArray=domain.match(domainPat)
     if (domainArray==null) {
-        alert("El dominio parece no ser válido.")
+        alert("El dominio parece no ser vï¿½lido.")
         return false
     }
 
@@ -413,7 +413,7 @@ function emailCheck (emailStr) {
     var domArr=domain.match(atomPat)
     var len=domArr.length
     if (domArr[domArr.length-1].length<2 || domArr[domArr.length-1].length>3) { 
-        alert("La dirección debe tener 3 letras si es .'com' o 2 si en de algún país.")
+        alert("La direcciï¿½n debe tener 3 letras si es .'com' o 2 si en de algï¿½n paï¿½s.")
         return false
     }
 
@@ -594,7 +594,7 @@ function setXMLInSelect(sSelect, q) {
 		}*/
 
             //Carga en un objeto el XML
-            //Siempre deja la primera opción vacía
+            //Siempre deja la primera opciï¿½n vacï¿½a
             var addOption = new Option('','');
             oSelect.options[oSelect.length] = addOption;
             for (i=0;i<x.length;i++) {
@@ -640,6 +640,30 @@ function validateSQL(code) {
         httpRequest = new XMLHttpRequest();
 
     s="control?$cmd=validate&q="+encodeURIComponent(code);
+    
+    httpRequest.open('POST',s, false);
+    httpRequest.send(null);
+
+    var error=httpRequest.responseXML.getElementsByTagName('error');
+
+    if (error.length>0) {
+        alert("Consulta no valida: "+ $(error).text());
+        return
+    }
+    
+    var consulta=httpRequest.responseXML.getElementsByTagName('sql');
+    var resultado=httpRequest.responseXML.getElementsByTagName('resultado');
+    alert ('Consulta resultante: ' + $(consulta).text());
+}
+
+function validateSQLAndReturnValue(code, origenDatos) {
+    var httpRequest;
+    if (window.ActiveXObject) // for IE 
+        httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+    else if (window.XMLHttpRequest) // for other browsers 
+        httpRequest = new XMLHttpRequest();
+
+    s="control?$cmd=validate&q="+encodeURIComponent(code)+"&origen_datos="+origenDatos;
 
     httpRequest.open('POST',s, false);
     httpRequest.send(null);
@@ -651,8 +675,14 @@ function validateSQL(code) {
         return
     }
     
+    var consulta=httpRequest.responseXML.getElementsByTagName('sql');
     var resultado=httpRequest.responseXML.getElementsByTagName('resultado');
-    alert ('Consulta resultante: ' + $(resultado).text());
+    
+    if (confirm('Consulta resultante: ' + $(consulta).text() + "\n\n\u00bfDesea establecer el resultado como valor actual del indicador?"))
+        return $(resultado)[0].firstChild.data;
+    else 
+        return null;
+    
 }
 
 function replaceAll( text, busca, reemplaza ){
