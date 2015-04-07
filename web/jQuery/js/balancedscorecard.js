@@ -11,7 +11,8 @@ function fw_scorecard_indicador_init() {
             modal: true,
             autoOpen: true,
             closeOnEscape:false
-        });        
+        });
+        
         valor=validateSQLAndReturnValue($("#consulta_actualizacion").val(),$("#clave_origen_dato").val());
         if (valor!=null) {
             $("#valor_actual").val(valor);

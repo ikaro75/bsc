@@ -95,7 +95,9 @@
 
         <link rel="stylesheet" type="text/css" media="screen" href="css/jqxstyles/jqx.base.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="css/pageguide.min.css" />  
-
+        <link rel="stylesheet" type="text/css" media="screen" href="jQuery/jqPlot/jquery.jqplot.min.css"/>
+        
+        
         <script src="jQuery/js/funciones.js?id=<%=usuario.getSesion()%>" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.desktop.js?id=<%=usuario.getSesion()%>" type="text/javascript"></script>
         <script src="jQuery/js/jquery.pi.gridqueue.js?id=<%=usuario.getSesion()%>" type="text/javascript"></script>
@@ -112,15 +114,26 @@
         <script src="jQuery/js/jquery.timeago.js?id=<%=usuario.getSesion()%>" type="text/javascript"></script>
         <script src="jQuery/js/jquery.timeago.es.js?id=<%=usuario.getSesion()%>" type="text/javascript"></script>
         <script src="jQuery/js/padron.js?id=<%=usuario.getSesion()%>" type="text/javascript"></script>
-        <script src="jQuery/js/directorio.js?id=<%=usuario.getSesion()%>" type="text/javascript"></script>
+        <script src="jQuery/js/viaticos.js?id=<%=usuario.getSesion()%>" type="text/javascript"></script>
         <script src="jQuery/js/balancedscorecard.js?id=<%=usuario.getSesion()%>" type="text/javascript"></script>
         
         <!-- soporte para charts  -->
-        <script src="jQuery/jqPlot/jquery.jqplot.min.js?id=<%=usuario.getSesion()%>" type="text/javascript"></script> 
-        <script src="jQuery/jqPlot/plugins/jqplot.pieRenderer.min.js?id=<%=usuario.getSesion()%>" type="text/javascript" ></script>
-        <script src="jQuery/jqPlot/plugins/jqplot.donutRenderer.min.js?id=<%=usuario.getSesion()%>" type="text/javascript"></script>
-
-
+        <script type="text/javascript" src="jQuery/jqPlot/jquery.jqplot.min.js?id=<%=usuario.getSesion()%>" ></script> 
+        <script type="text/javascript" src="jQuery/jqPlot/plugins/jqplot.canvasTextRenderer.min.js?id=<%=usuario.getSesion()%>"></script>
+        <script type="text/javascript" src="jQuery/jqPlot/plugins/jqplot.canvasAxisLabelRenderer.min.js?id=<%=usuario.getSesion()%>"></script>
+        <script type="text/javascript" src="jQuery/jqPlot/plugins/jqplot.dateAxisRenderer.min.js?id=<%=usuario.getSesion()%>"></script>
+        <script type="text/javascript" src="jQuery/jqPlot/plugins/jqplot.pieRenderer.min.js?id=<%=usuario.getSesion()%>"></script>
+        <script type="text/javascript" src="jQuery/jqPlot/plugins/jqplot.donutRenderer.min.js?id=<%=usuario.getSesion()%>"></script>
+        <script type="text/javascript" src="jQuery/jqPlot/plugins/jqplot.bubbleRenderer.min.js?id=<%=usuario.getSesion()%>"></script>
+        <script type="text/javascript" src="jQuery/jqPlot/plugins/jqplot.barRenderer.min.js?id=<%=usuario.getSesion()%>"></script>
+        <script type="text/javascript" src="jQuery/jqPlot/plugins/jqplot.categoryAxisRenderer.min.js?id=<%=usuario.getSesion()%>"></script>
+        <script type="text/javascript" src="jQuery/jqPlot/plugins/jqplot.pointLabels.min.js?id=<%=usuario.getSesion()%>"></script>
+        
+        <script src="jQuery/js/charts.js?id=<%=usuario.getSesion()%>" type="text/javascript"></script>
+        
+        <script src="jQuery/js/raphael.2.1.0.min.js"></script>
+        <script src="jQuery/js/justgage.1.0.1.min.js"></script>
+        
         <script type="text/javascript" src="jQuery/js/jwysiwyg-master/jquery.wysiwyg.js"></script>
         <script type="text/javascript" src="jQuery/js/sets/html/set.js"></script>
         <script src="jQuery/js/vista.js?id=<%=usuario.getSesion()%>" type="text/javascript"></script>
@@ -198,10 +211,26 @@
                                 </div>
                             </div>
                         </div>                        
-                        <div class="tabUser" style="height: 100%;">
-                            <div id="tacometro"></div>
-                            <div id="grid_datos" class="queued_grids" app="145" form="782" wsParameters="" titulo="" inDesktop="true" openKardex="false"></div>
-                            <div id="valores_historico"></div>
+                        <div class="tabUser" style="height: 100%; overflow: auto;">
+                            <div class="portlet" style="width: 45%; float: left; margin-left: 10px;">
+                                <div class="portlet-header">Datos generales del indicador</div>
+                                <div class="portlet-content" id="datos_indicador" style="margin: 5px;">
+                                </div>
+                            </div>
+                            <div class="portlet" style="width: 45%; float: left; margin-left: 10px;">
+                                <div class="portlet-header">Desempeño del indicador</div>
+                                <div class="portlet-content" id="desempeño_indicador" style="margin: 5px;">
+                                    <div id="tacometro" style="background-color: #FFF;" ></div>
+                                </div>
+                            </div>    
+                            <div class="portlet" style="width: 45%; float: left; margin-left: 10px;">
+                                <div class="portlet-header">Tendencia del indicador</div>
+                                <div class="portlet-content" id="chart_indicador" style="margin: 5px;">
+                                    <div id="chart_historico"  style="background-color: #FFF; height:250px;" ></div>
+                                </div>    
+                            </div>
+                            
+                            <div id="grid_datos" style="float:left; margin-left: 10px; width: 430px; height: 180px; "  app="145" form="782" wsParameters="" titulo="" inDesktop="true" openKardex="false"></div>
                             <div id="comentarios"></div>
                         </div>
                     </div>

@@ -206,7 +206,8 @@
                             nRefrescaArbol = $.trim($(this).find('refresca_arbol').text().replace('\n', ''));
                             sXML += "<item id='" + nClaveNodo + "' parent_id='" + nClaveNodoPadre + "' rel='" + sRel + "' state='" + sState + "' evento='" + sEvento + "' refresca_arbol='" + nRefrescaArbol + "'><content><name><![CDATA[" + sTextoNodo + "]]></name></content></item>";
                         });
-
+                        
+                        var responsables="";
                         sXML = "<root>" + sXML + "</root>";
                         aPlugins = "themes,contextmenu,xml_data,types,ui,dnd".split(",");
                         sTypes = "{" + sTypes.substring(0, sTypes.length - 1) + "}";
@@ -225,12 +226,118 @@
                             var nRefrescaArbol = $(oTheNode).attr("refresca_arbol");
                             var sW = "";
                             
+                            var claveIndicador=$('#tvIndicadores').jstree('get_selected').attr('id').split("_")[1].split("-")[0];
+                            
+                            $.ajax(
+                                { url: "control?$cmd=plain&$ta=select&$cf=775&$pk=" + claveIndicador + "&$w=clave_indicador=" +  claveIndicador,
+                                  dataType: ($.browser.msie) ? "text" : "xml",
+                                  type: "POST",
+                                  success: function(data) {
+                                        if (typeof data == "string") {
+                                            xmlIndicador = new ActiveXObject("Microsoft.XMLDOM");
+                                            xmlIndicador.async = false;
+                                            xmlIndicador.validateOnParse = "true";
+                                            xmlIndicador.loadXML(data);
+
+                                            if (xmlIndicador.parseError.errorCode > 0) {
+                                                alert("Error de compilación xml:" + xmlIndicador.parseError.errorCode + "\nParse reason:" + xmlIndicador.parseError.reason + "\nLinea:" + xmlIndicador.parseError.line);
+                                            }
+                                        }
+                                        else {
+                                            xmlIndicador = data;
+                                      }    
+                                      
+                                      var indicador = $(xmlIndicador).find("indicador")[0].childNodes[0].data;
+                                      var descripcionIndicador= $(xmlIndicador).find("descripcion")[0].childNodes[0].data       
+                                      var valorActual= $(xmlIndicador).find("valor_actual")[0].childNodes[0].data  
+                                      
+                                      //Extrae nombres de los responsables
+                                      $.ajax({ url: "control?$cmd=plain&$ta=select&$cf=776&$w=clave_indicador=" + claveIndicador,
+                                          dataType: ($.browser.msie) ? "text" : "xml",
+                                          type: "POST",
+                                          success: function(data) {
+                                                if (typeof data == "string") {
+                                                    xmlResponsables = new ActiveXObject("Microsoft.XMLDOM");
+                                                    xmlResponsables.async = false;
+                                                    xmlResponsables.validateOnParse = "true";
+                                                    xmlResponsables.loadXML(data);
+
+                                                    if (xmlResponsables.parseError.errorCode > 0) {
+                                                        alert("Error de compilación xml:" + xmlResponsables.parseError.errorCode + "\nParse reason:" + xmlResponsables.parseError.reason + "\nLinea:" + xmlResponsables.parseError.line);
+                                                    }
+                                                }
+                                                else {
+                                                    xmlResponsables = data;
+                                                }
+                                                
+                                                responsables = "";
+                                                $(xmlResponsables).find("personal").each(function () {
+                                                    responsables += $(this).text() + "<br />";
+                                                });
+                                                
+                                                //Presenta información general del indicador
+                                                $("#datos_indicador").html("<h2>" + indicador +"</h2>"
+                                                          + "<p>" + descripcionIndicador + "</p>"  
+                                                          + "<p><strong>Responsables</strong><p>" + 
+                                                          responsables
+                                                );
+                                            },
+                                            error: function (xhr, err) {
+                                                if (xhr.responseText.indexOf("Iniciar sesi&oacute;n") > -1) {
+                                                    alert("Su sesión ha expirado, por seguridad es necesario volverse a registrar");
+                                                    window.location = 'login.jsp';
+                                                }
+                                                alert("Error al recuperar responsables del indicador");
+                                            }
+                                        });
+                                    
+
+                                      $("#tacometro").html("");
+                                      
+                                       new JustGage({
+                                            id: "tacometro",
+                                            value: valorActual,
+                                            min: 0,
+                                            max: 100,
+                                            title: " ",
+                                            label:  indicador,
+                                            levelColors:["#FF0734","#FF973D","#00FF21"]
+                                        });
+                                        
+                                        $("#grid_datos").appgrid({app: "145",
+                                                entidad: "782",
+                                                wsParameters: "clave_indicador=" + claveIndicador,
+                                                titulo: "Valores históricos del indicador",
+                                                inDesktop:"true",
+                                                height:"180px",
+                                                removeGridTitle:true,
+                                                showFilterLink:false,
+                                                inQueue:true,
+                                                insertInDesktopEnabled:0,
+                                                editingApp:"1",
+                                                width:"100%"
+                                        });
+                                        
+                                        $("#tacometro").append("<p style='text-align:center'>Valor actual: " + valorActual+ "</p>");
+                                        $("#chart_historico").html();
+                                        chartValoresHistoricosIndicador(claveIndicador, "", "chart_historico");
+                                    },
+                                   error: function (xhr, err) {
+                                        if (xhr.responseText.indexOf("Iniciar sesi&oacute;n") > -1) {
+                                            alert("Su sesión ha expirado, por seguridad es necesario volverse a registrar");
+                                            window.location = 'login.jsp';
+                                        }
+                                        alert("Error al recuperar indicador");
+                                    }
+                                });
+                            
+                            
                             //Recorre los nodos padres
-                            nodoPadre = data.inst._get_parent(data.rslt.obj);
+                            /*nodoPadre = data.inst._get_parent(data.rslt.obj);
                             while (nodoPadre!=-1) {
                                 sTitulo = $.trim(nodoPadre.children("a").text()) + "\\" + sTitulo;
                                 nodoPadre = data.inst._get_parent(nodoPadre);
-                            }                
+                            } */               
 
                             //Llama grids
                             oGridHeader = $("#grid_141_636_0").parent().parent().parent().find("span.ui-jqgrid-title");
