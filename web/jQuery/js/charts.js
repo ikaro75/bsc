@@ -1,13 +1,34 @@
 function chartValoresHistoricosIndicador(claveIndicador, titulo, divId) {
             $.getJSON( "chart.jsp?$cf=782&$w=clave_indicador=" + claveIndicador, function( data ) {            
-              var plot1 = jQuery.jqplot (divId, [data], 
+              /*var plot1 = jQuery.jqplot (divId, [data], 
                 { 
                   title: titulo,
                 axes:{xaxis:{renderer:$.jqplot.DateAxisRenderer}},
                 series:[{lineWidth:4, markerOptions:{style:'square'}}],
                 seriesDefaults: {color: '#459e00'}
                 }
-              );
+              );*/
+
+              var plot1 = $.jqplot(divId, [data], {
+              title:titulo,
+              axes:{
+              xaxis:{
+                renderer:$.jqplot.DateAxisRenderer
+              },
+              yaxis:{
+                tickOptions:{
+                  formatString:'%.2f%'
+                  }
+              }
+                },
+                highlighter: {
+                show: true,
+                sizeAdjust: 7.5
+                },
+                cursor: {
+              show: false
+                }});
+
             }).fail(function( jqxhr, textStatus, error ) {
                 var err = textStatus + ", " + error;
                 console.log( "Request Failed: " + err );

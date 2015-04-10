@@ -15,23 +15,23 @@ function be_forma_init() {
     
     //Se debe llenar el catálogo de tablas de acuerdo al origen de datos
     if ($("#form_" + clave_aplicacion + "_3_" + clave_forma + " #clave_origen_dato").val() != "") {
-         setXMLInSelect3("form_" + clave_aplicacion + "_3_" + clave_forma + " #tabla", -1, "update", $("#clave_origen_dato").val());
+         setXMLInSelect3("form_" + clave_aplicacion + "_3_" + clave_forma + " #tabla", 785, "select", $("#clave_origen_dato").val());
+         $("#form_" + clave_aplicacion + "_3_" + clave_forma + " #tabla option[value=" + $(xml).find("registro").find("tabla")[0].firstChild.data  + "]").attr("selected", true);
     }
     
     $("#form_" + clave_aplicacion + "_3_" + clave_forma + " #clave_origen_dato").change(function() {
         if ($("#form_" + clave_aplicacion + "_3_" + clave_forma + " #clave_origen_dato").val() != "")
-            setXMLInSelect3("form_" + clave_aplicacion + "_3_" + clave_forma + " #tabla", -1, "update", $(this).val());
+            setXMLInSelect3("form_" + clave_aplicacion + "_3_" + clave_forma + " #tabla", 785, "select", $(this).val());
     });
     
     if ($("#form_" + clave_aplicacion + "_3_" + clave_forma + " #tabla").val() != "") {
-        setXMLInSelect3("form_" + clave_aplicacion + "_3_" + clave_forma + " #llave_primaria", -2, "update", $("#tabla").val());
-        llave = $(xml).find("registro").find("llave_primaria")[0].childNodes[0].data;
-        $("#form_" + clave_aplicacion + "_3_" + clave_forma + " #llave_primaria option[value=" + llave + "]").attr("selected", true);
+        setXMLInSelect3("form_" + clave_aplicacion + "_3_" + clave_forma + " #llave_primaria", 786, "select", $("#tabla").val());
+        $("#form_" + clave_aplicacion + "_3_" + clave_forma + " #llave_primaria option[value=" + $(xml).find("registro").find("llave_primaria")[0].childNodes[0].data + "]").attr("selected", true);
     }
 
     $("#form_" + clave_aplicacion + "_3_" + clave_forma + " #tabla").change(function() {
         if ($("#form_" + clave_aplicacion + "_3_" + clave_forma + " #tabla").val() != "")
-            setXMLInSelect3("form_" + clave_aplicacion + "_3_" + clave_forma + " #llave_primaria", -2, "update", $(this).val());
+            setXMLInSelect3("form_" + clave_aplicacion + "_3_" + clave_forma + " #llave_primaria", 786, "select", $(this).val());
     });
 
     /*if (!$("#form_" + clave_aplicacion + "_3_" + clave_forma + " #muestra_formas_foraneas").is(':checked')) {

@@ -28,6 +28,10 @@
             }
         }
     
+    if (request.getParameter("$w") != null) {
+        w = request.getParameter("$w");
+    }
+    
     try {
         tipoAccion="select";
         String pk = "0";

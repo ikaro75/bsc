@@ -1924,7 +1924,10 @@ public class Consulta {
                         } else if (fromPendiente) { // caso de que la consulta contenga más de una tabla
                             from += aFrom[j] + ",";
                         } else if (!aFrom[j].equals(""))  {
-                            select += aFrom[j] + ",";
+                            if (aFrom[j].contains(")") || aFrom[j].toLowerCase().equals("as"))
+                                select += aFrom[j] + " ";
+                            else    
+                                select += aFrom[j] + ",";
                         }
                     }
                 } else if (aFields[i].toLowerCase().contains("where") || wherePendiente) {
@@ -1977,6 +1980,7 @@ public class Consulta {
                             i --; 
 
                         } else if (!aFields[i].equals("")) {
+                            //Si se trata de una función que contiene una coma en uno de los campos del select 
                             select += aFields[i]+",";
                         }
                     }

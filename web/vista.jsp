@@ -129,7 +129,9 @@
         <script type="text/javascript" src="jQuery/jqPlot/plugins/jqplot.categoryAxisRenderer.min.js?id=<%=usuario.getSesion()%>"></script>
         <script type="text/javascript" src="jQuery/jqPlot/plugins/jqplot.pointLabels.min.js?id=<%=usuario.getSesion()%>"></script>
         
-        <script src="jQuery/js/charts.js?id=<%=usuario.getSesion()%>" type="text/javascript"></script>
+        <script type="text/javascript" src="jQuery/jqPlot/plugins/jqplot.highlighter.min.js"  ></script>
+        <script type="text/javascript" src="jQuery/jqPlot/plugins/jqplot.cursor.min.js"></script>
+        <script type="text/javascript" src="jQuery/js/charts.js?id=<%=usuario.getSesion()%>"></script>
         
         <script src="jQuery/js/raphael.2.1.0.min.js"></script>
         <script src="jQuery/js/justgage.1.0.1.min.js"></script>

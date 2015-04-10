@@ -86,3 +86,11 @@ function fw_scorecard_indicador_init() {
     });  
     
 }
+
+function fw_scorecard_valor_historico_grid_init() {
+    alert("entre al init");
+    $('#grid_datos').unbind("ondblClickRow").jqGrid('setGridParam', { onSelectRow: function(id){ 
+            alert(id); } 
+    });
+
+}
