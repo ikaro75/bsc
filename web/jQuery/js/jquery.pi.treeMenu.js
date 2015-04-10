@@ -349,7 +349,7 @@
                                 $("#grid_141_636_0").jqGrid('setGridParam', {
                                     url: "control?$cmd=grid&$cf=636&$ta=select&$dp=body"
                                 }).trigger("reloadGrid");
-                                $("#grid_141_636_0").parent().parent().parent().find("span.ui-jqgrid-title").text("Inidcadores ");
+                                $("#grid_141_636_0").parent().parent().parent().find("span.ui-jqgrid-title").text("Indicadores ");
                             });
 
                             /*panels = $('#jqxSplitter').jqxSplitter('panels');
@@ -402,7 +402,7 @@
                                                 nForma = 775;
                                                 //if (obj[0].id.indexOf("sector") == 0) {
                                                 nPK = obj[0].id.split("_")[1].split("-")[0];
-                                                w = "clave_indicador_padre=" + nPK;
+                                                w = "clave_indicador=" + nPK;
                                                 //}
 
                                                 //$("#_cache_").val("sector");
@@ -428,7 +428,7 @@
                                                     width: "80%",
                                                     originatingObject: "",
                                                     showRelationships: "false",
-                                                    updateControl: obj[0].id,
+                                                    updateControl: "tvIndicadores",
                                                     secondFieldText: "" //Puesto que se trata de un registro nuevo, 
                                                 });
                                             }
@@ -467,7 +467,7 @@
                                                     width: "80%",
                                                     originatingObject: "",
                                                     showRelationships: "false",
-                                                    updateControl: obj[0].id,
+                                                    updateControl: "tvIndicadores",
                                                     secondFieldText: "" //Puesto que se trata de un registro nuevo, 
                                                 });
                                             }

@@ -42,6 +42,7 @@ public class Forma extends Consulta {
     private String llavePrimaria;
     private String campoSeguimientoFlujo;
     private Integer claveTipoGrid;
+    private Integer claveOrigenDatos;
     private ArrayList<Reporte> reportes;
     private ArrayList<Nota> notas;
     private ArrayList<Forma> formasForaneas;
@@ -137,7 +138,8 @@ public class Forma extends Consulta {
                     if (super.getCampos().get("clave_tipo_grid").getValor() != null && !super.getCampos().get("clave_tipo_grid").getValor().equals("")) {
                         this.claveTipoGrid = Integer.parseInt(super.getCampos().get("clave_tipo_grid").getValor());
                     }
-
+                    
+                    this.claveOrigenDatos = Integer.parseInt(super.getCampos().get("clave_origen_datos").getValor());
                     this.tabla = super.getCampos().get("tabla").getValor().toString();
                     this.llavePrimaria = super.getCampos().get("llave_primaria").getValor().toString();
                 }

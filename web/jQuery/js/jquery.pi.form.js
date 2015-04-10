@@ -1129,7 +1129,7 @@
                                             $.fn.form.options.modo == "insert") || ($.fn.form.options.modo == "duplicate")) {
 
                                         $("#divwait")
-                                                .html("<br /><p style='text-align: center'><img src='img/throbber.gif' />&nbsp;Por favor espere, construcción de interfaz en progreso...</p>")
+                                                .html("<br /><p style='text-align: center'><img src='img/throbber.gif' />&nbsp;Por favor espere, construcci\u00f3n de interfaz en progreso...</p>")
                                                 .attr('title', 'Espere un momento por favor')
                                                 .dialog({
                                                     height: 140,

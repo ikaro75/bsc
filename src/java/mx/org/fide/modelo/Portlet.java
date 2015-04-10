@@ -3,6 +3,7 @@ package mx.org.fide.modelo;
 import java.net.URLEncoder;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import mx.org.fide.backend.Forma;
 
 /**
  *
@@ -103,14 +104,14 @@ public class Portlet {
                             .append("' forma='").append(rs.getInt("clave_forma")).append("'>").append(rs.getString("reporte")).append("</a></div>");    
                 }            
             } else if (this.clave_portlet==3) {
-                FormaX forma = new FormaX();
-                forma.setConsulta(new Consulta(claveForma, "select", "0", "", usuario));
-                forma.setClaveForma(claveForma, usuario);
+                Forma forma = new Forma();
+                //forma.setConsulta(new Consulta(claveForma, "select", "0", "", usuario, 0));
+                //forma.setClaveForma(claveForma, usuario);
                 ResultSet rs = oDb.getRs("SELECT TOP 10 ba.clave_bitacora, ba.fecha, "
                                   .concat("CASE ISNULL(foto,'0') WHEN '0' THEN '<img src=''img/alguien.jpg'' class=''bitacora'' />' ")
                                   .concat("ELSE '<img src=''uploads/' + CONVERT(varchar,e.clave_empleado) + '/' + foto + ''' class=''bitacora'' />' END as foto,")
                                   .concat("e.nombre + ' ' + e.apellido_paterno as nombre,")
-                                  .concat("te.tipo_evento AS clave_tipo_evento, lower(f.alias_tab) as entidad,").concat("x.").concat(forma.getConsulta().getCampos().get(1).nombre).concat(" AS descripcion_entidad,")
+                                  //.concat("te.tipo_evento AS clave_tipo_evento, lower(f.alias_tab) as entidad,").concat("x.").concat(forma.getConsulta().getCampos().get(1).nombre).concat(" AS descripcion_entidad,")
                                   .concat("ba.clave_forma, ba.clave_registro ")
                                   .concat("FROM be_bitacora ba, be_empleado e, be_tipo_evento te, be_forma f,").concat(forma.getTabla()).concat(" x ")
                                   .concat("WHERE  ba.clave_empleado=e.clave_empleado AND ")
@@ -128,13 +129,13 @@ public class Portlet {
                         .append("</a>&nbsp;<abbr class='timeago' title='").append(rs.getDate("fecha")).append("'>") .append(rs.getDate("fecha")).append("</abbr></div>");
                 }                
             } else if (this.clave_portlet==4) {
-                FormaX forma = new FormaX();
-                forma.setConsulta(new Consulta(claveForma, "select", "0", "", usuario));
-                forma.setClaveForma(claveForma, usuario);
+                Forma forma = new Forma();
+                //forma.setConsulta(new Consulta(claveForma, "select", "0", "", usuario,0));
+                //forma.setClaveForma(claveForma, usuario);
                 ResultSet rs = oDb.getRs("SELECT TOP 10 clave_nota,forma.clave_forma,clave_registro,clave_empleado,titulo,mensaje,"
                                .concat("fecha_nota, lower(forma.alias_tab) as entidad,")
                                .concat("(SELECT CASE WHEN foto IS NULL THEN 'img/sin_foto.jpg' ELSE 'uploads/' + convert(varchar,clave_empleado) + '/' + foto end from empleado where clave_empleado=nota_forma.clave_empleado) as foto,")
-                               .concat("(SELECT ").concat(forma.getConsulta().getCampos().get(1).nombre).concat(" FROM ").concat(forma.getTabla()).concat(" WHERE ").concat(forma.getLlavePrimaria()).concat("=nota_forma.clave_registro) as titulo_entidad")
+                               //.concat("(SELECT ").concat(forma.getConsulta().getCampos().get(1).nombre).concat(" FROM ").concat(forma.getTabla()).concat(" WHERE ").concat(forma.getLlavePrimaria()).concat("=nota_forma.clave_registro) as titulo_entidad")
                                .concat(" FROM be_nota_forma, be_forma ")
                                .concat("WHERE nota_forma.clave_forma=forma.clave_forma AND nota_forma.clave_forma=").concat(claveForma.toString()).concat(" ORDER BY fecha_nota DESC"));
                 

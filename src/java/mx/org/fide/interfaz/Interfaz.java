@@ -2,7 +2,7 @@ package mx.org.fide.interfaz;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import mx.org.fide.modelo.Aplicacion;
+import mx.org.fide.backend.Aplicacion;
 import mx.org.fide.modelo.Conexion;
 import mx.org.fide.modelo.Usuario;
 

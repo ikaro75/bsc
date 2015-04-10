@@ -212,25 +212,25 @@
                             </div>
                         </div>                        
                         <div class="tabUser" style="height: 100%; overflow: auto;">
-                            <div class="portlet" style="width: 45%; float: left; margin-left: 10px;">
+                            <div class="portlet" style="width: 47%; float: left; margin-left: 10px;">
                                 <div class="portlet-header">Datos generales del indicador</div>
                                 <div class="portlet-content" id="datos_indicador" style="margin: 5px;">
                                 </div>
                             </div>
-                            <div class="portlet" style="width: 45%; float: left; margin-left: 10px;">
+                            <div class="portlet" style="width: 47%; float: left; margin-left: 10px;">
                                 <div class="portlet-header">Desempeño del indicador</div>
                                 <div class="portlet-content" id="desempeño_indicador" style="margin: 5px;">
                                     <div id="tacometro" style="background-color: #FFF;" ></div>
                                 </div>
                             </div>    
-                            <div class="portlet" style="width: 45%; float: left; margin-left: 10px;">
-                                <div class="portlet-header">Tendencia del indicador</div>
+                            <div class="portlet" style="width: 47%; float: left; margin-left: 10px;">
+                                <div class="portlet-header">Desempeño hist&oacute;rico del indicador</div>
                                 <div class="portlet-content" id="chart_indicador" style="margin: 5px;">
                                     <div id="chart_historico"  style="background-color: #FFF; height:250px;" ></div>
                                 </div>    
                             </div>
                             
-                            <div id="grid_datos" style="float:left; margin-left: 10px; width: 430px; height: 180px; "  app="145" form="782" wsParameters="" titulo="" inDesktop="true" openKardex="false"></div>
+                            <div id="grid_datos" style="float:left; margin-left: 10px; width: 450px; height: 180px; "  app="145" form="782" wsParameters="" titulo="" inDesktop="true" openKardex="false"></div>
                             <div id="comentarios"></div>
                         </div>
                     </div>

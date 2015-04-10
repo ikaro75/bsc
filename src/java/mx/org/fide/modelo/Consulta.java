@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mx.org.fide.modelo.Conexion.DbType;
 
 /**
  * Recupera las consultas de las formas, las resuelve basándose en el perfil del
@@ -18,6 +19,7 @@ public class Consulta {
     private Integer clavePerfil;
     private Integer claveAplicacion;
     private Integer claveForma;
+    private Integer claveOrigenDatos;
     private String tipoConsulta;
     private String sql;
     private String tabla;
@@ -113,16 +115,25 @@ public class Consulta {
      * @throws Fallo si ocurre algún problema relacionado con la base de datos
      */
     public void setCampos() throws Fallo {
-
+        Conexion oDb = new Conexion(this.usuario.getCx().getServer(), this.usuario.getCx().getDb(), this.usuario.getCx().getUser(), this.usuario.getCx().getPw(), this.usuario.getCx().getDbType());;
         Campo fdCampo;
         ResultSet oRs = null;
         ResultSet rsFieldDictionary;
         int nCols;
         StringBuilder qryCampos = new StringBuilder("");
-        Conexion oDb = new Conexion(this.usuario.getCx().getServer(), this.usuario.getCx().getDb(), this.usuario.getCx().getUser(), this.usuario.getCx().getPw(), this.usuario.getCx().getDbType());
+        
+        //Aquí es donde es necesario seleccionar la base de datos en función al origen de datos seleccionado
         Boolean autoIncrement = false;
         Boolean autoIncrementLocated = false;
         try {
+            if (this.claveOrigenDatos!=0) {
+                oRs=oDb.getRs("SELECT * FROM fw_scorecard_origen_dato WHERE clave_origen_dato=" + this.claveOrigenDatos.toString());
+                if (oRs.next()) {
+                    oDb = new Conexion(oRs.getString("servidor") + (oRs.getString("puerto")!=null?":"+oRs.getString("puerto"):""),oRs.getString("db"),oRs.getString("login"),oRs.getString("pw"), DbType.values()[oRs.getInt("clave_tipo_db")]);
+                } else {
+                    throw new Fallo("No se encontró el origen de datos " + this.claveOrigenDatos.toString());
+                }
+            } 
 
             oRs = oDb.getRs(this.sql);
 
@@ -502,6 +513,15 @@ public class Consulta {
         Conexion oDb = new Conexion(this.usuario.getCx().getServer(), this.usuario.getCx().getDb(), this.usuario.getCx().getUser(), this.usuario.getCx().getPw(), this.usuario.getCx().getDbType());
 
         try {
+            
+            if (this.claveOrigenDatos!=0) {
+                oRs=oDb.getRs("SELECT * FROM fw_scorecard_origen_dato WHERE clave_origen_dato=" + this.claveOrigenDatos.toString());
+                if (oRs.next()) {
+                    oDb = new Conexion(oRs.getString("servidor") + (oRs.getString("puerto")!=null?":"+oRs.getString("puerto"):""),oRs.getString("db"),oRs.getString("login"),oRs.getString("pw"), DbType.values()[oRs.getInt("clave_tipo_db")]);
+                } else {
+                    throw new Fallo("No se encontró el origen de datos " + this.claveOrigenDatos.toString());
+                }
+            } 
             oRs = oDb.getRs(this.sql);
 
             /* Recupera datos del qry */
@@ -1655,7 +1675,7 @@ public class Consulta {
             String s = "";
             /* Recupera sql del qry */
             if (claveForma > 0) {
-                s = "select clave_aplicacion, be_forma.clave_forma, clave_consulta,tabla, llave_primaria, consulta,clave_tipo_grid from "
+                s = "select clave_aplicacion, be_forma.clave_forma, clave_consulta,tabla, llave_primaria, consulta,clave_tipo_grid, be_forma.clave_origen_datos from "
                         .concat(" be_consulta_forma, be_forma ")
                         .concat(" where ")
                         .concat(" be_forma.clave_forma=").concat(claveForma.toString()).concat(" AND ")
@@ -1667,8 +1687,9 @@ public class Consulta {
                         .replace("%clave_perfil", usuario.getClavePerfil().toString());
 
             } else {
-                s = "select 0 as clave_aplicacion, -1 as clave_forma, clave_consulta,'(tabla de sistema)' as tabla, '()' as llave_primaria, consulta, 1 as clave_tipo_grid from "
-                        + "be_consulta_forma where clave_forma=" + claveForma + " AND tipo_consulta='" + tipoConsulta + "'";
+                s = "select 0 as clave_aplicacion, -1 as clave_forma, clave_consulta,'(tabla de sistema)' as tabla, '()' as llave_primaria, consulta, 1 as clave_tipo_grid,"
+                    + " (select clave_origen_datos from be_forma where clave_forma=" + claveForma + ") as clave_origen_datos from "
+                    + "be_consulta_forma where clave_forma=" + claveForma + " AND tipo_consulta='" + tipoConsulta + "'";
             }
 
             oRs = oDb.getRs(s);
@@ -1682,6 +1703,7 @@ public class Consulta {
             } else {
                 this.claveAplicacion = oRs.getInt("clave_aplicacion");
                 this.claveForma = oRs.getInt("clave_forma");
+                this.claveOrigenDatos = oRs.getInt("clave_origen_datos");
                 this.claveConsulta = oRs.getInt("clave_consulta");
                 select = oRs.getString("consulta");
                 this.sql = select;
@@ -1785,7 +1807,7 @@ public class Consulta {
             
             /* Recupera sql del qry */
             if (claveForma > 0) {
-                s = "select clave_aplicacion, be_forma.clave_forma, clave_consulta,tabla, llave_primaria, consulta, clave_tipo_grid from "
+                s = "select clave_aplicacion, be_forma.clave_forma, clave_consulta,tabla, llave_primaria, consulta, clave_tipo_grid, be_forma.clave_origen_datos from "  
                         + " be_consulta_forma, be_forma "
                         + " where "
                         + " be_forma.clave_forma=" + claveForma + " AND "
@@ -1794,8 +1816,9 @@ public class Consulta {
                         + " be_consulta_forma.clave_perfil=%clave_perfil"
                         .replace("%clave_perfil", this.usuario.getClavePerfil().toString());
             } else {
-                s = "select 0 as clave_aplicacion, -1 as clave_forma, clave_consulta, '(tabla de sistema)' as tabla, '()' as llave_primaria, consulta, 1 as clave_tipo_grid from "
-                        + "be_consulta_forma where clave_forma=" + claveForma + " AND tipo_consulta='" + tipoConsulta + "'";
+                s = "select 0 as clave_aplicacion, -1 as clave_forma, clave_consulta, '(tabla de sistema)' as tabla, '()' as llave_primaria, consulta, 1 as clave_tipo_grid,"
+                  + " (select clave_origen_datos from be_forma where clave_forma=" + claveForma + ") as clave_origen_datos from "                        
+                  + "be_consulta_forma where clave_forma=" + claveForma + " AND tipo_consulta='" + tipoConsulta + "'";
             }
 
             oRs = oDb.getRs(s);
@@ -1811,6 +1834,7 @@ public class Consulta {
             } else {
                 this.claveAplicacion = oRs.getInt("clave_aplicacion");
                 this.claveForma = oRs.getInt("clave_forma");
+                this.claveOrigenDatos = oRs.getInt("clave_origen_datos");
                 this.claveConsulta = oRs.getInt("clave_consulta");
                 this.sql = oRs.getString("consulta");
                 this.tabla = oRs.getString("tabla");
@@ -1976,10 +2000,20 @@ public class Consulta {
            //Calcula el número de registros de la consulta
             //Es necesario verificar si en la consulta que contiene el último from se trata de una subconsulta
             String sCount;
-
+            
+            if (this.claveOrigenDatos!=0) {
+                oRs=oDb.getRs("SELECT * FROM fw_scorecard_origen_dato WHERE clave_origen_dato=" + this.claveOrigenDatos.toString());
+                if (oRs.next()) {
+                    oDb = new Conexion(oRs.getString("servidor") + (oRs.getString("puerto")!=null?":"+oRs.getString("puerto"):""),oRs.getString("db"),oRs.getString("login"),oRs.getString("pw"), DbType.values()[oRs.getInt("clave_tipo_db")]);
+                } else {
+                    throw new Fallo("No se encontró el origen de datos " + this.claveOrigenDatos.toString());
+                }
+            } 
+            
             if (oDb.getDbType() == Conexion.DbType.MSSQL) {
                 oDb.execute("SET DATEFORMAT YMD");
             }            
+                    
             sCount = "SELECT COUNT(*) as conteo ".concat(from).concat(" ").concat(where)
                     .replaceAll("%clave_empleado", this.usuario.getClave().toString())
                     .replaceAll("%area", "'".concat(usuario.getArea().toString()).concat("'"))
