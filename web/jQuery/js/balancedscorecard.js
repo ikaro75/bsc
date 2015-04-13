@@ -88,9 +88,89 @@ function fw_scorecard_indicador_init() {
 }
 
 function fw_scorecard_valor_historico_grid_init() {
-    alert("entre al init");
-    $('#grid_datos').unbind("ondblClickRow").jqGrid('setGridParam', { onSelectRow: function(id){ 
-            alert(id); } 
-    });
 
 }
+
+
+//1. se requiere una llamada ajax para saber qué forma está asociada
+//2. Inyectar html del grid del detalle y del chart
+function presenta_detalle_balanced_scorecard(fecha) {
+    alert(fecha);
+     $.ajax({ url: "control?$cmd=plain&$ta=select&$cf=775&$w=clave_indicador=" +  $("#_cache_").val(),
+            dataType: ($.browser.msie) ? "text" : "xml",
+            type: "POST",
+            success: function(data) {
+                  if (typeof data == "string") {
+                      xmlDetalles = new ActiveXObject("Microsoft.XMLDOM");
+                      xmlDetalles.async = false;
+                      xmlDetalles.validateOnParse = "true";
+                      xmlDetalles.loadXML(data);
+
+                      if (xmlDetalles.parseError.errorCode > 0) {
+                          alert("Error de compilación xml:" + xmlDetalles.parseError.errorCode + "\nParse reason:" + xmlDetalles.parseError.reason + "\nLinea:" + xmlDetalles.parseError.line);
+                      }
+                  }
+                  else {
+                      xmlDetalles = data;
+                  }
+
+                  claveFormaDetalle=$(xmlDetalles).find("clave_forma_detalle")[0].firstChild.data;
+                  
+                  if (claveFormaDetalle!="") {
+                    $("#grid_datos").parent()
+                    .append('<div id="grid_datos_detalle" style="float:left; clear:left; margin-left: 10px; width: 450px; height: 180px; "  app="145" form="' + claveFormaDetalle + '" wsParameters="" titulo="" inDesktop="true" ></div>' + 
+                    '<div id="chart_datos_detalle" class="portlet"  style="float:left; margin-left: 10px; width: 450px; height: 180px;">'+
+                    '<div class="portlet-header">Detalles del indicador</div>'+
+                    '<div class="portlet-content" id="datos_indicador" style="margin: 5px;">'+
+                    '</div>');                      
+            
+                    $("#grid_datos_detalle").appgrid({app: "145",
+                            entidad: claveFormaDetalle,
+                            valoresReemplazo: "%fecha=" + fecha,
+                            titulo: "Detalles de los valores históricos del indicador",
+                            inDesktop:"true",
+                            height:"180px",
+                            removeGridTitle:true,
+                            showFilterLink:false,
+                            inQueue:true,
+                            insertInDesktopEnabled:0,
+                            editingApp:"1",
+                            width:"100%"
+                    });
+                    
+                    $( "#chart_datos_detalle" ).sortable({
+                        connectWith: ".column"
+                    });
+
+                    $( "#chart_datos_detalle" ).addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
+                        .find( ".portlet-header" )
+                                .addClass( "ui-widget-header ui-corner-all" )
+                                .prepend( "<span class='ui-icon ui-icon-minusthick'></span>")
+                                .end()
+                        .find( ".portlet-content" );
+
+                    $( ".portlet-header .ui-icon" ).click(function() {
+                      $( this ).toggleClass( "ui-icon-minusthick" ).toggleClass( "ui-icon-plusthick" );
+                      $( this ).parents( ".portlet:first" ).find( ".portlet-content" ).toggle();
+                    });
+
+                    $( ".column" ).disableSelection();
+                  }
+
+              },
+              error: function (xhr, err) {
+                  if (xhr.responseText.indexOf("Iniciar sesi&oacute;n") > -1) {
+                      alert("Su sesión ha expirado, por seguridad es necesario volverse a registrar");
+                      window.location = 'login.jsp';
+                  }
+                  alert("Error al recuperar responsables del indicador");
+              }
+          });
+                    
+    
+
+    //3. Llamar al objeto jqgrid
+    //4. Llamar al objeto del chart
+}
+
+                  

@@ -1776,7 +1776,7 @@ public class Consulta {
      * de datos
      * @throws Fallo si ocurre un error relacionado a la base de datos
      */
-    public Consulta(int claveForma, String tipoConsulta, String pk, String w, Usuario usuario, Integer registros, Integer pagina, String sidx, String sord) throws Fallo {
+    public Consulta(int claveForma, String tipoConsulta, String pk, String w, String valoresDeReemplazo, Usuario usuario, Integer registros, Integer pagina, String sidx, String sord) throws Fallo {
         String s = "";
         StringBuilder tmp = new StringBuilder("");
         StringTokenizer tokens;
@@ -1804,6 +1804,8 @@ public class Consulta {
             String groupBy ="";
             String having="";
             String orderBy = "";
+            
+            String[] aValoresDeReemplazo = valoresDeReemplazo.split(";");
             
             /* Recupera sql del qry */
             if (claveForma > 0) {
@@ -2022,8 +2024,12 @@ public class Consulta {
                     .replaceAll("%clave_empleado", this.usuario.getClave().toString())
                     .replaceAll("%area", "'".concat(usuario.getArea().toString()).concat("'"))
                     .replaceAll("%clave_perfil", this.usuario.getClavePerfil().toString())
-                    .replaceAll("\\$pk", String.valueOf(getPk()));;
-
+                    .replaceAll("\\$pk", String.valueOf(getPk()));    
+            
+            for (Integer i=0; i>aValoresDeReemplazo.length; i++) {
+                sCount= sCount.replace(aValoresDeReemplazo[i].split("=")[0],aValoresDeReemplazo[i].split("=")[1]);
+            }
+                    
             oRs = oDb.getRs(sCount);
             if (oRs.next()) {
                 this.numeroDeRegistros = oRs.getInt("conteo");
@@ -2073,7 +2079,11 @@ public class Consulta {
                  .replaceAll("%clave_perfil", this.usuario.getClavePerfil().toString())
                  .replaceAll("\\$pk", String.valueOf(getPk()));
 
-
+            //Se aplican reemplazo pasadas en el parámetro     
+            for (Integer i=0; i>aValoresDeReemplazo.length; i++) {
+                s= s.replace(aValoresDeReemplazo[i].split("=")[0],aValoresDeReemplazo[i].split("=")[1]);
+            }
+                        
             this.sql = s;
             this.setCampos();
 

@@ -36,7 +36,8 @@
             gridComplete: "",
             error:"",
             claveTipoGrid:"",
-            agrupar:false
+            agrupar:false,
+            valoresReemplazo:""
         };
 
         // Devuelvo la lista de objetos jQuery
@@ -62,6 +63,7 @@
                 "' updateTreeAfterPost='" + $.fn.appgrid.options.updateTreeAfterPost +
                 "' requeriesFilter='" + $.fn.appgrid.options.requeriesFilter  +
                 "' frecuenciaActualizacion='" + $.fn.appgrid.options.frecuenciaActualizacion  +
+                "' valoresReemplazo='" + $.fn.appgrid.options.valoresReemplazo  +
                 "'>" +
                 "</table><input type='hidden' value='' id='grid_complete_code_" + suffix + "'><div id='pager" + suffix +"' security=''><div align='center' id='loader" + suffix +"'><br/><br/><br/><br/><br/><br/><br /><br/><br/><br/><br/><br/><br/><br />Cargando informaci&oacute;n... <br><img src='img/loading.gif' /><br /><br /></div></div>");
 
@@ -74,7 +76,7 @@
         $("#_status_").val("Cargando definicion del cat\u00e1logo");
         $.ajax(
         {
-            url: $.fn.appgrid.options.xmlUrl + "?$cmd=grid&$cf=" + $.fn.appgrid.options.entidad.split('-')[0] + "&$ta=select&$dp=header&$w=" + $.fn.appgrid.options.wsParameters,
+            url: $.fn.appgrid.options.xmlUrl + "?$cmd=grid&$cf=" + $.fn.appgrid.options.entidad.split('-')[0] + "&$ta=select&$dp=header&$w=" + $.fn.appgrid.options.wsParameters +"&$vr=" + encodeURIComponent($.fn.appgrid.options.valoresReemplazo),
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  processGridDefinition, 
             error:function(xhr,err){
@@ -135,7 +137,6 @@
                 $("#_status_").val("");
                 return true; 
             }
-            
             
             if (error.find("tipo").text()=="Exception" && $("#_cp_").val()=="1") {
                 $.fn.appgrid.options.error+="No hay una consulta asociada a esta acción" + 
@@ -390,7 +391,7 @@
         );
         
          oGridConfig= {
-            url:xmlURL,
+            url:xmlURL + "&$vr=" + encodeURIComponent(obj.attr("valoresReemplazo")),
             datatype: "xml",
             colNames:$.fn.appgrid.options.colNames,
             colModel:$.fn.appgrid.options.colModel,
@@ -410,7 +411,12 @@
             caption:$.fn.appgrid.options.titulo,
             
           ondblClickRow: function(rowid) {
-
+              
+                    //Se deshabilita este evento para el grid de la forma 782
+                    if (nEntidad==782) {
+                        return;
+                    }
+                    
                     nRow=rowid;
                     if (nRow) {
                         nPK= $(this).getCell(nRow,0);
@@ -497,6 +503,14 @@
               $("#divwait").dialog( "close" );
             }
         };
+        
+        //Se programa el evento on onSelectRow
+        if (nEntidad==782) {
+              oGridConfig.onSelectRow= function (rowId, status, e) {
+                  presenta_detalle_balanced_scorecard($(this).getCell(rowId,0));
+                }
+        }
+        
         
         if ($.fn.appgrid.options.agrupar && $.fn.appgrid.options.claveTipoGrid=="1") {
             oGridConfig.grouping=false;

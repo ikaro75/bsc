@@ -227,7 +227,7 @@
                             var sW = "";
                             
                             var claveIndicador=$('#tvIndicadores').jstree('get_selected').attr('id').split("_")[1].split("-")[0];
-                            
+                            $("#_cache_").val(claveIndicador);
                             $.ajax(
                                 { url: "control?$cmd=plain&$ta=select&$cf=775&$pk=" + claveIndicador + "&$w=clave_indicador=" +  claveIndicador,
                                   dataType: ($.browser.msie) ? "text" : "xml",
@@ -321,6 +321,8 @@
                                         $("#tacometro").append("<p style='text-align:center'>Valor actual: " + valorActual+ "</p>");
                                         $("#chart_historico").html();
                                         chartValoresHistoricosIndicador(claveIndicador, "", "chart_historico");
+                                        $("#grid_datos_detalle").remove();
+                                        $("#chart_datos_detalle").remove();
                                     },
                                    error: function (xhr, err) {
                                         if (xhr.responseText.indexOf("Iniciar sesi&oacute;n") > -1) {

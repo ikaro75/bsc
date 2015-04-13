@@ -231,9 +231,8 @@
                                     <div id="chart_historico"  style="background-color: #FFF; height:250px;" ></div>
                                 </div>    
                             </div>
-                            
                             <div id="grid_datos" style="float:left; margin-left: 10px; width: 450px; height: 180px; "  app="145" form="782" wsParameters="" titulo="" inDesktop="true" openKardex="false"></div>
-                            <div id="comentarios"></div>
+                            
                         </div>
                     </div>
 

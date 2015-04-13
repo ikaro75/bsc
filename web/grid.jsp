@@ -36,7 +36,7 @@
     try {
         if (request.getParameter("$cf") != null) {
             try {
-                forma = Integer.parseInt(request.getParameter("$cf"));
+                forma = Integer.parseInt(request.getParameter("$cf")); 
             } catch (Exception e) {
                 throw new Fallo("El parámetro $cf no es válido, verifique");
             }
@@ -96,7 +96,7 @@
             sord = request.getParameter("sord");
         }
         
-        frmTemp = new Forma(new Consulta(forma, tipoConsulta, pk, w, user, registros, pagina, sidx.toString(), sord),false);
+        frmTemp = new Forma(new Consulta(forma, tipoConsulta, pk, w, request.getParameter("$vr")==null?"":request.getParameter("$vr"),user, registros, pagina, sidx.toString(), sord),false);
         frmTemp.setDefinicionDelGrid(dp.equals("header") ? true : false);
         source = frmTemp.getSQL();
         error = "";
