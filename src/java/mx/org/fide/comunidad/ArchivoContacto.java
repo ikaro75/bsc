@@ -173,7 +173,7 @@ public class ArchivoContacto extends Consulta {
                 if (mensaje==null)  mensaje="";
             }
             
-            frmArchivo = new Forma (new Consulta(311,"insert", "0", "", this.getUsuario()),false);
+            frmArchivo = new Forma (new Consulta(311,"insert", "0","", "", this.getUsuario()),false);
             /*frmArchivo.setClaveForma(311, usuario.getClavePerfil(), usuario.getCx());
             frmArchivo.setConsulta("insert", "0", "", usuario.getReglasDeReemplazo(), usuario.getCx());
             frmArchivo.getConsulta().setRegistros(usuario.getCx());   */

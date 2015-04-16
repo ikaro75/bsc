@@ -15,7 +15,7 @@
 %><%
 //response.setContentType("text/xml"); 
 
-    response.setContentType("text/xml;charset=ISO-8859-1");
+    response.setContentType("text/xml;charset=ISO-8859-1"); 
     request.setCharacterEncoding("UTF8");
 
     String error = "";
@@ -61,7 +61,7 @@
             w = request.getParameter("$w");
         }
         
-        frmForma = new Forma(new Consulta(forma,tipoAccion, String.valueOf(pk), w, user), false);
+        frmForma = new Forma(new Consulta(forma,tipoAccion, String.valueOf(pk), "",w, user), false);
         source = frmForma.getSQL();
 
         campos = frmForma.getCampos();

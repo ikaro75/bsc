@@ -58,7 +58,7 @@
             }
         }
 
-        if (request.getParameter("$w") != null) {
+        if (request.getParameter("$w") != null && !request.getParameter("$w").equals("") ) {
             w = request.getParameter("$w").replaceAll("\\$inicial=",">=").replaceAll("\\$final=","<=");
         }
 
@@ -121,15 +121,15 @@
             return;
         }
     }
-%><permisos><% if (frmTemp.isSelect()) {%>
+%><permisos><% if (frmTemp.isSelect() && !frmTemp.getNoParsear()) {%>
     <permiso><clave_permiso>1</clave_permiso></permiso><%}
-        if (frmTemp.isInsert()) {%>
+        if (frmTemp.isInsert() && !frmTemp.getNoParsear()) {%>
     <permiso><clave_permiso>2</clave_permiso></permiso>    <%}
-        if (frmTemp.isUpdate()) {%>
+        if (frmTemp.isUpdate() && !frmTemp.getNoParsear()) {%>
     <permiso><clave_permiso>3</clave_permiso></permiso><%}
-        if (frmTemp.isDelete()) {%>
+        if (frmTemp.isDelete() && !frmTemp.getNoParsear()) {%>
     <permiso><clave_permiso>4</clave_permiso></permiso><%}
-        if (frmTemp.isReport()) {%>
+        if (frmTemp.isReport() && !frmTemp.getNoParsear()) {%>
     <permiso><clave_permiso>6</clave_permiso></permiso><% }%>
 </permisos>
 <configuracion_grid>

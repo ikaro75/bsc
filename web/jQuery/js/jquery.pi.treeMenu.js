@@ -250,6 +250,7 @@
                                       var indicador = $(xmlIndicador).find("indicador")[0].childNodes[0].data;
                                       var descripcionIndicador= $(xmlIndicador).find("descripcion")[0].childNodes[0].data       
                                       var valorActual= $(xmlIndicador).find("valor_actual")[0].childNodes[0].data  
+                                      var claveFormaDetalle= $(xmlIndicador).find("clave_forma_detalle")[0].childNodes[0].data  
                                       
                                       //Extrae nombres de los responsables
                                       $.ajax({ url: "control?$cmd=plain&$ta=select&$cf=776&$w=clave_indicador=" + claveIndicador,
@@ -304,9 +305,9 @@
                                             levelColors:["#FF0734","#FF973D","#00FF21"]
                                         });
                                         
-                                        $("#grid_datos").appgrid({app: "145",
-                                                entidad: "782",
-                                                wsParameters: "clave_indicador=" + claveIndicador,
+                                        $("#grid_datos").appgrid({app: "147",
+                                                entidad: claveFormaDetalle,
+                                                wsParameters: "",
                                                 titulo: "Valores históricos del indicador",
                                                 inDesktop:"true",
                                                 height:"180px",
@@ -315,14 +316,19 @@
                                                 inQueue:true,
                                                 insertInDesktopEnabled:0,
                                                 editingApp:"1",
-                                                width:"100%"
+                                                width:"100%",
+                                                tipoConsulta:"timeline",
+                                                desactivaBusqueda: true,
+                                                desactivaOndblClickRow: true,
+                                                onSelectRow: function (rowId, status, e) {
+                                                        presenta_detalle_balanced_scorecard($(this).getCell(rowId,0));
+                                                        $("#grid_datos_detalle").find(".ui-jqgrid-title").text("Detalles del indicador");
+                                                } 
                                         });
                                         
                                         $("#tacometro").append("<p style='text-align:center'>Valor actual: " + valorActual+ "</p>");
                                         $("#chart_historico").html();
-                                        chartValoresHistoricosIndicador(claveIndicador, "", "chart_historico");
-                                        $("#grid_datos_detalle").remove();
-                                        $("#chart_datos_detalle").remove();
+                                        timeLineValoresHistoricosIndicador(claveFormaDetalle,"","", "chart_historico");
                                     },
                                    error: function (xhr, err) {
                                         if (xhr.responseText.indexOf("Iniciar sesi&oacute;n") > -1) {

@@ -40,7 +40,7 @@ try {
     else {
         try {
             forma= Integer.parseInt(request.getParameter("$cf"));
-            f = new Forma(new Consulta(forma,tipoAccion, String.valueOf(pk), w, user), false);
+            f = new Forma(new Consulta(forma,tipoAccion, String.valueOf(pk),"", w, user), false);
             response.setHeader("Content-Disposition", "attachment; filename="+ f.getForma()+".xls");
         }
         catch (Exception e) { 

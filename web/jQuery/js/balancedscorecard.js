@@ -117,17 +117,19 @@ function presenta_detalle_balanced_scorecard(fecha) {
                   claveFormaDetalle=$(xmlDetalles).find("clave_forma_detalle")[0].firstChild.data;
                   
                   if (claveFormaDetalle!="") {
+                    $("#grid_datos_detalle").remove();
+                    $("#chart_datos_detalle").remove();
                     $("#grid_datos").parent()
                     .append('<div id="grid_datos_detalle" style="float:left; clear:left; margin-left: 10px; width: 450px; height: 180px; "  app="145" form="' + claveFormaDetalle + '" wsParameters="" titulo="" inDesktop="true" ></div>' + 
                     '<div id="chart_datos_detalle" class="portlet"  style="float:left; margin-left: 10px; width: 450px; height: 180px;">'+
                     '<div class="portlet-header">Detalles del indicador</div>'+
                     '<div class="portlet-content" id="datos_indicador" style="margin: 5px;">'+
                     '</div>');                      
-            
+                    var aMeses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
                     $("#grid_datos_detalle").appgrid({app: "145",
                             entidad: claveFormaDetalle,
-                            valoresReemplazo: "%fecha=" + fecha,
-                            titulo: "Detalles de los valores históricos del indicador",
+                            valoresReemplazo: "%ano=" + fecha.split("/")[2] +";%mes="+ fecha.split("/")[1],
+                            titulo: "Detalles del indicador "+ aMeses[parseInt(fecha.split("/")[1]) - 1] + " "+ fecha.split("/")[2],
                             inDesktop:"true",
                             height:"180px",
                             removeGridTitle:true,
@@ -155,6 +157,8 @@ function presenta_detalle_balanced_scorecard(fecha) {
                     });
 
                     $( ".column" ).disableSelection();
+                    barrasIndicadorDetalles(claveFormaDetalle,"%ano=" + fecha.split("/")[2] +";%mes="+ fecha.split("/")[1],"Comparación de valores historicos","chart_datos_detalle");
+
                   }
 
               },

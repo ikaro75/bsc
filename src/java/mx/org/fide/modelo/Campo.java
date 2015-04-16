@@ -75,7 +75,7 @@ public class Campo {
      * @throws Fallo            si ocurre un problema relacionado a la base de datos
      */
     public void setFormaForanea(int claveForma, String pk, String w, Usuario usuario) throws Fallo {
-        this.FormaForanea = new Consulta(claveForma, "foreign", pk, w, usuario); 
+        this.FormaForanea = new Consulta(claveForma, "foreign", pk,"", w, usuario); 
     }
      
     /**

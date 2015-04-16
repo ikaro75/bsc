@@ -1432,7 +1432,7 @@ public class Forma extends Consulta {
             Integer i = 0;
             while (rs.next()) {
                 //1. Crear objeto forma
-                Consulta c = new Consulta(3, "insert", "0", "", usuario);
+                Consulta c = new Consulta(3, "insert", "0","", "", usuario);
                 c.getCampos().get("clave_aplicacion").setValor(aplicacion.toString());
                 c.getCampos().get("forma").setValor(rs.getString("table_name"));
                 c.getCampos().get("tabla").setValor(rs.getString("table_name"));

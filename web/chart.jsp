@@ -33,10 +33,10 @@
     }
     
     try {
-        tipoAccion="select";
+        tipoAccion=request.getParameter("$ta"); 
         String pk = "0";
         
-        tempForma = new Forma(new Consulta(forma,tipoAccion, pk, w, user),false);
+        tempForma = new Forma(new Consulta(forma,request.getParameter("$ta"), pk,request.getParameter("$vr")==null?"":request.getParameter("$vr"), w, user),false);
         source = tempForma.getSQL();
 
 
@@ -74,34 +74,73 @@
 
     String data;
 %>[<%
-     int j = 0;
-     for (ArrayList registro : registros) {
-         int k = 0;
-%>[<%
+    
+    if (request.getParameter("$ts").equals("1")) {
+        int j = 0;
+        for (ArrayList registro : registros) {
+            int k = 0;
+   %>[<%
+           for (Campo campo : campos.values()) {
+               //Le asigna el valor anterior del campo para registrarlo en la bitácora
+               if (registro.get(k) != null) {
+                   campo.setValorOriginal(registro.get(k).toString());
+               }
+
+               if (registro.get(k) == null) {
+                   data = "";
+               } else if (campo.getTipoDato().equals("smalldatetime")) {
+                   data = df.format(registro.get(k));
+               } else if (campo.getTipoDato().equals("bit")) {
+                   data = registro.get(k).toString().equals("true") ? "1" : "0";
+               } //else if (campo.getTipoDato().equals("money"))
+               //    data = nfMoney.format(registro.get(k));
+               else {
+                   data = registro.get(k).toString();
+               }
+
+    if (campo.getTipoDato().toLowerCase().equals("int") || campo.getTipoDato().toLowerCase().equals("bit") || campo.getTipoDato().toLowerCase().equals("float")) {%><%=data%><%}
+    else { %>"<%=data%>"<% }  
+       if (k<campos.size()-1) {%><%= "," %><%} else {%>]<%}
+       k++;}     
+           if (j<registros.size()-1) {%><%= "," %><%} 
+               j++;
+       }
+    } else if (request.getParameter("$ts").equals("2")) {
+        Integer nCampo = 0;
         for (Campo campo : campos.values()) {
-            //Le asigna el valor anterior del campo para registrarlo en la bitácora
-            if (registro.get(k) != null) {
-                campo.setValorOriginal(registro.get(k).toString());
-            }
 
-            if (registro.get(k) == null) {
-                data = "";
-            } else if (campo.getTipoDato().equals("smalldatetime")) {
-                data = df.format(registro.get(k));
-            } else if (campo.getTipoDato().equals("bit")) {
-                data = registro.get(k).toString().equals("true") ? "1" : "0";
-            } //else if (campo.getTipoDato().equals("money"))
-            //    data = nfMoney.format(registro.get(k));
-            else {
-                data = registro.get(k).toString();
-            }
+            Integer nRegistro = 0;
+            %>[<%
+            for (ArrayList registro : registros) {
+                
+               //Le asigna el valor anterior del campo para registrarlo en la bitácora
+               if (registro.get(nCampo) != null) {
+                   campo.setValorOriginal(registro.get(nCampo).toString());
+               }
 
- if (campo.getTipoDato().toLowerCase().equals("int") || campo.getTipoDato().toLowerCase().equals("bit") || campo.getTipoDato().toLowerCase().equals("float")) {%><%=data%><%}
- else { %>"<%=data%>"<% }  
-    if (k<campos.size()-1) {%><%= "," %><%} else {%>]<%}
-    k++;}     
-        if (j<registros.size()-1) {%><%= "," %><%} 
-            j++;
+               if (registro.get(nCampo) == null) {
+                   data = "";
+               } else if (campo.getTipoDato().equals("smalldatetime")) {
+                   data = df.format(registro.get(nCampo));
+               } else if (campo.getTipoDato().equals("bit")) {
+                   data = registro.get(nCampo).toString().equals("true") ? "1" : "0";
+               } //else if (campo.getTipoDato().equals("money"))
+               //    data = nfMoney.format(registro.get(k));
+               else {
+                   data = registro.get(nCampo).toString();
+               }
+
+                if (campo.getTipoDato().toLowerCase().equals("int") || campo.getTipoDato().toLowerCase().equals("bit") || campo.getTipoDato().toLowerCase().equals("float")) {%><%=data%><%}
+                else { %>"<%=data%>"<% }  
+
+                if(nRegistro<registros.size()-1) {%><%= "," %><%}
+
+                nRegistro++;
+            }
+            %>]<%
+            if (nCampo<campos.size()-1)  {%><%= "," %><%}
+            nCampo++;
+        }
     }
     /* guarda el objeto usuario en la sesión para aprovechar los objetos que se tiene abiertos */
     request.getSession().setAttribute("usuario", user);

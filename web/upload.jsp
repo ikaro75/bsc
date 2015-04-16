@@ -13,7 +13,7 @@
 <%@page import="java.io.IOException"%>
 <%@page import="mx.org.fide.backend.Forma"%><%
 //request.setCharacterEncoding("UTF-8");
-    response.setContentType("text/xml;charset=ISO-8859-1");
+    response.setContentType("text/xml;charset=ISO-8859-1"); 
     request.setCharacterEncoding("UTF8");
 
     String error = "";
@@ -172,7 +172,7 @@
 
     try {
         //Si no está abierto el objeto forma
-        frmTemp = new Forma(new Consulta(forma,tipoAccion, String.valueOf(pk), w, user), false);
+        frmTemp = new Forma(new Consulta(forma,tipoAccion, String.valueOf(pk), "", w, user), false);
         source = frmTemp.getSQL();
 
         if (!tipoAccion.equals("delete")) {
@@ -214,7 +214,7 @@
         } else if (tipoAccion.equals("update")) {
             result = frmTemp.update(true);
         } else if (tipoAccion.equals("delete")) {
-            result = frmTemp.delete(true);
+            result = frmTemp.delete(true, user);
         }
 
     } catch (Exception e) {

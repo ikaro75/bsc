@@ -13,7 +13,7 @@
     String w = "";
     String source = "";
     String result = "";
-    int pk = 0;
+    int pk = 0; 
     Forma frmTemp = new Forma();
     response.setContentType("text/xml");
     Usuario user = (Usuario) request.getSession().getAttribute("usuario");
@@ -61,10 +61,10 @@
     try {
         //Si no está abierto el objeto forma
             if (!tipoAccion.equals("delete") && !tipoAccion.equals("duplicate")) {
-                frmTemp = new Forma (new Consulta(forma,tipoAccion, String.valueOf(pk), w, user), false); 
+                frmTemp = new Forma (new Consulta(forma,tipoAccion, String.valueOf(pk), "",w, user), false); 
                 source = frmTemp.getSQL();
             } else {
-                frmTemp = new Forma (new Consulta(forma,"select", String.valueOf(pk), w, user), false); 
+                frmTemp = new Forma (new Consulta(forma,"select", String.valueOf(pk), "", w, user), false); 
                 frmTemp.setAccion(tipoAccion);
             }
       

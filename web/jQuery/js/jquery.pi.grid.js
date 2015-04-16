@@ -37,7 +37,11 @@
             error:"",
             claveTipoGrid:"",
             agrupar:false,
-            valoresReemplazo:""
+            valoresReemplazo:"",
+            tipoConsulta:"select",
+            desactivaBusqueda:false,
+            desactivaOndblClickRow: false,
+            onSelectRow: ""
         };
 
         // Devuelvo la lista de objetos jQuery
@@ -64,6 +68,8 @@
                 "' requeriesFilter='" + $.fn.appgrid.options.requeriesFilter  +
                 "' frecuenciaActualizacion='" + $.fn.appgrid.options.frecuenciaActualizacion  +
                 "' valoresReemplazo='" + $.fn.appgrid.options.valoresReemplazo  +
+                "' tipoConsulta='" + $.fn.appgrid.options.tipoConsulta  +
+                "' desactivaOndblClickRow='" + $.fn.appgrid.options.desactivaOndblClickRow +
                 "'>" +
                 "</table><input type='hidden' value='' id='grid_complete_code_" + suffix + "'><div id='pager" + suffix +"' security=''><div align='center' id='loader" + suffix +"'><br/><br/><br/><br/><br/><br/><br /><br/><br/><br/><br/><br/><br/><br />Cargando informaci&oacute;n... <br><img src='img/loading.gif' /><br /><br /></div></div>");
 
@@ -76,7 +82,7 @@
         $("#_status_").val("Cargando definicion del cat\u00e1logo");
         $.ajax(
         {
-            url: $.fn.appgrid.options.xmlUrl + "?$cmd=grid&$cf=" + $.fn.appgrid.options.entidad.split('-')[0] + "&$ta=select&$dp=header&$w=" + $.fn.appgrid.options.wsParameters +"&$vr=" + encodeURIComponent($.fn.appgrid.options.valoresReemplazo),
+            url: $.fn.appgrid.options.xmlUrl + "?$cmd=grid&$cf=" + $.fn.appgrid.options.entidad.split('-')[0] + "&$ta=" + $.fn.appgrid.options.tipoConsulta + "&$dp=header&$w=" + $.fn.appgrid.options.wsParameters +"&$vr=" + encodeURIComponent($.fn.appgrid.options.valoresReemplazo),
             dataType: ($.browser.msie) ? "text" : "xml",
             success:  processGridDefinition, 
             error:function(xhr,err){
@@ -198,7 +204,8 @@
         }      
        
         //Titulo del grid
-        $.fn.appgrid.options.titulo=$(xml).find("configuracion_grid").find("forma").text() + "&nbsp;";
+        if ($.fn.appgrid.options.titulo=="")
+            $.fn.appgrid.options.titulo=$(xml).find("configuracion_grid").find("forma").text() + "&nbsp;";
        
         //Titulo de forma de alta y de edici?n
         if ($(xml).find("configuracion_grid").find("alias_tab").text().split(" ")[0]=="el")
@@ -356,11 +363,11 @@
             $.fn.appgrid.options.titulo+="&nbsp;&nbsp;&nbsp;<a href='#' id='lnkRemoveFilter_grid" + suffix+"'>(Quitar filtro)</a>";
 
         if ($("#grid"+suffix).attr("requeriesFilter")==0 ) //Si no est? configurado para filtrar registros, trae el cuerpo
-            xmlURL=$.fn.appgrid.options.xmlUrl + "?$cmd=grid&$cf="+ nEntidad + "&$ta=select&$dp=body&$w=" + $.fn.appgrid.options.wsParameters;
+            xmlURL=$.fn.appgrid.options.xmlUrl + "?$cmd=grid&$cf="+ nEntidad + "&$ta=" + $.fn.appgrid.options.tipoConsulta + "&$dp=body&$w=" + $.fn.appgrid.options.wsParameters;
         else if ($("#lnkRemoveFilter_grid"+suffix).length==0)  //Si est? configurado y no tiene un filtro solo trae la cabecera
-            xmlURL=$.fn.appgrid.options.xmlUrl + "?$cmd=grid&$cf="+ nEntidad + "&$ta=select&$dp=body&$w=" + $.fn.appgrid.options.wsParameters;
+            xmlURL=$.fn.appgrid.options.xmlUrl + "?$cmd=grid&$cf="+ nEntidad + "&$ta=" + $.fn.appgrid.options.tipoConsulta + "&$dp=body&$w=" + $.fn.appgrid.options.wsParameters;
         else
-            xmlURL=$.fn.appgrid.options.xmlUrl + "?$cmd=grid&$cf="+ nEntidad + "&$ta=select&$dp=body&$w=" + $.fn.appgrid.options.wsParameters;
+            xmlURL=$.fn.appgrid.options.xmlUrl + "?$cmd=grid&$cf="+ nEntidad + "&$ta=" + $.fn.appgrid.options.tipoConsulta + "&$dp=body&$w=" + $.fn.appgrid.options.wsParameters;
         
         if ($.fn.appgrid.options.claveTipoGrid=="2") {
             xmlURL= xmlURL.replace("control?$cmd=grid","control?$cmd=tree");
@@ -391,7 +398,7 @@
         );
         
          oGridConfig= {
-            url:xmlURL + "&$vr=" + encodeURIComponent(obj.attr("valoresReemplazo")),
+            url:xmlURL + "&$vr=" + encodeURIComponent($.fn.appgrid.options.valoresReemplazo),
             datatype: "xml",
             colNames:$.fn.appgrid.options.colNames,
             colModel:$.fn.appgrid.options.colModel,
@@ -413,7 +420,7 @@
           ondblClickRow: function(rowid) {
               
                     //Se deshabilita este evento para el grid de la forma 782
-                    if (nEntidad==782) {
+                    if ($(this).attr("desactivaOndblClickRow")=="true") {
                         return;
                     }
                     
@@ -505,10 +512,8 @@
         };
         
         //Se programa el evento on onSelectRow
-        if (nEntidad==782) {
-              oGridConfig.onSelectRow= function (rowId, status, e) {
-                  presenta_detalle_balanced_scorecard($(this).getCell(rowId,0));
-                }
+        if ($.fn.appgrid.options.onSelectRow!="") {
+              oGridConfig.onSelectRow= $.fn.appgrid.options.onSelectRow;
         }
         
         
@@ -903,7 +908,7 @@
                     });                            
                 else    
                     $(sGridId).jqGrid('setGridParam',{
-                        url:"control?$cmd=grid&$cf=" + nForma + "&$ta=select&$dp=body"
+                        url:"control?$cmd=grid&$cf=" + nForma + "&$ta=" + $(sGridId).attr("tipoConsulta") + "&$dp=body"
                     }).trigger("reloadGrid")
             });
         }

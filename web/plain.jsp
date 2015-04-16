@@ -13,7 +13,7 @@ request.setCharacterEncoding("UTF8");
 String error=""; 
 int forma=0;
 String tipoAccion="";
-String w = "";
+String w = ""; 
 String source="";
 LinkedHashMap <String,Campo> campos= new LinkedHashMap <String,Campo>();
 ArrayList<ArrayList> registros= new ArrayList<ArrayList>();
@@ -57,7 +57,7 @@ try {
     if (request.getParameter("$w")!=null)
         w=request.getParameter("$w");
     
-    tempForma = new Forma(new Consulta(forma,tipoAccion, pk, w, user), false);
+    tempForma = new Forma(new Consulta(forma,tipoAccion, pk, "",w, user), false);
     source=tempForma.getSQL();
    
 } catch (Fallo f) {

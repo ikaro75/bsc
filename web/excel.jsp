@@ -8,7 +8,7 @@
 <%@page import="java.text.DecimalFormat"%>
 <% 
 
-response.setContentType("text/html;charset=ISO-8859-1");
+response.setContentType("text/html;charset=ISO-8859-1"); 
 request.setCharacterEncoding("UTF8"); 
 
 String error=""; 
@@ -23,7 +23,7 @@ Forma frmTemp = new Forma();
 Usuario user = new Usuario();
 Conexion cx = new Conexion();
 
-int nUsuario = cx.getLogin(request.getParameter("email"), request.getParameter("password"));
+String nUsuario = cx.getLogin(request.getParameter("email"), request.getParameter("password"));
 user.setCx(cx);
 user.setClave(nUsuario);
 request.getSession().setAttribute("usuario", user);
@@ -64,7 +64,7 @@ try {
     if (request.getParameter("$w")!=null)
         w=request.getParameter("$w");
     
-    frmTemp = new Forma(new Consulta(forma,tipoAccion, pk, w, user),false);
+    frmTemp = new Forma(new Consulta(forma,tipoAccion, pk, "",w, user),false);
     source=frmTemp.getSQL();
  
    

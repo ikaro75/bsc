@@ -1,5 +1,5 @@
-function chartValoresHistoricosIndicador(claveIndicador, titulo, divId) {
-            $.getJSON( "chart.jsp?$cf=782&$w=clave_indicador=" + claveIndicador, function( data ) {            
+function timeLineValoresHistoricosIndicador(claveFormaDetalle, valorDeReemplazo, titulo, divId) {
+            $.getJSON( "chart.jsp?$cf=" + claveFormaDetalle + "&$ta=timeline&$vr="+encodeURIComponent(valorDeReemplazo)+"&$ts=1", function( data ) {            
               /*var plot1 = jQuery.jqplot (divId, [data], 
                 { 
                   title: titulo,
@@ -35,29 +35,33 @@ function chartValoresHistoricosIndicador(claveIndicador, titulo, divId) {
             });
 }
 
-function entregas_por_estado_2() {
-var plot2 = $.jqplot('entregas_x_estado', [
-        [[2,1], [4,2], [6,3], [3,4]], 
-        [[5,1], [1,2], [3,3], [4,4]], 
-        [[4,1], [7,2], [1,3], [2,4]]], {
-        seriesDefaults: {
-            renderer:$.jqplot.BarRenderer,
-            // Show point labels to the right ('e'ast) of each bar.
-            // edgeTolerance of -15 allows labels flow outside the grid
-            // up to 15 pixels.  If they flow out more than that, they 
-            // will be hidden.
-            pointLabels: { show: true, location: 'e', edgeTolerance: -15 },
-            // Rotate the bar shadow as if bar is lit from top right.
-            shadowAngle: 135,
-            // Here's where we tell the chart it is oriented horizontally.
-            rendererOptions: {
-                barDirection: 'horizontal'
+function barrasIndicadorDetalles(claveFormaDetalle, valorDeReemplazo, titulo, divId) {
+    $.getJSON( "chart.jsp?$cf=" + claveFormaDetalle + "&$ta=select&$vr="+encodeURIComponent(valorDeReemplazo)+"&$ts=2", function(data) {
+            
+            //El primer valor son las etiquetas, el segundo los valores de las barras
+             for (var i=0, len=data.length; i < len; i++) {
+               console.log(data[i]);
             }
-        },
-        axes: {
-            yaxis: {
-                renderer: $.jqplot.CategoryAxisRenderer
+            
+            var barra = $.jqplot(divId, [data[1]], {
+            title: titulo, 
+            seriesDefaults: {
+                renderer: $.jqplot.BarRenderer,
+                rendererOptions: {barDirection: 'horizontal'}
+            },
+            series:[
+             {pointLabels:{show: true,labels:data[0]},
+              shadowAngle: 135
+              }],
+            axes: {
+              xaxis:{renderer:$.jqplot.CategoryAxisRenderer},
+              yaxis:{padMax:1.3}
             }
-        }
-    });
-}    
+            });
+
+            }).fail(function( jqxhr, textStatus, error ) {
+                var err = textStatus + ", " + error;
+                console.log( "Request Failed: " + err );
+            });
+            
+}
