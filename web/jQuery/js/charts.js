@@ -10,7 +10,7 @@ function timeLineValoresHistoricosIndicador(claveFormaDetalle, valorDeReemplazo,
               );*/
 
               var plot1 = $.jqplot(divId, [data], {
-              title:titulo,
+              animate: !$.jqplot.use_excanvas,
               axes:{
               xaxis:{
                 renderer:$.jqplot.DateAxisRenderer
@@ -43,20 +43,19 @@ function barrasIndicadorDetalles(claveFormaDetalle, valorDeReemplazo, titulo, di
                console.log(data[i]);
             }
             
-            var barra = $.jqplot(divId, [data[1]], {
-            title: titulo, 
+            var barra = $.jqplot(divId, [[data[1]]], {
+            animate: !$.jqplot.use_excanvas,
             seriesDefaults: {
+                show: true,     
                 renderer: $.jqplot.BarRenderer,
-                rendererOptions: {barDirection: 'horizontal'}
+                /*shadowAngle: 135,
+                rendererOptions: { barDirection: 'horizontal' },*/
+                pointLabels: { show: true, location: 'e', edgeTolerance: -15 },
             },
-            series:[
-             {pointLabels:{show: true,labels:data[0]},
-              shadowAngle: 135
-              }],
             axes: {
-              xaxis:{renderer:$.jqplot.CategoryAxisRenderer},
-              yaxis:{padMax:1.3}
-            }
+                xaxis:{renderer:$.jqplot.CategoryAxisRenderer,
+                       ticks:data[0]}
+                  }
             });
 
             }).fail(function( jqxhr, textStatus, error ) {

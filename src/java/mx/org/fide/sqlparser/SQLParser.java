@@ -41,6 +41,38 @@ public class SQLParser {
     }
     
     public SQLParser(String query) {
+        /*
+        1. La subcadena empieza con WITH ?
+           Si, busco que no haya parentesis abiertos y un select después del with
+               no hay parentesis abiertos y la subcadena empieza con 'select' ?
+               si 
+                brinca a 2.
+               no 
+                brinca a 3.
+        2.   No, la subcadena empieza con SELECT ?
+             Si (busco que no haya parentesis abiertos y un from después del select)
+               no hay parentesis abiertos y la subcadena empieza con 'from' ?
+               Si (busco que no haya parentesis abiertos y un 'where' o un 'order by' después del from)
+                 no hay parentesis abiertos y la subcadena empieza con 'where' ?
+                 Si (busco que no haya parentesis abiertos y un 'group by' o un 'order by' después del where)
+                    no hay parentesis abiertos y la subcadena empieza con 'group by' ?
+                    Si (busco que no haya parentesis abiertos y un 'having' o un 'order by' después del group by)
+                    No
+                 No 
+                    Salta a 2.1 
+               No 
+                  2.1 no hay parentesis abierto?  
+                  Si 
+                    Posible cadena válida - (Caso más corto, ejemplo: SELECT 'Hola mundo') 
+                  No
+                    brinca a 3
+             No
+        3.       Error!
+              
+        */
+    }
+    
+    public void SQLParserX(String query) {
         this.isUnion=false;
         this.query = query;
         String token;

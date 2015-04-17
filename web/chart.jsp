@@ -8,7 +8,7 @@
     ArrayList<ArrayList> registros = new ArrayList<ArrayList>();
     Forma tempForma = new Forma(); 
 
-    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
     NumberFormat nfMoney = new DecimalFormat("$###,###,###,##0.00");
 
     Usuario user = (Usuario) request.getSession().getAttribute("usuario");
@@ -92,13 +92,16 @@
                    data = df.format(registro.get(k));
                } else if (campo.getTipoDato().equals("bit")) {
                    data = registro.get(k).toString().equals("true") ? "1" : "0";
-               } //else if (campo.getTipoDato().equals("money"))
-               //    data = nfMoney.format(registro.get(k));
+               } /*else if (campo.getTipoDato().equals("money"))
+                   data = nfMoney.format(registro.get(k));**/
                else {
                    data = registro.get(k).toString();
                }
 
-    if (campo.getTipoDato().toLowerCase().equals("int") || campo.getTipoDato().toLowerCase().equals("bit") || campo.getTipoDato().toLowerCase().equals("float")) {%><%=data%><%}
+    if (campo.getTipoDato().toLowerCase().equals("int") ||
+            campo.getTipoDato().toLowerCase().equals("bit") || 
+            campo.getTipoDato().toLowerCase().equals("float") || 
+            campo.getTipoDato().toLowerCase().equals("money")) {%><%=data%><%}
     else { %>"<%=data%>"<% }  
        if (k<campos.size()-1) {%><%= "," %><%} else {%>]<%}
        k++;}     
@@ -127,12 +130,15 @@
                } //else if (campo.getTipoDato().equals("money"))
                //    data = nfMoney.format(registro.get(k));
                else {
+                   
                    data = registro.get(nCampo).toString();
                }
 
-                if (campo.getTipoDato().toLowerCase().equals("int") || campo.getTipoDato().toLowerCase().equals("bit") || campo.getTipoDato().toLowerCase().equals("float")) {%><%=data%><%}
-                else { %>"<%=data%>"<% }  
-
+                if (campo.getTipoDato().toLowerCase().equals("int") || campo.getTipoDato().toLowerCase().equals("bit") || campo.getTipoDato().toLowerCase().equals("float")) {
+                    %><%=data%><%
+                } else {
+                    %>"<%=data%>"<%
+                }
                 if(nRegistro<registros.size()-1) {%><%= "," %><%}
 
                 nRegistro++;

@@ -135,10 +135,15 @@
         
         <script src="jQuery/js/raphael.2.1.0.min.js"></script>
         <script src="jQuery/js/justgage.1.0.1.min.js"></script>
+        <script src="jQuery/js/hashset.js"></script>
+        <script src="jQuery/js/hashtable.js"></script>        
+        <script src="jQuery/js/jquery.numberformatter-1.2.4.min.js"></script>
         
         <script type="text/javascript" src="jQuery/js/jwysiwyg-master/jquery.wysiwyg.js"></script>
         <script type="text/javascript" src="jQuery/js/sets/html/set.js"></script>
         <script src="jQuery/js/vista.js?id=<%=usuario.getSesion()%>" type="text/javascript"></script>
+        
+        
 
     </head>
     <body id="top">
@@ -213,26 +218,7 @@
                                 </div>
                             </div>
                         </div>                        
-                        <div class="tabUser" style="height: 100%; overflow: auto;">
-                            <div class="portlet" style="width: 47%; float: left; margin-left: 10px;">
-                                <div class="portlet-header">Datos generales del indicador</div>
-                                <div class="portlet-content" id="datos_indicador" style="margin: 5px;">
-                                </div>
-                            </div>
-                            <div class="portlet" style="width: 47%; float: left; margin-left: 10px;">
-                                <div class="portlet-header">Desempeño del indicador</div>
-                                <div class="portlet-content" id="desempeño_indicador" style="margin: 5px;">
-                                    <div id="tacometro" style="background-color: #FFF;" ></div>
-                                </div>
-                            </div>    
-                            <div class="portlet" style="width: 47%; float: left; margin-left: 10px;">
-                                <div class="portlet-header">Desempeño hist&oacute;rico del indicador</div>
-                                <div class="portlet-content" id="chart_indicador" style="margin: 5px;">
-                                    <div id="chart_historico"  style="background-color: #FFF; height:250px;" ></div>
-                                </div>    
-                            </div>
-                            <div id="grid_datos" style="float:left; margin-left: 10px; width: 450px; height: 180px; "  app="145" form="782" wsParameters="" titulo="" inDesktop="true" openKardex="false"></div>
-                            
+                        <div id="frontweb" class="tabUser" style="height: 100%; overflow: auto;">                             
                         </div>
                     </div>
 

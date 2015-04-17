@@ -267,8 +267,8 @@
                     name:sParent+suffix,
                     index:sParent+suffix,
                     width:oTamano[iCol].attributes.length==0?$(oTamano[iCol]).text():$(oTamano[iCol+1]).text(),
-                    sortable:true,
-                    formatter: "currency",
+                    sortable:true ,/*
+                    formatter: "currency",*/
                     summaryType: "sum"
                 };                                
             } else if ($(this).parent().index()==0) {
