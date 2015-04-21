@@ -43,17 +43,17 @@ function barrasIndicadorDetalles(claveFormaDetalle, valorDeReemplazo, titulo, di
                console.log(data[i]);
             }
             
-            var barra = $.jqplot(divId, [[data[1]]], {
+            var barra = $.jqplot(divId, [data[1]], {
             animate: !$.jqplot.use_excanvas,
             seriesDefaults: {
                 show: true,     
                 renderer: $.jqplot.BarRenderer,
-                /*shadowAngle: 135,
-                rendererOptions: { barDirection: 'horizontal' },*/
+                shadowAngle: 135,
+                rendererOptions: { barDirection: 'horizontal' },
                 pointLabels: { show: true, location: 'e', edgeTolerance: -15 },
             },
             axes: {
-                xaxis:{renderer:$.jqplot.CategoryAxisRenderer,
+                yaxis:{renderer:$.jqplot.CategoryAxisRenderer,
                        ticks:data[0]}
                   }
             });

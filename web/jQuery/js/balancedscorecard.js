@@ -95,7 +95,7 @@ function fw_scorecard_valor_historico_grid_init() {
 //1. se requiere una llamada ajax para saber qué forma está asociada
 //2. Inyectar html del grid del detalle y del chart
 function presenta_detalle_balanced_scorecard(fecha) {
-    alert(fecha);
+    //alert(fecha);
      $.ajax({ url: "control?$cmd=plain&$ta=select&$cf=775&$w=clave_indicador=" +  $("#_cache_").val(),
             dataType: ($.browser.msie) ? "text" : "xml",
             type: "POST",

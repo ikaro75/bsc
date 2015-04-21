@@ -134,11 +134,16 @@
                    data = registro.get(nCampo).toString();
                }
 
-                if (campo.getTipoDato().toLowerCase().equals("int") || campo.getTipoDato().toLowerCase().equals("bit") || campo.getTipoDato().toLowerCase().equals("float")) {
-                    %><%=data%><%
-                } else {
-                    %>"<%=data%>"<%
+                if (campo.getTipoDato().toLowerCase().equals("int") || campo.getTipoDato().toLowerCase().equals("bit") 
+                        || campo.getTipoDato().toLowerCase().equals("float") || campo.getTipoDato().toLowerCase().equals("money")) {
+                    if (nCampo>0) {
+                        %>[<%=data%>,<%=nRegistro+1%>]<% 
+                    } else {
+                        %><%=data%><%
+                    }
                 }
+                else { %>"<%=data%>"<% }
+
                 if(nRegistro<registros.size()-1) {%><%= "," %><%}
 
                 nRegistro++;

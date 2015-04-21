@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mx.org.fide.modelo.Conexion.DbType;
+import mx.org.fide.sqlparser.SimpleSQLParser;
 
 /**
  * Recupera las consultas de las formas, las resuelve basándose en el perfil del
@@ -1909,331 +1910,125 @@ public class Consulta {
             }
 
             if (this.noParsear) {
-
                 s = this.sql;
                 this.numeroDeRegistros = 0;
-
-                if (oDb.getDbType() == Conexion.DbType.MSSQL) {
-                    oDb.execute("SET DATEFORMAT YMD");
-                }
             } else {
-                //Determina si tiene un where que no es de subconsulta
 
-                Integer parentesisAbiertos = 0;
-                Integer cierreParentesis = 0;
-                Boolean estoyEnElWith = true;
-                Boolean estoyEnElSelect = false;
-                Boolean estoyEnElFrom = false;
-                Boolean estoyEnElWhere = false;
-                Boolean estoyEnElGroupBy = false;
-                Boolean estoyEnElHavingBy = false;
-                
-              /* 1. La cadena empieza con un with ?
-                 si: ahora busco que no haya parentesis abiertos y busco un select
-                 no: la cadena empieza con select ?
-                 no
-                        
-                
-                for (int i = 0; i < s.length(); i++) {
-                    //Busco donde acaba el with
-                    if (s.substring(i, i+4).toLowerCase().startsWith("with")) {
-                                with = s.substring(0, 3);
-                                i = 3;
-                            } else {
-                                estoyEnElWith = false;
-                                estoyEnElSelect = true;
-                                
-                        } else {
-                            with += s.substring(i, i + 1);
-                            if (s.substring(i, i + 1).equals("(")) {
-                                parentesisAbiertos++;
-                            } else {
-                                if (s.substring(i, i + 1).equals(")")) {
-                                    parentesisAbiertos--;
+                SimpleSQLParser sQA = new SimpleSQLParser(this.sql);
+                /*System.out.println("SELECT: ".concat(sQA.getSelect()));
+                 System.out.println("FROM: ".concat(sQA.getFrom()));
+                 System.out.println("WHERE: ".concat(sQA.getWhere()));
+                 System.out.println("GROUP BY: ".concat(sQA.getGroupBy()));
+                 System.out.println("HAVING: ".concat(sQA.getHaving()));
+                 System.out.println("ORDER BY: ".concat(sQA.getOrderBy()));*/
 
-                                    if (parentesisAbiertos == 0) {
-                                        estoyEnElWith = false;
-                                        estoyEnElSelect = true;
-                                    }
-                                }
-                            }
-                        }
+                select = sQA.getSelect();
+                from = sQA.getFrom();
+                where = sQA.getWhere();
+                orderBy = sQA.getOrderBy();
+
+                //Valida y agrega el parametro w al WHERE
+                if (where.equals("")) {
+                    if (!w.equals("")) {
+                        where = " WHERE ".concat(w);
                     }
-                    
-                    while (estoyEnElSelect) {
-                        if (estoyEnElSelect && i == 0) {
-                            if (s.toLowerCase().startsWith("select ")) {
-                                with = s.substring(0, 3);
-                                i = 3;
-                            } else {
-                                estoyEnElWith = false;
-                                estoyEnElSelect = true;
-                            }
-                        } else {
-                            with += s.substring(i, i + 1);
-                            if (s.substring(i, i + 1).equals("(")) {
-                                parentesisAbiertos++;
-                            } else {
-                                if (s.substring(i, i + 1).equals(")")) {
-                                    parentesisAbiertos--;
-
-                                    if (parentesisAbiertos == 0) {
-                                        estoyEnElWith = false;
-                                        estoyEnElSelect = true;
-                                    }
-                                }
-                            }
-                        }
+                } else {
+                    if (!w.equals("")) {
+                        where = " AND ".concat(w);
                     }
-                    */
-                    String[] aFields = this.sql.replaceAll("\n", " ").split(",");
-                    Boolean fromPendiente = false;
-                    Boolean wherePendiente = false;
-                    Boolean subconsultaPendiente = false;
-                    String separador = ",";
-                    for (int i = 0; i < aFields.length; i++) {
-
-                        if (aFields[i].toLowerCase().startsWith("with")) {
-                            Boolean esDelWith = true;
-
-                            while (esDelWith) {
-                                if (aFields[i].toLowerCase().contains(") select")) {
-                                    esDelWith = false;
-                                } else {
-                                    with += aFields[i];
-                                }
-                                i++;
-                            }
-
-                        } else if (aFields[i].toLowerCase().startsWith("select")) {
-                            //Verifica el caso en que la consulta no traiga una sola coma...
-                            if (aFields.length == 1) {
-                                aFields = this.sql.replaceAll("\n", " ").split(" ");
-                                separador = " ";
-                                select += aFields[0] + " ";
-                            } else {
-                                select += aFields[i] + ",";
-                            }
-                        } else if (aFields[i].trim().startsWith("(") || subconsultaPendiente) { //Hay una subconsulta en el select?
-
-                            if (aFields[i].toLowerCase().lastIndexOf("from") > aFields[i].toLowerCase().indexOf(")")) {
-                                select += aFields[i].substring(0, aFields[i].toLowerCase().lastIndexOf("from") - 1) + ",";
-                                aFields[i] = aFields[i].substring(aFields[i].toLowerCase().lastIndexOf("from"), aFields[i].length());
-                                subconsultaPendiente = false;
-                                i--;
-                            } else if (!aFields[i].equals("")) {
-                                select += aFields[i] + ",";
-                                subconsultaPendiente = true;
-                            }
-                            //Verificar si viene FROM
-                        } else if (aFields[i].toLowerCase().contains("from") || fromPendiente) {
-                            String[] aFrom = aFields[i].split(" ");
-                            Boolean esDelFrom = false;
-                            for (int j = 0; j < aFrom.length; j++) {
-                                if (aFrom[j].toLowerCase().equals("from")) {
-                                    fromPendiente = true;
-                                    esDelFrom = true;
-                                    from += aFrom[j] + " ";
-                                } else if (aFrom[j].toLowerCase().equals("where")) {
-                                    fromPendiente = false;
-                                    aFields[i] = "";
-                                    for (int k = j; k < aFields.length; k++) {
-                                        aFields[i] += aFrom[k] + " ";
-                                    }
-                                    separador = " ";
-                                    i--;
-                                    break;
-                                } else if (aFrom[j].toLowerCase().equals("order")) {
-                                    fromPendiente = false;
-                                    //Se debe vaciar los valores del aFrom en aFields[i]
-                                    aFields[i] = "";
-                                    for (int k = j; k < aFrom.length; k++) {
-                                        aFields[i] += aFrom[k] + " ";
-                                    }
-                                    //aFields[i]=aFields[i].substring(from.length(), aFields[i].length());
-                                    i--;
-                                    break;
-                                } else if (esDelFrom) { // caso de los alias
-                                    from += aFrom[j] + " ";
-                                    //Si aqui termina pero tiene más tabla, se queda pendiente
-                                    fromPendiente = true;
-                                } else if (fromPendiente) { // caso de que la consulta contenga más de una tabla
-                                    from += aFrom[j] + ",";
-                                } else if (!aFrom[j].equals("")) {
-                                    if (aFrom[j].contains(")") || aFrom[j].toLowerCase().equals("as")) {
-                                        select += aFrom[j] + " ";
-                                    } else {
-                                        select += aFrom[j] + ",";
-                                    }
-                                }
-                            }
-                        } else if (aFields[i].toLowerCase().contains("where") || wherePendiente) {
-                            String[] aWhere = aFields[i].split(" ");
-                            Boolean esDelWhere = wherePendiente;
-                            for (int j = 0; j < aWhere.length; j++) {
-                                if (aWhere[j].toLowerCase().equals("where")) {
-                                    wherePendiente = true;
-                                    esDelWhere = true;
-                                } else if (aWhere[j].toLowerCase().equals("order")) {
-                                    wherePendiente = false;
-                                }
-
-                                if (esDelWhere) {
-                                    where = where.concat(aWhere[j].concat(" "));
-                                } else {
-                                    from += ",".concat(aWhere[j]);
-                                }
-                            }
-
-                            if (i < aFields.length && (aFields[i + 1].toLowerCase().startsWith("and") || aFields[i + 1].toLowerCase().startsWith("or"))) {
-                                wherePendiente = true;
-                            }
-                        } else if (aFields[i].toLowerCase().contains("group")) {
-                            String[] aGroupBy = aFields[i].split(" ");
-                            Boolean esDelHaving = false;
-
-                            for (int j = 0; j < aGroupBy.length; j++) {
-                                if (aFields[j].toLowerCase().equals("order")) {
-                                    break;
-                                }
-
-                                if (aFields[j].toLowerCase().equals("having")) {
-                                    esDelHaving = true;
-                                }
-
-                                if (esDelHaving) {
-                                    having += aFields[j];
-                                } else {
-                                    groupBy += aFields[j];
-                                }
-
-                                i++;
-                            }
-
-                        } else if (aFields[i].toLowerCase().contains("order")) {
-                            //Debe tomarse el resto de la sentencia
-                            for (int j = i; j < aFields.length; j++) {
-                                orderBy += aFields[j] + ",";
-                                i++;
-                            }
-
-                        } else {
-                            if (aFields[i].toLowerCase().lastIndexOf("from") - 1 > -1) {
-                                select += aFields[i].substring(0, aFields[i].toLowerCase().lastIndexOf("from") - 1) + ",";
-                                aFields[i] = aFields[i].substring(aFields[i].toLowerCase().lastIndexOf("from"), aFields[i].length());
-                                i--;
-
-                            } else if (!aFields[i].equals("")) {
-                                //Si se trata de una función que contiene una coma en uno de los campos del select 
-                                select += aFields[i] + ",";
-                            }
-                        }
-                    }
-
-                    select = select.substring(0, select.length() - 1);
-                    from = from.substring(0, from.length() - 1);
-                    orderBy = orderBy.length() > 0 ? orderBy.substring(0, orderBy.length() - 1) : "";
-
-                    //Valida y agrega el parametro w al WHERE
-                    if (where.equals("")) {
-                        if (!w.equals("")) {
-                            where = " WHERE ".concat(w);
-                        }
-                    } else {
-                        if (!w.equals("")) {
-                            where = " AND ".concat(w);
-                        }
-                    }
+                }
 
                 //Calcula el número de registros de la consulta
-                    //Es necesario verificar si en la consulta que contiene el último from se trata de una subconsulta
-                    String sCount;
+                //Es necesario verificar si en la consulta que contiene el último from se trata de una subconsulta
+                String sCount;
 
-                    sCount = "SELECT COUNT(*) as conteo ".concat(from).concat(" ").concat(where)
-                            .replaceAll("%clave_empleado", this.usuario.getClave().toString())
-                            .replaceAll("%area", "'".concat(usuario.getArea().toString()).concat("'"))
-                            .replaceAll("%clave_perfil", this.usuario.getClavePerfil().toString())
-                            .replaceAll("\\$pk", String.valueOf(getPk()));
-
-                    if (!valoresDeReemplazo.equals("")) {
-                        String[] aValoresDeReemplazo = valoresDeReemplazo.split(";");
-                        for (Integer i = 0; i < aValoresDeReemplazo.length; i++) {
-                            sCount = sCount.replace(aValoresDeReemplazo[i].split("=")[0], aValoresDeReemplazo[i].split("=")[1]);
-                        }
-                    }
-
-                    oRs = oDb.getRs(sCount);
-                    if (oRs.next()) {
-                        this.numeroDeRegistros = oRs.getInt("conteo");
-                    } else {
-                        this.numeroDeRegistros = 0;
-                    }
-
-                    oRs.close();
-                    oRs = null;
-
-                    if (!sidx.equals("")) {
-                        orderBy = " ORDER BY ".concat(sidx).concat(" ").concat(sord);
-                    }
-
-                    //Este procedimiento incorpora paginación
-                    if (oDb.getDbType() == Conexion.DbType.MYSQL) {
-                        s = select.concat(" ").concat(from).concat(" ")
-                                .concat(where).concat(" ")
-                                .concat(groupBy).concat(" ")
-                                .concat(having).concat(" ")
-                                .concat(orderBy)
-                                .concat(" LIMIT ").concat(String.valueOf(limiteDeRegistros * (pagina - 1)).concat(",").concat(String.valueOf(limiteDeRegistros)));
-                    } else if (oDb.getDbType() == Conexion.DbType.MSSQL) {
-                        //Verifica si se está construyendo un árbol y no se pagina
-                        if (!(this.claveTipoGrid == 2 && this.sql.toUpperCase().contains("UNION"))) {
-                            s = "SELECT * FROM (".concat(select).concat(",")
-                                    .concat("ROW_NUMBER() OVER (").concat(orderBy.equals("") ? "ORDER BY ".concat(this.llavePrimaria) : orderBy).concat(") as numeroDeRegistro ")
-                                    .concat(from)
-                                    .concat(" ").concat(where)
-                                    .concat(groupBy).concat(" ")
-                                    .concat(having).concat(" ")
-                                    .concat(") AS a WHERE numeroDeRegistro BETWEEN ")
-                                    .concat(String.valueOf(limiteDeRegistros * (pagina - 1) + 1)).concat(" AND ").concat(String.valueOf(limiteDeRegistros * pagina));
-
-                        }
-                    } else if (oDb.getDbType() == Conexion.DbType.ORACLE) {
-                        if (!where.equals("")) {
-                            s = select.concat(" ").concat(from).concat(" ").concat(where).concat(" AND rownum>=").concat(String.valueOf(limiteDeRegistros * (pagina - 1))).concat(" AND rownum<=").concat(String.valueOf(limiteDeRegistros * (pagina - 1) + limiteDeRegistros)).concat(" ").concat(groupBy).concat(" ").concat(having).concat(" ").concat(orderBy);
-                        } else {
-                            s = select.concat(" ").concat(from).concat(" ").concat(" WHERE rownum>=").concat(String.valueOf(limiteDeRegistros * (pagina - 1))).concat(" AND rownum<=").concat(String.valueOf(limiteDeRegistros * (pagina - 1) + limiteDeRegistros));
-                        }
-                    }
-                }
-                /*Se aplican reglas de reemplazo al select que contiene el from y el where originales*/
-                s = s.replaceAll("%clave_empleado", this.usuario.getClave().toString())
+                sCount = "SELECT COUNT(*) as conteo ".concat(from).concat(" ").concat(where)
+                        .replaceAll("%clave_empleado", this.usuario.getClave().toString())
                         .replaceAll("%area", "'".concat(usuario.getArea().toString()).concat("'"))
                         .replaceAll("%clave_perfil", this.usuario.getClavePerfil().toString())
                         .replaceAll("\\$pk", String.valueOf(getPk()));
 
-                //Se aplican reemplazo pasadas en el parámetro     
                 if (!valoresDeReemplazo.equals("")) {
                     String[] aValoresDeReemplazo = valoresDeReemplazo.split(";");
                     for (Integer i = 0; i < aValoresDeReemplazo.length; i++) {
-                        s = s.replaceAll(aValoresDeReemplazo[i].split("=")[0], aValoresDeReemplazo[i].split("=")[1]);
+                        sCount = sCount.replace(aValoresDeReemplazo[i].split("=")[0], aValoresDeReemplazo[i].split("=")[1]);
                     }
                 }
 
-                this.sql = s;
-                this.setCampos();
-
-                if (this.noParsear) {
-                    this.numeroDeRegistros = this.getRegistros().size();
+                oRs = oDb.getRs(sCount);
+                if (oRs.next()) {
+                    this.numeroDeRegistros = oRs.getInt("conteo");
+                } else {
+                    this.numeroDeRegistros = 0;
                 }
 
-            }catch (Exception e) {
+                oRs.close();
+                oRs = null;
+
+                if (!sidx.equals("")) {
+                    orderBy = " ORDER BY ".concat(sidx).concat(" ").concat(sord);
+                }
+
+                //Este procedimiento incorpora paginación
+                if (oDb.getDbType() == Conexion.DbType.MYSQL) {
+                    s = select.concat(" ").concat(from).concat(" ")
+                            .concat(where).concat(" ")
+                            .concat(groupBy).concat(" ")
+                            .concat(having).concat(" ")
+                            .concat(orderBy)
+                            .concat(" LIMIT ").concat(String.valueOf(limiteDeRegistros * (pagina - 1)).concat(",").concat(String.valueOf(limiteDeRegistros)));
+                } else if (oDb.getDbType() == Conexion.DbType.MSSQL) {
+                    //Verifica si se está construyendo un árbol y no se pagina
+                    if (!(this.claveTipoGrid == 2 && this.sql.toUpperCase().contains("UNION"))) {
+                        s = "SELECT * FROM (".concat(select).concat(",")
+                                .concat("ROW_NUMBER() OVER (").concat(orderBy.equals("") ? "ORDER BY ".concat(this.llavePrimaria) : orderBy).concat(") as numeroDeRegistro ")
+                                .concat(from)
+                                .concat(" ").concat(where)
+                                .concat(groupBy).concat(" ")
+                                .concat(having).concat(" ")
+                                .concat(") AS a WHERE numeroDeRegistro BETWEEN ")
+                                .concat(String.valueOf(limiteDeRegistros * (pagina - 1) + 1)).concat(" AND ").concat(String.valueOf(limiteDeRegistros * pagina));
+
+                    }
+                } else if (oDb.getDbType() == Conexion.DbType.ORACLE) {
+                    if (!where.equals("")) {
+                        s = select.concat(" ").concat(from).concat(" ").concat(where).concat(" AND rownum>=").concat(String.valueOf(limiteDeRegistros * (pagina - 1))).concat(" AND rownum<=").concat(String.valueOf(limiteDeRegistros * (pagina - 1) + limiteDeRegistros)).concat(" ").concat(groupBy).concat(" ").concat(having).concat(" ").concat(orderBy);
+                    } else {
+                        s = select.concat(" ").concat(from).concat(" ").concat(" WHERE rownum>=").concat(String.valueOf(limiteDeRegistros * (pagina - 1))).concat(" AND rownum<=").concat(String.valueOf(limiteDeRegistros * (pagina - 1) + limiteDeRegistros));
+                    }
+                }
+            }
+            /*Se aplican reglas de reemplazo al select que contiene el from y el where originales*/
+            s = s.replaceAll("%clave_empleado", this.usuario.getClave().toString())
+                    .replaceAll("%area", "'".concat(usuario.getArea().toString()).concat("'"))
+                    .replaceAll("%clave_perfil", this.usuario.getClavePerfil().toString())
+                    .replaceAll("\\$pk", String.valueOf(getPk()));
+
+            //Se aplican reemplazo pasadas en el parámetro     
+            if (!valoresDeReemplazo.equals("")) {
+                String[] aValoresDeReemplazo = valoresDeReemplazo.split(";");
+                for (Integer i = 0; i < aValoresDeReemplazo.length; i++) {
+                    s = s.replaceAll(aValoresDeReemplazo[i].split("=")[0], aValoresDeReemplazo[i].split("=")[1]);
+                }
+            }
+
+            this.sql = s;
+            this.setCampos();
+
+            if (this.noParsear) {
+                this.numeroDeRegistros = this.getRegistros().size();
+            }
+
+        } catch (Exception e) {
             throw new Fallo("<error><general>Error al ejecutar la consulta</general><descripcion><![CDATA[<a href='#', id='_1_8-".concat(this.claveConsulta.toString()).concat("'>").concat(this.getClaveConsulta().toString()).concat("</a> : ").concat(this.sql).concat(" / ").concat(e.toString()).concat(">]]</descripcion><tipo>Error en consulta</tipo><pk>").concat(this.claveConsulta.toString()).concat("</pk></error>"));
-        }finally {
+        } finally {
             oDb.cierraConexion();
             oDb = null;
         }
-        }
-        //Constructor para árbol sin paginación     
+    }
+
+    //Constructor para árbol sin paginación     
+
     public Consulta(int claveForma, String tipoConsulta, String pk, String w, Usuario usuario, Integer registros, Integer pagina, String sidx, String sord, Integer nodo) throws Fallo {
         String s;
         StringBuilder tmp = new StringBuilder("");

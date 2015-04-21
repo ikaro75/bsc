@@ -296,12 +296,12 @@
                                     } else if (claveTipoIndicador == "2") {
 
                                         $("#frontweb").html(
-                                                '<div class="portlet" style="width: 47%; float: left; margin-left: 10px;">' +
+                                                '<div class="portlet" style="width: 47%; float: left; margin-left: 10px;" id="datos_generales_indicador">' +
                                                 '<div class="portlet-header">Datos generales del indicador</div>' +
                                                 '<div class="portlet-content" id="datos_indicador" style="margin: 5px;">' +
                                                 '</div></div>' +
-                                                '<div class="portlet" style="width: 47%; float: left; margin-left: 10px;">' +
-                                                '<div class="portlet-header">Desempeño del indicador</div>' +
+                                                '<div class="portlet" style="width: 47%; float: left; margin-left: 10px;" id="tacometro_portlet">' +
+                                                '<div class="portlet-header">Desempe&ntilde;o del indicador</div>' +
                                                 '<div class="portlet-content" id="desempeño_indicador" style="margin: 5px;">' +
                                                 '<div id="tacometro" style="background-color: #FFF;" ></div>' +
                                                 '</div></div>');
@@ -366,14 +366,26 @@
                                         }
 
                                         $($($("#tacometro").children()[0]).find("text").children()[1]).html(valorConFormato);
-
+                                        
+                                        //Se le da formato a los portlet
+                                        $("#datos_generales_indicador,#tacometro_portlet").sortable({
+                                                connectWith: ".column"
+                                            });
+                                        
+                                        $("#datos_generales_indicador,#tacometro_portlet").addClass("ui-widget ui-widget-content ui-helper-clearfix ui-corner-all")
+                                                    .find(".portlet-header")
+                                                    .addClass("ui-widget-header ui-corner-all")
+                                                    .prepend("<span class='ui-icon ui-icon-minusthick'></span>")
+                                                    .end()
+                                                    .find(".portlet-content");
+                                            
                                         if (claveFormaDetalle != "") {
                                             $("#chart_desempeno_portlet").remove();
                                             $("#grid_datos").remove();
                                             $("#datos_indicador")
-                                                    .parent().parent()
+                                                    .parent().parent() 
                                                     .append('<div class="portlet" id="chart_desempeno_portlet" style="width: 47%; float: left; margin-left: 10px;">' +
-                                                            '<div class="portlet-header">Desempeño hist&oacute;rico del indicador</div>' +
+                                                            '<div class="portlet-header">Desempe&ntilde;o hist&oacute;rico del indicador</div>' +
                                                             '<div class="portlet-content" id="chart_indicador" style="margin: 5px;">' +
                                                             '<div id="chart_historico"  style="background-color: #FFF; height:250px;" ></div>' +
                                                             '</div>' +
@@ -424,6 +436,8 @@
                                             $("#grid_datos_detalle").remove();
                                             $("#chart_datos_detalle_portlet").remove();
                                         }
+                                        
+                                        
                                     }
                                 }
                                 , error: function (xhr, err) {
