@@ -1925,6 +1925,8 @@ public class Consulta {
                 select = sQA.getSelect();
                 from = sQA.getFrom();
                 where = sQA.getWhere();
+                groupBy = sQA.getGroupBy();
+                having = sQA.getHaving();
                 orderBy = sQA.getOrderBy();
 
                 //Valida y agrega el parametro w al WHERE
