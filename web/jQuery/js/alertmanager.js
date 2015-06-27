@@ -36,9 +36,16 @@ function mis_pendientes_init() {
 
 function mis_pendientes_ongridcomplete() {
     // Quita eventos anteriores 
-    $(".gridlink").unbind("click");
+    $(".gridlink").unbind("click").click(function() {
+        //Debe de ubicar el nodo
+        claveNodo = this.id.split("-")[3];
+        $("#tvIndicadores").jstree('open_node',$('#pki_' + claveNodo));
+        $("#tvIndicadores li[id=pki_" + claveNodo + "] a").click();
+    });
     
-    var source = {
+    $(".desactivaAlerta").button();
+    
+    /*var source = {
                   url: 'events.jsp',
                   type: 'GET'
             }

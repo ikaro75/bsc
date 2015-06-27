@@ -234,11 +234,23 @@
                     //Se debe disparar la selección del primer nodo
                    $("#" + this.id).jstree("select_node", "#pki_1");
                    //$(($(this).find("li")[0]).find("a")[0]).click();
+                }).bind("open_node.jstree", function (event, data) { 
+                     //data.rslt.np[0].id.split("_")[1].split("-")[0]
+                    if((data.inst._get_parent(data.rslt.obj)).length) { 
+                       data.inst.open_node(data.inst._get_parent(data.rslt.obj), false,true); 
+                    } 
                 }).bind("select_node.jstree", function (event, data) {
-                    //`data.rslt.obj` is the jquery extended node that was clicked          
+                    //`data.rslt.obj` is the jquery extended node that was clicked      
+                    var sTitulo ="";
+                    data.rslt.obj.parents("li").each(function () {
+                        //parents.push({ id: $(this).attr("id"), description: $(this).children("a").text() });
+                        sTitulo=$(this).children("a").text() + '/' + sTitulo;
+                    });
+
                     var oTheNode = data.rslt.obj;
                     var sNodeId = data.rslt.obj.attr("id");
-                    var sTitulo = $.trim(data.rslt.obj.children("a").text());
+                    var descripcionIndicador = "";
+                    var sTitulo= (sTitulo!="")? sTitulo + $.trim(data.rslt.obj.children("a").text()):$.trim(data.rslt.obj.children("a").text());
                     var sFiltro = $(oTheNode).attr("evento");
                     var nApp = sNodeId.split("-")[1];
                     var nForma = sNodeId.split("-")[2];
@@ -267,7 +279,7 @@
                                     }
 
                                     var indicador = $(xmlIndicador).find("indicador")[0].childNodes[0].data;
-                                    var descripcionIndicador = $(xmlIndicador).find("descripcion")[0].childNodes[0].data
+                                    descripcionIndicador = $(xmlIndicador).find("descripcion")[0].childNodes[0].data
                                     var valorActual = $(xmlIndicador).find("valor_actual")[0].childNodes[0].data
                                     var claveFormaDetalle = $(xmlIndicador).find("clave_forma_detalle")[0].childNodes[0].data
                                     var formato = $(xmlIndicador).find("formato")[0].childNodes[0].data;
@@ -283,7 +295,7 @@
                                             wsParameters: "",
                                             titulo: "Alertas",
                                             inDesktop: "true",
-                                            height: "400px",
+                                            height: "480px",
                                             removeGridTitle: true,
                                             showFilterLink: false,
                                             inQueue: true,
@@ -304,7 +316,7 @@
                                                 '<div class="portlet-header">Desempe&ntilde;o del indicador</div>' +
                                                 '<div class="portlet-content" id="desempeño_indicador" style="margin: 5px;">' +
                                                 '<div id="tacometro" style="background-color: #FFF;" ></div>' +
-                                                '</div></div>');
+                                                '</div></div><input type="hidden" id="filtros_indicador" value=""/> ');
                                         //Extrae nombres de los responsables
                                         $.ajax({url: "control?$cmd=plain&$ta=select&$cf=776&$w=clave_indicador=" + claveIndicador,
                                             dataType: ($.browser.msie) ? "text" : "xml",
@@ -330,7 +342,7 @@
                                                 });
 
                                                 //Presenta información general del indicador
-                                                $("#datos_indicador").html("<h2>" + indicador + "</h2>"
+                                                $("#datos_indicador").html("<h2>" + sTitulo + "</h2>"
                                                         + "<p>" + descripcionIndicador + "</p>"
                                                         + "<p><strong>Responsables</strong><p>" +
                                                         responsables
@@ -377,8 +389,8 @@
                                                     .addClass("ui-widget-header ui-corner-all")
                                                     .prepend("<span class='ui-icon ui-icon-minusthick'></span>")
                                                     .end()
-                                                    .find(".portlet-content");
-                                            
+                                                    .find(".portlet-content");                                     
+                                        
                                         if (claveFormaDetalle != "") {
                                             $("#chart_desempeno_portlet").remove();
                                             $("#grid_datos").remove();
@@ -425,6 +437,7 @@
                                                 desactivaBusqueda: true,
                                                 desactivaOndblClickRow: true,
                                                 onSelectRow: function (rowId, status, e) {
+                                                    $("#filtros_indicador").val("fecha='"+$(this).getCell(rowId, 0)+"';");
                                                     presenta_detalle_balanced_scorecard($(this).getCell(rowId, 0));
                                                     $("#grid_datos_detalle").find(".ui-jqgrid-title").text("Detalles del indicador");
                                                 }

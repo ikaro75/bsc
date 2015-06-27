@@ -122,15 +122,26 @@ public class Consulta {
         Campo fdCampo;
         ResultSet oRs = null;
         ResultSet rsFieldDictionary;
+        Integer claveOrigenDatos=0;
         int nCols;
         StringBuilder qryCampos = new StringBuilder("");
 
         //Aquí es donde es necesario seleccionar la base de datos en función al origen de datos seleccionado
         Boolean autoIncrement = false;
         Boolean autoIncrementLocated = false;
+        //Verifica que el tipo consulta no empieza en un número
         try {
-            if (this.claveOrigenDatos != 0) {
-                oRs = oDb.getRs("SELECT * FROM fw_scorecard_origen_dato WHERE clave_origen_dato=" + this.claveOrigenDatos.toString());
+            claveOrigenDatos = Integer.parseInt(this.tipoConsulta.split("_")[0]);
+        } catch (Exception e) {
+            
+        }
+        
+        if (this.claveOrigenDatos!=0)
+             claveOrigenDatos = this.claveOrigenDatos;
+        
+        try {
+            if (claveOrigenDatos != 0) {
+                oRs = oDb.getRs("SELECT * FROM be_origen_dato WHERE clave_origen_dato=" + claveOrigenDatos.toString());
                 if (oRs.next()) {
                     oDb = new Conexion(oRs.getString("servidor") + (oRs.getString("puerto") != null ? ":" + oRs.getString("puerto") : ""), oRs.getString("db"), oRs.getString("login"), oRs.getString("pw"), DbType.values()[oRs.getInt("clave_tipo_db")]);
                 } else {
@@ -536,7 +547,7 @@ public class Consulta {
         try {
 
             if (this.claveOrigenDatos != 0) {
-                oRs = oDb.getRs("SELECT * FROM fw_scorecard_origen_dato WHERE clave_origen_dato=" + this.claveOrigenDatos.toString());
+                oRs = oDb.getRs("SELECT * FROM be_origen_dato WHERE clave_origen_dato=" + this.claveOrigenDatos.toString());
                 if (oRs.next()) {
                     oDb = new Conexion(oRs.getString("servidor") + (oRs.getString("puerto") != null ? ":" + oRs.getString("puerto") : ""), oRs.getString("db"), oRs.getString("login"), oRs.getString("pw"), DbType.values()[oRs.getInt("clave_tipo_db")]);
                 } else {
@@ -1703,9 +1714,14 @@ public class Consulta {
         this.w = w;
         this.usuario = usuario;
 
+        String with = "";
+        String set = "";
         String select = "";
+        String from = "";
         String where = "";
-        String orderby = "";
+        String groupBy = "";
+        String having = "";
+        String orderBy = "";
 
         ResultSet oRs;
         try {
@@ -1763,24 +1779,27 @@ public class Consulta {
                     w = w.concat(" AND ").concat(this.llavePrimaria).concat("=").concat(this.pk);
                 }
             }
+            
+            SimpleSQLParser sQA = new SimpleSQLParser(this.sql);
+            with = sQA.getWith();
+            set =sQA.getSet();
+            select = sQA.getSelect();
+            from = sQA.getFrom();
+            where = sQA.getWhere();
+            groupBy = sQA.getGroupBy();
+            having = sQA.getHaving();
+            orderBy = sQA.getOrderBy();
 
-            //Se busca el último from
-            int lastPos = this.sql.toLowerCase().lastIndexOf("from");
-
-            //Si la consulta incluye un order by, se divide la consulta en dos para incorporar el where
-            if (select.toLowerCase().contains("order by")) {
-                select = select.substring(0, this.sql.toLowerCase().lastIndexOf("order by"));
-                orderby = "ORDER BY " + this.sql.toLowerCase().split("order by")[1];
-            }
-
-            if (select.substring(lastPos).toLowerCase().contains("where") && !w.equals("")) {
-                select += " and " + w;
+            if (!where.equals("") && !w.equals("")) {
+                where += " and " + w;
             } else if (!w.equals("")) {
-                select += " where  " + w;
+                where += " where  " + w;
             }
 
             /*Se aplican reglas de reemplazo*/
-            this.sql = select.concat(" ").concat(orderby).replace("%clave_empleado", this.usuario.getClave().toString())
+            this.sql = (set.equals("")?"":set.concat("\n")).concat(select).concat(" ").concat(from).concat(" ").concat(where).concat(" ")
+                    .concat(groupBy).concat(" ").concat(having).concat(" ").concat(orderBy)
+                    .replace("%clave_empleado", this.usuario.getClave().toString())
                     .replace("%area", "'".concat(usuario.getArea().toString()).concat("'"))
                     .replace("%clave_perfil", this.usuario.getClavePerfil().toString())
                     .replaceAll("\\$pk", String.valueOf(getPk()));
@@ -1844,6 +1863,7 @@ public class Consulta {
             this.limiteDeRegistros = registros;
 
             String with = "";
+            String set = "";
             String select = "";
             String from = "";
             String where = "";
@@ -1897,7 +1917,7 @@ public class Consulta {
             }
 
             if (this.claveOrigenDatos != 0) {
-                oRs = oDb.getRs("SELECT * FROM fw_scorecard_origen_dato WHERE clave_origen_dato=" + this.claveOrigenDatos.toString());
+                oRs = oDb.getRs("SELECT * FROM be_origen_dato WHERE clave_origen_dato=" + this.claveOrigenDatos.toString());
                 if (oRs.next()) {
                     oDb = new Conexion(oRs.getString("servidor") + (oRs.getString("puerto") != null ? ":" + oRs.getString("puerto") : ""), oRs.getString("db"), oRs.getString("login"), oRs.getString("pw"), DbType.values()[oRs.getInt("clave_tipo_db")]);
                 } else {
@@ -1915,13 +1935,8 @@ public class Consulta {
             } else {
 
                 SimpleSQLParser sQA = new SimpleSQLParser(this.sql);
-                /*System.out.println("SELECT: ".concat(sQA.getSelect()));
-                 System.out.println("FROM: ".concat(sQA.getFrom()));
-                 System.out.println("WHERE: ".concat(sQA.getWhere()));
-                 System.out.println("GROUP BY: ".concat(sQA.getGroupBy()));
-                 System.out.println("HAVING: ".concat(sQA.getHaving()));
-                 System.out.println("ORDER BY: ".concat(sQA.getOrderBy()));*/
-
+                with = sQA.getWith();
+                set = sQA.getSet();
                 select = sQA.getSelect();
                 from = sQA.getFrom();
                 where = sQA.getWhere();
@@ -1989,7 +2004,7 @@ public class Consulta {
                                 .concat(groupBy).concat(" ")
                                 .concat(having).concat(" ")
                                 .concat(") AS a WHERE numeroDeRegistro BETWEEN ")
-                                .concat(String.valueOf(limiteDeRegistros * (pagina - 1) + 1)).concat(" AND ").concat(String.valueOf(limiteDeRegistros * pagina));
+                                .concat(String.valueOf(limiteDeRegistros * (pagina - 1) + 1)).concat(" AND ").concat(String.valueOf(limiteDeRegistros * pagina)).concat(" ").concat(orderBy);
 
                     }
                 } else if (oDb.getDbType() == Conexion.DbType.ORACLE) {

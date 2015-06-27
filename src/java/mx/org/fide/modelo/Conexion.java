@@ -500,7 +500,7 @@ public class Conexion {
         }
         try {
             //Recupera el origen de datos seleccionado
-            rs = this.getRs("SELECT * FROM fw_scorecard_origen_dato WHERE clave_origen_dato=".concat(origenDatos.toString()));
+            rs = this.getRs("SELECT * FROM be_origen_dato WHERE clave_origen_dato=".concat(origenDatos.toString()));
             
             if (rs.next()) {
                 c = new Conexion(rs.getString("servidor").concat(":").concat(rs.getString("puerto")),rs.getString("db"),rs.getString("login"),rs.getString("pw"),DbType.values()[rs.getInt("clave_tipo_db")]);

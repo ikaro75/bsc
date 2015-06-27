@@ -9,6 +9,7 @@ public class SimpleSQLParser {
 
     public String q = "";
     public String with = "";
+    public String set = "";
     public String select = "";
     public String from = "";
     public String where = "";
@@ -65,6 +66,14 @@ public class SimpleSQLParser {
         this.with = with;
     }
 
+    public String getSet() {
+        return set;
+    }
+
+    public void setSet(String set) {
+        this.set = set;
+    }
+    
     public String getSelect() {
         return select;
     }
@@ -119,13 +128,21 @@ public class SimpleSQLParser {
         _remainingSentence = q;
 
         if (_remainingSentence.toLowerCase().startsWith("with")) {
-            if (hasClosedParenthesesBefore("select")) {
+            if (hasClosedParenthesesBefore("set,select")) {
                 this.with = _parsedSentence;
             } else {
                 throw new SQLParserException("Error de sintaxis analizando with");
             }
         }
-
+        
+        if (_remainingSentence.toLowerCase().startsWith("set")) {
+            if (hasClosedParenthesesBefore("select")) {
+                this.select = _parsedSentence;
+            } else {
+                throw new SQLParserException("Error de sintaxis analizando set");
+            }
+        }
+        
         if (_remainingSentence.toLowerCase().startsWith("select")) {
             if (hasClosedParenthesesBefore("from")) {
                 this.select = _parsedSentence;
@@ -153,7 +170,7 @@ public class SimpleSQLParser {
         }
 
         if (_remainingSentence.toLowerCase().startsWith("group by")) {
-            if (hasClosedParenthesesBefore("having")) {
+            if (hasClosedParenthesesBefore("having,order by")) {
                 this.groupBy = _parsedSentence;
 
                 if (_remainingSentence.toLowerCase().startsWith("having")) {

@@ -130,8 +130,7 @@
                } //else if (campo.getTipoDato().equals("money"))
                //    data = nfMoney.format(registro.get(k));
                else {
-                   
-                   data = registro.get(nCampo).toString();
+                     data = registro.get(nCampo).toString();
                }
 
                 if (campo.getTipoDato().toLowerCase().equals("int") || campo.getTipoDato().toLowerCase().equals("bit") 

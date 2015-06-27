@@ -1,37 +1,46 @@
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 function be_forma_init() {
     clave_aplicacion = $("#_cache_").val();  //Debe ser el valor de la segunda columna
-    $("#_cache_").val("");
-
     clave_forma = $(xml).find("registro").find("clave_forma")[0].firstChild.data;
-
+    clave_origen_datos = $(xml).find("registro").find("clave_origen_datos")[0].firstChild.data;
+    $("#_cache_").val("");    
+    
     if (clave_forma == "") {
         clave_forma = "0";
     }
     
     //Se debe llenar el catálogo de tablas de acuerdo al origen de datos
-    if ($("#form_" + clave_aplicacion + "_3_" + clave_forma + " #clave_origen_dato").val() != "") {
-         setXMLInSelect3("form_" + clave_aplicacion + "_3_" + clave_forma + " #tabla", 785, "select", $("#clave_origen_dato").val());
-         $("#form_" + clave_aplicacion + "_3_" + clave_forma + " #tabla option[value=" + $(xml).find("registro").find("tabla")[0].firstChild.data  + "]").attr("selected", true);
+    if (clave_origen_datos != "") {
+        setXMLInSelect3("form_" + clave_aplicacion + "_3_" + clave_forma + " #tabla", 777, clave_origen_datos + "_sysobject", "");
+        $("#form_" + clave_aplicacion + "_3_" + clave_forma + " #tabla option[value=" + $(xml).find("registro").find("tabla")[0].firstChild.data  + "]").attr("selected", true);
     }
     
-    $("#form_" + clave_aplicacion + "_3_" + clave_forma + " #clave_origen_dato").change(function() {
-        if ($("#form_" + clave_aplicacion + "_3_" + clave_forma + " #clave_origen_dato").val() != "")
-            setXMLInSelect3("form_" + clave_aplicacion + "_3_" + clave_forma + " #tabla", 785, "select", $(this).val());
+    $("#form_" + clave_aplicacion + "_3_" + clave_forma + " #clave_origen_datos").change(function() {
+        if ($("#form_" + clave_aplicacion + "_3_" + clave_forma + " #clave_origen_datos").val() != "")
+            setXMLInSelect3("form_" + clave_aplicacion + "_3_" + clave_forma + " #tabla", 777, $(this).val() + "_sysobject", "");
+            $("#form_" + clave_aplicacion + "_3_" + clave_forma + " #llave_primaria").find('option').remove().end();
     });
     
     if ($("#form_" + clave_aplicacion + "_3_" + clave_forma + " #tabla").val() != "") {
-        setXMLInSelect3("form_" + clave_aplicacion + "_3_" + clave_forma + " #llave_primaria", 786, "select", $("#tabla").val());
-        $("#form_" + clave_aplicacion + "_3_" + clave_forma + " #llave_primaria option[value=" + $(xml).find("registro").find("llave_primaria")[0].childNodes[0].data + "]").attr("selected", true);
+        setXMLInSelect3("form_" + clave_aplicacion + "_3_" + clave_forma + " #llave_primaria", 777, $("#form_" + clave_aplicacion + "_3_" + clave_forma + " #clave_origen_datos").val() + "_syscolumn", $("#form_" + clave_aplicacion + "_3_" + clave_forma + " #tabla").val());
+        setXMLInSelect3("form_" + clave_aplicacion + "_3_" + clave_forma + " #campo_seguimiento_flujo", 777, $("#form_" + clave_aplicacion + "_3_" + clave_forma + " #clave_origen_datos").val() + "_syscolumn", $("#form_" + clave_aplicacion + "_3_" + clave_forma + " #tabla").val());
+        try {
+            $("#form_" + clave_aplicacion + "_3_" + clave_forma + " #llave_primaria option[value=" + $(xml).find("registro").find("llave_primaria")[0].childNodes[0].data + "]").attr("selected", true);
+        } catch(err) {
+            $("#form_" + clave_aplicacion + "_3_" + clave_forma + " #llave_primaria").remove().append('<input tipo_dato="varchar" id="llave_primaria" name="llave_primaria" tabindex="2" class="singleInput obligatorio" type="text" value="' + $(xml).find("registro").find("llave_primaria")[0].childNodes[0].data + '">');
+        }
+        
+        try {
+            $("#form_" + clave_aplicacion + "_3_" + clave_forma + " #campo_seguimiento_flujo option[value=" + $(xml).find("registro").find("campo_seguimiento_flujo")[0].childNodes[0].data + "]").attr("selected", true);
+        } catch(err) {
+            $("#form_" + clave_aplicacion + "_3_" + clave_forma + " #campo_seguimiento_flujo").remove().append('<input tipo_dato="varchar" id="campo_seguimiento_flujo" name="campo_seguimiento_flujo" tabindex="2" class="singleInput obligatorio" type="text" value="' + $(xml).find("registro").find("campo_seguimiento_flujo")[0].childNodes[0].data + '">');
+        }
     }
 
     $("#form_" + clave_aplicacion + "_3_" + clave_forma + " #tabla").change(function() {
-        if ($("#form_" + clave_aplicacion + "_3_" + clave_forma + " #tabla").val() != "")
-            setXMLInSelect3("form_" + clave_aplicacion + "_3_" + clave_forma + " #llave_primaria", 786, "select", $(this).val());
+        if ($("#form_" + clave_aplicacion + "_3_" + clave_forma + " #tabla").val() != "") {
+            setXMLInSelect3("form_" + clave_aplicacion + "_3_" + clave_forma + " #llave_primaria", 777, $("#form_" + clave_aplicacion + "_3_" + clave_forma + " #clave_origen_datos").val() + "_syscolumn", $(this).val());
+            setXMLInSelect3("form_" + clave_aplicacion + "_3_" + clave_forma + " #campo_seguimiento_flujo", 777, $("#form_" + clave_aplicacion + "_3_" + clave_forma + " #clave_origen_datos").val() + "_syscolumn", $(this).val());
+        }    
     });
 
     /*if (!$("#form_" + clave_aplicacion + "_3_" + clave_forma + " #muestra_formas_foraneas").is(':checked')) {

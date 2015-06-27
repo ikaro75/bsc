@@ -46,8 +46,32 @@ $(document).ready(function() {
     $(".appmenu").appmenu();
     $('#jqxSplitter')
             .jqxSplitter({ width: '100%', height: '95%', panels: [{ size: '30%' }, { size: '70%' }] })
-            .on('resize', function (event) { var panels = event.args.panels;
-                                            $("#grid_141_636_0").setGridWidth($("#grid_141_636_0").parent().parent().parent().parent().parent().width()); 
+            .on('resize', function (event) { 
+                var panels = event.args.panels;
+                if ($("#grid_1_101_0").length>0) {
+                    $("#grid_1_101_0").setGridWidth($("#grid_1_101_0").parent().parent().parent().parent().parent().width()); 
+                } else {
+                    if ($("#datos_generales_indicador").height()>$("#tacometro_portlet").height()) {
+                        $("#tacometro_portlet").height($("#datos_generales_indicador").height());
+                    } else if ($("#tacometro_portlet").height()>$("#datos_generales_indicador").height()) {
+                        $("#datos_generales_indicador").height($("#tacometro_portlet").height());
+                    }
+                    //$("#datos_indicador").width($("#frontweb").width()/2-20);
+                    //$("#tacometro_portlet").width($("#frontweb").width()/2-20);
+                    if ($("#grid_datos").length>0) {
+                        $($("#grid_datos").find("table")[3]).setGridWidth($("#tacometro_portlet").width());
+                    }
+                    
+                    if ($("#grid_datos_detalle").length>0) {
+                        $("#grid_datos_detalle").width($("#chart_desempeno_portlet").width()+20);
+                        $($("#grid_datos_detalle").find("table")[3]).setGridWidth($("#chart_desempeno_portlet").width());
+                    }
+                    
+                    if ($("#chart_datos_detalle_portlet").length>0) {
+                        $("#chart_datos_detalle_portlet").width($("#tacometro_portlet").width());
+                    }
+                }
+                
             }); 
                                                 
     $("#sessionMenu").sessionmenu();
