@@ -93,7 +93,7 @@ function fw_scorecard_valor_historico_grid_init() {
 //1. se requiere una llamada ajax para saber qué forma está asociada
 //2. Inyectar html del grid del detalle y del chart
 function presenta_detalle_balanced_scorecard(fecha) {
-    //alert(fecha);
+     pageguide.close();
      $.ajax({ url: "control?$cmd=plain&$ta=select&$cf=775&$w=clave_indicador=" +  $("#_cache_").val(),
             dataType: ($.browser.msie) ? "text" : "xml",
             type: "POST",
@@ -117,28 +117,40 @@ function presenta_detalle_balanced_scorecard(fecha) {
                   if (claveFormaDetalle!="") {
                     $("#grid_datos_detalle").remove();
                     $("#chart_datos_detalle_portlet").remove();
-                                        
-                    $("#grid_datos").parent()
-                    .append('<div id="grid_datos_detalle" style="float:left; clear:left; margin-left: 10px; width: 450px; height: 550px; "  app="145" form="' + claveFormaDetalle + '" wsParameters="" titulo="" inDesktop="true" ></div>' + 
-                    '<div id="chart_datos_detalle_portlet" class="portlet" style="float:left; margin-left: 10px; width: 450px; height: 580px;">'+
+                    
+                    anchoDatosGeneralesIndicador=$("#datos_generales_indicador").width()-5;
+                    anchoTacometro = $("#tacometro_portlet").width();
+                    /*$("#grid_datos").parent()
+                    .append('<div id="grid_datos_detalle" style="float:left; clear:left; margin-left: 10px; width:' + anchoDatosGeneralesIndicador +'px; height: 550px; "  app="145" form="' + claveFormaDetalle + '" wsParameters="" titulo="" inDesktop="true" ></div>' + 
+                    '<div id="chart_datos_detalle_portlet" class="portlet" style="float:left; margin-left: 10px; width:' + anchoTacometro  +'px; height: 580px;">'+
                     '<div class="portlet-header">Detalles del indicador</div>'+
                     '<div class="portlet-content"  style="margin: 5px;">'+
                         '<div id="chart_datos_detalle" id="chart_datos_detalle" style="background-color: #FFF; height:540px;" ></div>'+
-                    '</div>');                      
+                    '</div>');   */                   
+                    
+                    $("#grid_datos").parent()
+                    .append('<div id="grid_datos_detalle" style="float:left;clear:left; margin-left: 10px; width: 47%; height: 180px; "  app="145" form="' + claveFormaDetalle + '" wsParameters="" titulo="" inDesktop="true" ></div>' + 
+                            '<div id="chart_datos_detalle_portlet" class="portlet" style="width: 47%; float: left; margin-left: 10px;">' +
+                            '<div class="portlet-header">Detalles del indicador<div id="chart_datos_detalle_portlet_d"/></div>' +
+                            '<div class="portlet-content" style="margin: 5px;">' +
+                            '<div id="chart_datos_detalle" id="chart_datos_detalle" style="background-color: #FFF; height:540px;" ></div>'+
+                            '</div></div>');
+            
                     var aMeses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+                    
                     $("#grid_datos_detalle")
                             .appgrid({app: "145",
                             entidad: claveFormaDetalle,
                             valoresReemplazo: "%ano=" + fecha.split("/")[2] +";%mes="+ fecha.split("/")[1],
-                            titulo: "Detalles del indicador "+ aMeses[parseInt(fecha.split("/")[1]) - 1] + " "+ fecha.split("/")[2],
+                            titulo: 'Detalles del indicador '+ aMeses[parseInt(fecha.split("/")[1]) - 1] + ' '+ fecha.split("/")[2] + '<div id="grid_datos_detalle_d" />',
                             inDesktop:"true",
-                            height:"480px",
+                            height: "480px",
                             removeGridTitle:true,
                             showFilterLink:false,
                             inQueue:true,
                             insertInDesktopEnabled:0,
                             editingApp:"1",
-                            width:"100%",
+                            width: anchoDatosGeneralesIndicador + "px",
                             onSelectRow: function (rowId, status, e) {
                                 //Se hace una búsqueda de la primera forma asociada a esta forma
                                 $("#filtros_indicador").val($("#filtros_indicador").val() +"filtro='"+ $(this).getCell(rowId, 0)+"';");
@@ -177,7 +189,7 @@ function presenta_detalle_balanced_scorecard(fecha) {
                                     });
                                 }
                             });
-                            
+                        
                     barrasIndicadorDetalles(claveFormaDetalle,"%ano=" + fecha.split("/")[2] +";%mes="+ fecha.split("/")[1],"","chart_datos_detalle");
                     
                     $( "#chart_datos_detalle_portlet" ).sortable({

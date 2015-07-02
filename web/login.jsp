@@ -153,7 +153,7 @@
                 </td>
             </tr>
         </table>
-                                <div style="position:absolute; bottom: auto; text-align: right; font-family: verdana; margin-left: 200px;">Versi&oacute;n beta.20150309.07.18</div>
+        <div style="position:absolute; bottom: auto; text-align: right; font-family: verdana; margin-left: 200px;">Versi&oacute;n beta.20150701.02.50</div>
     </body>
 </html>
 <% request.getSession().setAttribute("mensaje_login","");%>

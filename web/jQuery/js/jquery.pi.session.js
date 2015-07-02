@@ -175,7 +175,6 @@
                   
                   
                   sHtml+= '<a class="ui-state-default session_menu" href="control?$cmd=logout" id="lnkCerrarSesion">Cerrar sesi&oacute;n </a>'+
-                          '<br /><br /><a class="ui-state-default session_menu table_picker" href="guia_rapida.pdf" target="_blank" id="lnkCerrarSesion">Gu&iacute;a r&aacute;pida de uso</a><br/>' +
                           '</div></td>' +
                           '</tr>'+
                           '</table>'+

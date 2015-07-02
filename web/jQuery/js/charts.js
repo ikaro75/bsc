@@ -9,7 +9,7 @@ function timeLineValoresHistoricosIndicador(claveFormaDetalle, valorDeReemplazo,
                 }
               );*/
 
-              var plot1 = $.jqplot(divId, [data], {
+              plot1 = $.jqplot(divId, [data], {
               animate: !$.jqplot.use_excanvas,
               axes:{
               xaxis:{
@@ -43,7 +43,7 @@ function barrasIndicadorDetalles(claveFormaDetalle, valorDeReemplazo, titulo, di
                console.log(data[i]);
             }
             
-            var barra = $.jqplot(divId, [data[1]], {
+            plot2 = $.jqplot(divId, [data[1]], {
             animate: !$.jqplot.use_excanvas,
             seriesDefaults: {
                 show: true,     

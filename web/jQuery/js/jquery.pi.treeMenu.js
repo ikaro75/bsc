@@ -240,6 +240,7 @@
                        data.inst.open_node(data.inst._get_parent(data.rslt.obj), false,true); 
                     } 
                 }).bind("select_node.jstree", function (event, data) {
+                    pageguide.close();
                     //`data.rslt.obj` is the jquery extended node that was clicked      
                     var sTitulo ="";
                     data.rslt.obj.parents("li").each(function () {
@@ -288,6 +289,7 @@
 
                                     //Se va a ejecutar una acción dependiendo del tipo de indicador 
                                     if (claveNodoPadre == "") {
+                                       
                                         $("#frontweb")
                                                 .html('<div id="divgrid_1_101_0" app="1" form="101" wsParameters="" titulo="Mis pendientes" leyendas="Nueva actividad, Editar actividad" inDesktop="true" openKardex="false" ></div>');
                                         $("#divgrid_1_101_0").appgrid({app: "1",
@@ -309,11 +311,11 @@
 
                                         $("#frontweb").html(
                                                 '<div class="portlet" style="width: 47%; float: left; margin-left: 10px;" id="datos_generales_indicador">' +
-                                                '<div class="portlet-header">Datos generales del indicador</div>' +
+                                                '<div class="portlet-header">Datos generales del indicador<div id="datos_generales_indicador_d" /></div>' +
                                                 '<div class="portlet-content" id="datos_indicador" style="margin: 5px;">' +
                                                 '</div></div>' +
                                                 '<div class="portlet" style="width: 47%; float: left; margin-left: 10px;" id="tacometro_portlet">' +
-                                                '<div class="portlet-header">Desempe&ntilde;o del indicador</div>' +
+                                                '<div class="portlet-header">Desempe&ntilde;o del indicador<div id="tacometro_portlet_d" /></div>' +
                                                 '<div class="portlet-content" id="desempeño_indicador" style="margin: 5px;">' +
                                                 '<div id="tacometro" style="background-color: #FFF;" ></div>' +
                                                 '</div></div><input type="hidden" id="filtros_indicador" value=""/> ');
@@ -367,7 +369,8 @@
                                             max: 100,
                                             title: " ",
                                             label: indicador,
-                                            levelColors: ["#FF0734", "#FF973D", "#00FF21"]
+                                            levelColors: ["#FF0734", "#FF973D", "#00FF21"],
+                                            relativeGaugeSize: true
                                         });
 
                                         valorConFormato = "";
@@ -375,6 +378,9 @@
                                             valorConFormato = formatCurrency(valorActual);
                                         } else if (formato.indexOf("%") > -1) {
                                             valorConFormato = Math.round(valorActual * 100) / 100 + " %"
+                                        } else {
+                                            valorConFormato = formatCurrency(valorActual);
+                                            valorConFormato = valorConFormato.replace("$","");
                                         }
 
                                         $($($("#tacometro").children()[0]).find("text").children()[1]).html(valorConFormato);
@@ -397,7 +403,7 @@
                                             $("#datos_indicador")
                                                     .parent().parent() 
                                                     .append('<div class="portlet" id="chart_desempeno_portlet" style="width: 47%; float: left; margin-left: 10px;">' +
-                                                            '<div class="portlet-header">Desempe&ntilde;o hist&oacute;rico del indicador</div>' +
+                                                            '<div class="portlet-header">Desempe&ntilde;o hist&oacute;rico del indicador<div id="chart_desempeno_portlet_d" /></div>' +
                                                             '<div class="portlet-content" id="chart_indicador" style="margin: 5px;">' +
                                                             '<div id="chart_historico"  style="background-color: #FFF; height:250px;" ></div>' +
                                                             '</div>' +
@@ -424,7 +430,7 @@
                                             $("#grid_datos").appgrid({app: "147",
                                                 entidad: claveFormaDetalle,
                                                 wsParameters: "",
-                                                titulo: "Valores hist\u00f3ricos del indicador",
+                                                titulo: 'Valores hist\u00f3ricos del indicador <div id="grid_datos_d" />',
                                                 inDesktop: "true",
                                                 height: "180px",
                                                 removeGridTitle: true,
@@ -444,6 +450,14 @@
                                             });
 
                                             $("#tacometro").append("<p style='text-align:center'>Valor actual: " + valorConFormato + "</p>");
+                
+                                            //Redimensiona portlets
+                                            if ($("#datos_generales_indicador").height()>$("#tacometro_portlet").height()) {
+                                                $("#tacometro_portlet").height($("#datos_generales_indicador").height());
+                                            } else if ($("#tacometro_portlet").height()>$("#datos_generales_indicador").height()) {
+                                                $("#datos_generales_indicador").height($("#tacometro_portlet").height());
+                                            }
+                                        
                                             $("#chart_historico").html();
                                             timeLineValoresHistoricosIndicador(claveFormaDetalle, "", "", "chart_historico");
                                             $("#grid_datos_detalle").remove();

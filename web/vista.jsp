@@ -228,24 +228,45 @@
                         positioned. data-tourtarget should contain the selector for the element to
                         which you want to attach this pageguide step. -->
                         <li class="tlypageguide_left" data-tourtarget="#liInicio">
-                            Aquí encontrar&aacute; los sectores y organismos a los que pertenecen los suscriptores en el &aacute;rbol de la izquierda y los suscriptores y contactos a la derecha;
+                            En el &aacute;rbol de la izquierda encontrar&aacute; los indicadores de desempe&ntilde;o principales desde las 4 perspectivas que considera la metodología del balance scoredcard; dependiendo del nodo del &aacute;rbol que se seleccione, en el panel derecho podrá observar las alertas de que un indicador alcanz&oacute; alg&uacute;n valor objetivo o los datos relacionados al indicador que se seleccion&oacute;.
                         </li>
                         <li class="tlypageguide_left" data-tourtarget="#liAplicaciones">
-                            Aqu&iacute; encontrar&aacute; los cat&aacute;logos y subcat&aacute;logos del directorio.
+                            Aqu&iacute; encontrar&aacute; los catálogos que integran la configuración del sistema.
                         </li>
-                        <li class="tlypageguide_left" data-tourtarget="#divBusqueda">
-                            Aqu&iacute; puede realizar b&uacute;squedas de manera general. La b&uacute;squeda no es sensible a may&uacute;sculas, min&uacute;sculas, vocales acentuadas ni la letra &ntilde;.
-                        </li>
-                        <li class="tlypageguide_top" data-tourtarget="#tvSuscriptores">
-                            En &eacute;ste &aacute;rbol de carpetas se clasifican los sectores y organismos. Para agregar un sector o un organismo haga clic derecho sobre el sector en donde lo desea insertar y seleccione del menu contextual "Nuevo sector" o "Nuevo organismo". Si desea editar algún sector u organismo selecci&oacute;nelo, haga clic con el bot&oacute;n derecho y escoja "Editar" del menú contextual. 
-                            Para reubicar un sector u organismo dentro de otro sector seleccione,y arrastre y su&eacute;ltelo en el sector deseado.
+                        <li class="tlypageguide_top" data-tourtarget="#tvIndicadores">
+                            <p>En este árbol se encuentran los indicadores agrupados de acuerdo a las perspectivas de la empresa y dentro de carpetas que ayudan a clasificarlos. Si el indicador alcanza 
+                            el valor objetivo se mostrar&aacute; un punto verde de lado izquierdo del indicador; en caso de que el valor llegue a los l&iacute;mites inferiores los puntos mostrados ser&aacute;n amarillos o rojos; si no han sido establecidos valores objetivos el punto ser&aacute; gris. <p/>
+                                                        
+                            <p>Para agregar una carpeta o un indicador haga clic derecho sobre el nodo del &aacute;rbol en donde lo desea insertar y seleccione del menu contextual "Nuevo indicador". Si desea editar algún indicador selecci&oacute;nelo, haga clic con el bot&oacute;n derecho y escoja "Editar" del menú contextual. 
+                            Para reubicar un indicador dentro de otro carpeta, seleccione, arrastre y su&eacute;ltelo en el nodo deseado.</p>
+                            
+                            <p>Si selecciona el nodo "FIDE" podrá visualizar en el panel de la derecha las alertas de los indicadores que alcanzaron alg&uacute;n valor objetivo establecido. 
+                            Si se selecciona un nodo que represente un indicador, en el panel derecho se mostrar&aacute;n m&aacute;s detalles del mismo.</p>
                         </li>
                         <li class="tlypageguide_top" data-tourtarget=".jqx-splitter-collapse-button-vertical">
-                            Haga clic aquí para ocultar el &aacute;rbol de sectores y organismos; vuelva a hacer clic para volverlo a mostrar 
+                            Haga clic aquí para ocultar el &aacute;rbol de indicadores; vuelva a hacer clic para volverlo a mostrar 
                         </li>
-                        <li class="tlypageguide_bottom" data-tourtarget="#grid_suscriptores">
-                            En esta secci&oacute;n se pueden visualizar los datos referentes a los suscriptores y contactos de acuerdo al sector, subsector u organizaci&oacute;n seleccionada en el árbol.
+                        <li class="tlypageguide_bottom" data-tourtarget="#grid_1_101_0_toppager">
+                            Cada vez que algún indicador alcance algun valor objetivo establecido, el sistema generará una alerta que podrá encontrar en este cat&aacute;logo.
                         </li>
+                        <li class="tlypageguide_bottom" data-tourtarget="#datos_generales_indicador_d">
+                            Aqu&iacute; se muestran la categor&iacute;a, el nombre del indicador, una breve explicaci&oacute;n de en qu&eacute; consiste y los responsables a su cargo.
+                        </li>
+                        <li class="tlypageguide_bottom" data-tourtarget="#tacometro_portlet_d">
+                            Esta gráfica muestra el avance del indicador con respecto a sus valores objetivos establecidos.
+                        </li>
+                        <li class="tlypageguide_bottom" data-tourtarget="#chart_desempeno_portlet_d">
+                            Esta gr&aacute;fica muestra el comportamiento hist&oacute;rico del indicador en una l&iacute;nea de tiempo y los datos que conforman la gr&aacute;fica se muestran en la tabla de la derecha.
+                        </li>
+                        <li class="tlypageguide_bottom" data-tourtarget="#grid_datos_d">
+                            En esta tabla se muestran los datos que conforman la gr&aacute;fica de desempempe&ntilde;o hist&oacute;rico y cada registro representa un punto en la l&iacute;nea. Para ver m&aacute;s detalles haga clic encima de alguna fecha espec&iacute;fica.
+                        </li>
+                        <li class="tlypageguide_bottom" data-tourtarget="#grid_datos_detalle_d">
+                            En esta tabla se muestran los detalles del periodo que se seleccionó en la de valores hist&oacute;ricos. Cada registro representa una barra en la gr&aacute;fica de la derecha. 
+                        </li>
+                        <li class="tlypageguide_bottom" data-tourtarget="#chart_datos_detalle_portlet_d">
+                            Esta es la representaci&oacute;n gr&aacute;fica de la tabla de lado izquierdo y muestra c&oacute;mo se integra el dato del indicador en el periodo seleccionado.  
+                        </li>        
                     </ul>
                 </div>
                 <div id="tabAplicaciones">

@@ -15,7 +15,10 @@
 \u00d1 -> Ñ
  * and open the template in the editor.
  */
+var plot1;
+var plot2;
 var jsonConfig= {gridTimers: []};
+var pageguide;
 $(document).ready(function() {
 
     //Despliega dialogo modal para evitar acciones del usuario mientras se cargan primeros grids
@@ -33,7 +36,7 @@ $(document).ready(function() {
     		}); */
    
     
-    var pageguide= tl.pg.init();
+    pageguide= tl.pg.init();
     $(".tlypageguide_ignore").hide();
     
     $("#tabs").tabs({select: function(event, ui){
@@ -69,6 +72,37 @@ $(document).ready(function() {
                     
                     if ($("#chart_datos_detalle_portlet").length>0) {
                         $("#chart_datos_detalle_portlet").width($("#tacometro_portlet").width());
+                    }
+                    
+                    if ($("#tacometro").length>0) {
+                        valorConFormato=$("#tacometro")[0].outerText.split("\n")[0];
+                        indicador=$("#tacometro")[0].outerText.split("\n")[1];
+                        valorActual=valorConFormato.replace("$","").replace("%","").replace(",","");
+                        //Destruye contenido de tacometro;
+                        alturaTacometro=$("#tacometro").height();
+                        $("#tacometro").html("").height(alturaTacometro);
+                        
+                        new JustGage({
+                            id: "tacometro",
+                            value: valorActual,
+                            min: 0,
+                            max: 100,
+                            title: " ",
+                            label: indicador,
+                            levelColors: ["#FF0734", "#FF973D", "#00FF21"],
+                            relativeGaugeSize: true
+                        });
+                        $($($("#tacometro").children()[0]).find("text").children()[1]).html(valorConFormato);
+                        
+                        if ($("#datos_generales_indicador").height()>$("#tacometro_portlet").height()) {
+                            $("#tacometro_portlet").height($("#datos_generales_indicador").height());
+                        } else if ($("#tacometro_portlet").height()>$("#datos_generales_indicador").height()) {
+                            $("#datos_generales_indicador").height($("#tacometro_portlet").height());
+                        }
+                        
+                        if (plot1!=undefined) plot1.replot( { resetAxes: true } );
+                        if (plot2!=undefined) plot2.replot( { resetAxes: true } );
+                        
                     }
                 }
                 
